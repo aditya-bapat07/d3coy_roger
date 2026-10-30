@@ -6,6 +6,16 @@
     "description": "Fictional Indian smart city running real ICS/OT and IT equipment across Power, Water, Healthcare, and Municipal services.",
     "version": "1.0"
   },
+  "rule_3_generator_override": {
+    "trigger_asset_id": "asset_hosp_gen_ctrl",
+    "affected_edge": {
+      "from_node": "service_feeder_substation_ss2",
+      "to_node": "service_district_hospital"
+    },
+    "default_failure_delay_hours": 24.0,
+    "compromised_failure_delay_hours": 0.0,
+    "description": "If the backup generator controller is compromised, the delay on Feeder substation -> District hospital drops from 24 h to 0 h. The controller has no dependency edge of its own, because on its own it stops nothing."
+  },
   "assets": [
     {
       "id": "asset_internet",
@@ -23,7 +33,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 0,
       "criticality_note": "Uncontrolled exterior threat origin for opportunistic and nation-state attacker personas.",
-      "anomaly_score": 0.0
+      "anomaly_score": 0.0,
+      "controls_service_id": null
     },
     {
       "id": "asset_vendor_vpn",
@@ -41,7 +52,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 7,
       "criticality_note": "Third-party water contractor maintenance portal; critical ingress entry point.",
-      "anomaly_score": 0.72
+      "anomaly_score": 0.72,
+      "controls_service_id": null
     },
     {
       "id": "asset_corp_web",
@@ -59,7 +71,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 14,
       "criticality_note": "Public utility bill payment and grievance portal.",
-      "anomaly_score": 0.15
+      "anomaly_score": 0.15,
+      "controls_service_id": null
     },
     {
       "id": "asset_corp_mail",
@@ -77,7 +90,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 14,
       "criticality_note": "Internal employee communications and alerting.",
-      "anomaly_score": 0.35
+      "anomaly_score": 0.35,
+      "controls_service_id": null
     },
     {
       "id": "asset_corp_dc",
@@ -95,7 +109,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 30,
       "criticality_note": "Central identity provider for administrative accounts and workstations.",
-      "anomaly_score": 0.45
+      "anomaly_score": 0.45,
+      "controls_service_id": null
     },
     {
       "id": "asset_corp_ws1",
@@ -113,7 +128,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 7,
       "criticality_note": "Entry point for insider threat persona; holds domain credentials.",
-      "anomaly_score": 0.10
+      "anomaly_score": 0.10,
+      "controls_service_id": null
     },
     {
       "id": "asset_corp_ws2",
@@ -131,7 +147,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 7,
       "criticality_note": "SOC monitoring workstation with network reach to DMZ services.",
-      "anomaly_score": 0.05
+      "anomaly_score": 0.05,
+      "controls_service_id": null
     },
     {
       "id": "asset_dmz_jump",
@@ -149,7 +166,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 7,
       "criticality_note": "Primary administrative choke-point bridging Corporate IT into L3 Operations.",
-      "anomaly_score": 0.88
+      "anomaly_score": 0.88,
+      "controls_service_id": null
     },
     {
       "id": "asset_dmz_historian",
@@ -167,7 +185,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 14,
       "criticality_note": "Replicates real-time operational telemetry for business reporting.",
-      "anomaly_score": 0.20
+      "anomaly_score": 0.20,
+      "controls_service_id": null
     },
     {
       "id": "asset_dmz_patch",
@@ -185,7 +204,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 14,
       "criticality_note": "Stages software updates for industrial SCADA and engineering nodes.",
-      "anomaly_score": 0.12
+      "anomaly_score": 0.12,
+      "controls_service_id": null
     },
     {
       "id": "asset_pwr_scada",
@@ -203,7 +223,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 45,
       "criticality_note": "Supervisory telemetry and control aggregation for 33/11 kV feeder substation.",
-      "anomaly_score": 0.65
+      "anomaly_score": 0.65,
+      "controls_service_id": "service_feeder_substation_ss2"
     },
     {
       "id": "asset_pwr_eng_ws",
@@ -221,7 +242,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 14,
       "criticality_note": "Configuration terminal for protection relay logic and RTU parameters.",
-      "anomaly_score": 0.10
+      "anomaly_score": 0.10,
+      "controls_service_id": null
     },
     {
       "id": "asset_pwr_hmi",
@@ -239,7 +261,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 60,
       "criticality_note": "Control-room switchboard display for feeder breaker open/close operations.",
-      "anomaly_score": 0.40
+      "anomaly_score": 0.40,
+      "controls_service_id": "service_feeder_substation_ss2"
     },
     {
       "id": "asset_pwr_switch",
@@ -257,7 +280,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 21,
       "criticality_note": "Carries IEC 61850 station bus and GOOSE messaging between bay relays.",
-      "anomaly_score": 0.55
+      "anomaly_score": 0.55,
+      "controls_service_id": null
     },
     {
       "id": "asset_pwr_rtu",
@@ -275,7 +299,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 90,
       "criticality_note": "Directly actuates trip coils on 33/11 kV feeder lines supplying North Zone.",
-      "anomaly_score": 0.78
+      "anomaly_score": 0.78,
+      "controls_service_id": "service_feeder_substation_ss2"
     },
     {
       "id": "asset_pwr_ied",
@@ -293,7 +318,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 120,
       "criticality_note": "Solid-state protection relay triggering mechanical trip breakers on fault.",
-      "anomaly_score": 0.25
+      "anomaly_score": 0.25,
+      "controls_service_id": "service_feeder_substation_ss2"
     },
     {
       "id": "asset_pwr_breakers",
@@ -311,7 +337,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 180,
       "criticality_note": "Physical breaker mechanism interrupting grid current to feeder lines.",
-      "anomaly_score": 0.0
+      "anomaly_score": 0.0,
+      "controls_service_id": "service_feeder_substation_ss2"
     },
     {
       "id": "asset_water_scada",
@@ -329,7 +356,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 30,
       "criticality_note": "Central monitoring for 27 MLD water treatment, filtration, and dosing cycles.",
-      "anomaly_score": 0.82
+      "anomaly_score": 0.82,
+      "controls_service_id": "service_water_pumping"
     },
     {
       "id": "asset_water_hmi",
@@ -347,7 +375,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 45,
       "criticality_note": "Shift operator station for manual setpoint changes on pump speeds and chemical feed.",
-      "anomaly_score": 0.30
+      "anomaly_score": 0.30,
+      "controls_service_id": "service_water_pumping"
     },
     {
       "id": "asset_water_plc_pumps",
@@ -365,7 +394,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 90,
       "criticality_note": "Automates variable frequency drives running 4x 150 kW high-lift distribution pumps.",
-      "anomaly_score": 0.40
+      "anomaly_score": 0.40,
+      "controls_service_id": "service_water_pumping"
     },
     {
       "id": "asset_water_plc_chlorine",
@@ -383,7 +413,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 90,
       "criticality_note": "Regulates gas chlorinators and dosage parts-per-million into primary contact basin.",
-      "anomaly_score": 0.91
+      "anomaly_score": 0.91,
+      "controls_service_id": "service_chlorine_dosing"
     },
     {
       "id": "asset_water_pumps",
@@ -401,7 +432,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 180,
       "criticality_note": "Physical motor and impeller assemblies pressurizing city transmission mains.",
-      "anomaly_score": 0.0
+      "anomaly_score": 0.0,
+      "controls_service_id": "service_water_pumping"
     },
     {
       "id": "asset_water_dosing_skid",
@@ -419,7 +451,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 180,
       "criticality_note": "Gas injection valves controlling toxic disinfectant release into drinking supply.",
-      "anomaly_score": 0.0
+      "anomaly_score": 0.0,
+      "controls_service_id": "service_chlorine_dosing"
     },
     {
       "id": "asset_water_level_sensors",
@@ -437,7 +470,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 180,
       "criticality_note": "Provides depth readings to prevent pump dry-running cavitation and tank overflow.",
-      "anomaly_score": 0.0
+      "anomaly_score": 0.0,
+      "controls_service_id": "service_reservoir_level"
     },
     {
       "id": "asset_hosp_bms",
@@ -455,7 +489,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 30,
       "criticality_note": "Controls surgical theatre positive pressure, ICU ventilation, and climate.",
-      "anomaly_score": 0.22
+      "anomaly_score": 0.22,
+      "controls_service_id": "service_hospital_bms"
     },
     {
       "id": "asset_hosp_iot_gw",
@@ -473,7 +508,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 14,
       "criticality_note": "Serial-to-Ethernet bridge consolidating vitals monitoring on 40 ICU/HDU beds.",
-      "anomaly_score": 0.60
+      "anomaly_score": 0.60,
+      "controls_service_id": "service_medical_iot"
     },
     {
       "id": "asset_hosp_gen_ctrl",
@@ -491,7 +527,8 @@
       "patchable_now": false,
       "next_maintenance_window_days": 60,
       "criticality_note": "Auto-mains failure (AMF) PLC triggering hospital backup power on grid blackout.",
-      "anomaly_score": 0.85
+      "anomaly_score": 0.85,
+      "controls_service_id": "service_backup_gen_ctrl"
     },
     {
       "id": "asset_city_traffic_ctrl",
@@ -509,7 +546,8 @@
       "patchable_now": true,
       "next_maintenance_window_days": 30,
       "criticality_note": "Coordinates timing plans and green waves across 60 major city intersections.",
-      "anomaly_score": 0.35
+      "anomaly_score": 0.35,
+      "controls_service_id": "service_traffic_signals"
     },
     {
       "id": "asset_city_camera_gw",
@@ -527,140 +565,215 @@
       "patchable_now": true,
       "next_maintenance_window_days": 14,
       "criticality_note": "Aggregates optical streams from CCTV cameras for city traffic and security.",
-      "anomaly_score": 0.70
+      "anomaly_score": 0.70,
+      "controls_service_id": "service_camera_gateway"
     }
   ],
   "services": [
     {
       "id": "service_feeder_substation_ss2",
-      "name": "Feeder Substation SS-2 (33/11 kV)",
-      "site": "power",
+      "name": "Feeder substation SS-2 (33/11 kV)",
+      "site": "Power",
       "people_served": 120000,
       "safety_severity": 3,
       "baseline_outage_hours": 12.0,
       "backup": "None at the substation",
-      "reason": "Feeds the north zone (quarter of city) plus water plant, hospital, and traffic network. Long outages present health risks in high heat.",
+      "reason": "Feeds the north zone (about a quarter of the city) plus the water plant, the hospital and the signal network. Long outages are a health risk in heat and for people on home oxygen or other powered equipment. 12 h covers inspecting relays and breakers and restoring manually after a cyber incident.",
       "scenario_assumption": true
     },
     {
       "id": "service_residential_power_north",
-      "name": "Residential Power, North Zone",
-      "site": "power",
+      "name": "Residential power, North zone",
+      "site": "Power",
       "people_served": 120000,
       "safety_severity": 2,
       "baseline_outage_hours": 12.0,
-      "backup": "Household battery inverters (not counted)",
-      "reason": "Mainly economic and daily-life disruption across residential wards; health risk scored on substation and hospital.",
+      "backup": "Inverters in some homes (not counted)",
+      "reason": "Mainly economic and daily-life disruption; the health risk is scored on the substation and hospital rows, so it is not counted twice.",
       "scenario_assumption": true
     },
     {
       "id": "service_water_pumping",
-      "name": "Water Treatment Plant Pumping (27 MLD)",
-      "site": "water",
+      "name": "Water treatment plant, pumping (27 MLD)",
+      "site": "Water",
       "people_served": 200000,
       "safety_severity": 3,
       "baseline_outage_hours": 24.0,
-      "backup": "Plant DG set runs controls and SCADA only, not main pumps",
-      "reason": "27 MLD = 2 lakh people x 135 L/person/day CPHEEO norm. 24 h covers safe restart and water-quality checks.",
+      "backup": "Plant DG set runs controls and SCADA only, not the main pumps",
+      "reason": "27 MLD = 2 lakh people × 135 litres per person per day, the CPHEEO norm for cities with sewerage. 24 h covers a safe pump restart and water-quality checks before supply resumes.",
       "scenario_assumption": true
     },
     {
       "id": "service_chlorine_dosing",
-      "name": "Chlorine Disinfection Dosing",
-      "site": "water",
+      "name": "Chlorine dosing",
+      "site": "Water",
       "people_served": 200000,
       "safety_severity": 4,
       "baseline_outage_hours": 72.0,
       "backup": "Online residual-chlorine alarm; manual sampling",
-      "reason": "Under-dosing risks waterborne pathogen epidemic; over-dosing causes acute toxic poisoning. 72 h covers main flushing and lab clearance.",
+      "reason": "Under-dosing risks a waterborne disease outbreak; over-dosing makes water unsafe to drink. 72 h covers flushing mains, cleaning storage tanks, lab tests and lifting a boil-water notice.",
       "scenario_assumption": true
     },
     {
       "id": "service_reservoir_level",
-      "name": "Reservoir Level Monitoring",
-      "site": "water",
+      "name": "Reservoir level monitoring",
+      "site": "Water",
       "people_served": 200000,
       "safety_severity": 2,
       "baseline_outage_hours": 8.0,
-      "backup": "Manual dip-level readings by plant shift crew",
-      "reason": "False readings risk dry cavitation damage to multi-stage pumps or reservoir overflow.",
+      "backup": "Manual level readings by plant staff",
+      "reason": "False readings cause overflow or pumps running dry; costly and disruptive, but staff can switch to manual readings within a shift.",
       "scenario_assumption": true
     },
     {
       "id": "service_piped_water",
-      "name": "Piped Drinking Water Supply, Plant Service Area",
-      "site": "water",
+      "name": "Piped water supply, plant service area",
+      "site": "Water",
       "people_served": 200000,
       "safety_severity": 3,
       "baseline_outage_hours": 24.0,
       "backup": "Service reservoirs + household overhead tanks and sumps",
-      "reason": "Scheduled supply slots allow household storage for ~12 hours. Informal settlements without storage hit at first slot.",
+      "reason": "Most Indian cities supply water in scheduled slots and households store it, so the buffer is about half a day on average. Informal settlements with little storage are hit at the first missed slot, so the average understates their risk.",
       "scenario_assumption": true
     },
     {
       "id": "service_district_hospital",
-      "name": "District Hospital (300 beds, 20 ICU)",
-      "site": "hospital",
+      "name": "District hospital (300 beds, 20 ICU)",
+      "site": "Hospital",
       "people_served": 500000,
       "safety_severity": 4,
       "baseline_outage_hours": 12.0,
       "backup": "Diesel generator 24 h; overhead water tanks 12 h; UPS 30 min on critical loads",
-      "reason": "Emergency and critical inpatient care. Ventilators, theatres, and neonatal care make power loss potentially fatal.",
+      "reason": "The whole city depends on it for emergency and inpatient care, with 300 inpatients at direct risk on site. ICU, ventilators and theatres make loss of power potentially fatal.",
       "scenario_assumption": true
     },
     {
       "id": "service_hospital_bms",
-      "name": "Hospital Building Management System",
-      "site": "hospital",
+      "name": "Hospital building management system",
+      "site": "Hospital",
       "people_served": 300,
       "safety_severity": 3,
       "baseline_outage_hours": 8.0,
       "backup": "Manual override of air-handling units",
-      "reason": "Theatres and ICU laminar flow ventilation. Failure postpones emergency surgeries and elevates post-op sepsis.",
+      "reason": "Controls theatre and ICU air handling; failure postpones surgeries and raises infection risk for inpatients. It degrades care but does not shut the hospital, so it has no edge to the hospital node.",
       "scenario_assumption": true
     },
     {
       "id": "service_medical_iot",
-      "name": "Medical-Device IoT Gateway",
-      "site": "hospital",
+      "name": "Medical-device IoT gateway",
+      "site": "Hospital",
       "people_served": 40,
       "safety_severity": 3,
       "baseline_outage_hours": 12.0,
       "backup": "Bedside device alarms + nurse rounds",
-      "reason": "Central telemetry for ICU/HDU patients. Bedside alarms remain active locally, so scored as health risk.",
+      "reason": "40 = ICU and high-dependency beds on central monitoring. Bedside devices keep working, so this is a health risk, not an immediate loss of life, and it does not shut the hospital.",
       "scenario_assumption": true
     },
     {
       "id": "service_backup_gen_ctrl",
-      "name": "Hospital Backup Generator Controller",
-      "site": "hospital",
+      "name": "Backup generator controller",
+      "site": "Hospital",
       "people_served": 300,
       "safety_severity": 1,
       "baseline_outage_hours": 6.0,
       "backup": "Manual start by on-site electrician, about 30 min",
-      "reason": "Alone nothing visible happens. Real consequence is dropping hospital 24 h power buffer to 0 h during grid failure.",
+      "reason": "Alone, nothing visible happens. Its real consequence is removing the hospital's 24 h power buffer (rule 3), which makes a grid outage potentially fatal.",
       "scenario_assumption": true
     },
     {
       "id": "service_traffic_signals",
-      "name": "Traffic Signal Network (60 Junctions)",
-      "site": "city",
+      "name": "Traffic signal controller (60 junctions)",
+      "site": "City",
       "people_served": 150000,
       "safety_severity": 3,
       "baseline_outage_hours": 6.0,
-      "backup": "UPS at major junctions 2 h; traffic police manual control",
-      "reason": "Daily commuters through signalised corridors. Dark or conflicting signals elevate collision risk and stall emergency response.",
+      "backup": "UPS at major junctions about 2 h; traffic police manual control within about 1 h",
+      "reason": "Daily commuters through signalised junctions. Dark or manipulated signals raise crash risk and delay ambulances.",
       "scenario_assumption": true
     },
     {
       "id": "service_camera_gateway",
-      "name": "IoT Camera Gateway (City Surveillance)",
-      "site": "city",
+      "name": "IoT camera gateway (city surveillance)",
+      "site": "City",
       "people_served": 0,
       "safety_severity": 1,
       "baseline_outage_hours": 24.0,
-      "backup": "Local edge SD card recording on cameras, about 72 h",
-      "reason": "Live command center visibility lost, but public service continues. Personal data exposure governed under DPDP Act 2023.",
+      "backup": "Local recording on cameras, about 72 h",
+      "reason": "Live monitoring is lost but no public service stops, so no one loses a service directly. A compromise is also a personal-data exposure under the Digital Personal Data Protection Act, 2023, which this physical-severity scale does not score.",
+      "scenario_assumption": true
+    }
+  ],
+  "dependencies": [
+    {
+      "from_node": "service_feeder_substation_ss2",
+      "to_node": "service_residential_power_north",
+      "type": "powers",
+      "failure_delay_hours": 0.0,
+      "reason": "Homes lose power when the feeder trips.",
+      "scenario_assumption": true
+    },
+    {
+      "from_node": "service_feeder_substation_ss2",
+      "to_node": "service_water_pumping",
+      "type": "powers",
+      "failure_delay_hours": 0.0,
+      "reason": "Main pumps trip at once; the plant DG set keeps only controls alive.",
+      "scenario_assumption": true
+    },
+    {
+      "from_node": "service_feeder_substation_ss2",
+      "to_node": "service_district_hospital",
+      "type": "powers",
+      "failure_delay_hours": 24.0,
+      "reason": "Diesel generator runtime. Drops to 0 if the generator controller is compromised (rule 3).",
+      "scenario_assumption": true
+    },
+    {
+      "from_node": "service_feeder_substation_ss2",
+      "to_node": "service_traffic_signals",
+      "type": "powers",
+      "failure_delay_hours": 0.0,
+      "reason": "Most junctions go dark at once; UPS covers only major junctions, so 0 is the network-wide value.",
+      "scenario_assumption": true
+    },
+    {
+      "from_node": "service_feeder_substation_ss2",
+      "to_node": "service_camera_gateway",
+      "type": "powers",
+      "failure_delay_hours": 0.0,
+      "reason": "Gateway goes down at once; cameras keep recording locally.",
+      "scenario_assumption": true
+    },
+    {
+      "from_node": "service_water_pumping",
+      "to_node": "service_piped_water",
+      "type": "supplies_water",
+      "failure_delay_hours": 12.0,
+      "reason": "Service reservoirs plus household storage cover about half a day.",
+      "scenario_assumption": true
+    },
+    {
+      "from_node": "service_chlorine_dosing",
+      "to_node": "service_piped_water",
+      "type": "supplies_water",
+      "failure_delay_hours": 3.0,
+      "reason": "Storage gives no protection here: wrongly dosed water reaches taps through the contact tank and mains in about 3 h, and fills household tanks.",
+      "scenario_assumption": true
+    },
+    {
+      "from_node": "service_reservoir_level",
+      "to_node": "service_water_pumping",
+      "type": "monitors",
+      "failure_delay_hours": 2.0,
+      "reason": "With false readings, pumps run blind; overflow or dry-running damage builds up within about 2 h.",
+      "scenario_assumption": true
+    },
+    {
+      "from_node": "service_piped_water",
+      "to_node": "service_district_hospital",
+      "type": "supplies_water",
+      "failure_delay_hours": 12.0,
+      "reason": "Hospital overhead tanks and sumps cover about 12 h; tankers can be arranged after that.",
       "scenario_assumption": true
     }
   ],
@@ -916,160 +1029,6 @@
       "port": "554",
       "justification": "Corporate network granted unfettered live video streaming from municipal camera gateway.",
       "misconfiguration": true
-    }
-  ],
-  "dependencies": [
-    {
-      "from_node": "asset_pwr_rtu",
-      "to_node": "service_feeder_substation_ss2",
-      "type": "controls",
-      "failure_delay_hours": 0.0,
-      "reason": "ControlLogix RTU commands breaker trips on SS-2 33/11 kV feeder.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "asset_pwr_breakers",
-      "to_node": "service_feeder_substation_ss2",
-      "type": "controls",
-      "failure_delay_hours": 0.0,
-      "reason": "Physical vacuum breakers interrupt power transmission on busbars.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "service_feeder_substation_ss2",
-      "to_node": "service_residential_power_north",
-      "type": "powers",
-      "failure_delay_hours": 0.0,
-      "reason": "Homes lose power immediately when feeder substation trips.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "service_feeder_substation_ss2",
-      "to_node": "service_water_pumping",
-      "type": "powers",
-      "failure_delay_hours": 0.0,
-      "reason": "Main water treatment pumps trip at once; plant DG set powers only instrumentation and controls.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "service_feeder_substation_ss2",
-      "to_node": "service_district_hospital",
-      "type": "powers",
-      "failure_delay_hours": 24.0,
-      "reason": "Hospital diesel generator runtime covers 24 h. Drops to 0 h if generator controller is compromised.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "service_feeder_substation_ss2",
-      "to_node": "service_traffic_signals",
-      "type": "powers",
-      "failure_delay_hours": 0.0,
-      "reason": "Junction controllers go dark immediately; UPS covers only a few major intersections.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "service_feeder_substation_ss2",
-      "to_node": "service_camera_gateway",
-      "type": "powers",
-      "failure_delay_hours": 0.0,
-      "reason": "Surveillance gateway goes down immediately; edge cameras continue recording locally.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "asset_water_plc_pumps",
-      "to_node": "service_water_pumping",
-      "type": "controls",
-      "failure_delay_hours": 0.0,
-      "reason": "S7-1500 PLC directly controls high-lift pumps; compromise stops pumping.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "service_water_pumping",
-      "to_node": "service_piped_water",
-      "type": "supplies_water",
-      "failure_delay_hours": 12.0,
-      "reason": "Service reservoirs plus household overhead tanks buffer piped supply for ~12 hours.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "asset_water_plc_chlorine",
-      "to_node": "service_chlorine_dosing",
-      "type": "controls",
-      "failure_delay_hours": 0.0,
-      "reason": "Modicon M340 PLC manipulates chlorine dosing; compromise creates dangerous toxic/pathogen condition.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "service_chlorine_dosing",
-      "to_node": "service_piped_water",
-      "type": "supplies_water",
-      "failure_delay_hours": 3.0,
-      "reason": "Storage offers no protection: contaminated or improperly chlorinated water reaches taps in about 3 hours.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "asset_water_level_sensors",
-      "to_node": "service_reservoir_level",
-      "type": "monitors",
-      "failure_delay_hours": 0.0,
-      "reason": "Level transmitters feed reservoir depth signals to pump logic.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "service_reservoir_level",
-      "to_node": "service_water_pumping",
-      "type": "monitors",
-      "failure_delay_hours": 2.0,
-      "reason": "With corrupted readings, pumps run dry or tank overflows within ~2 hours.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "service_piped_water",
-      "to_node": "service_district_hospital",
-      "type": "supplies_water",
-      "failure_delay_hours": 12.0,
-      "reason": "Hospital overhead water storage tanks buffer water supply for 12 hours before tanker support is needed.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "asset_hosp_bms",
-      "to_node": "service_hospital_bms",
-      "type": "controls",
-      "failure_delay_hours": 0.0,
-      "reason": "Modicon Quantum controller regulates theatre and ICU air handling units.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "asset_hosp_iot_gw",
-      "to_node": "service_medical_iot",
-      "type": "controls",
-      "failure_delay_hours": 0.0,
-      "reason": "Moxa NPort gateway routes patient vitals from bedside monitors to nurse station.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "asset_hosp_gen_ctrl",
-      "to_node": "service_backup_gen_ctrl",
-      "type": "controls",
-      "failure_delay_hours": 0.0,
-      "reason": "S7-1200 PLC manages automatic start and transfer of hospital 300 kVA emergency DG set.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "asset_city_traffic_ctrl",
-      "to_node": "service_traffic_signals",
-      "type": "controls",
-      "failure_delay_hours": 0.0,
-      "reason": "Serial device servers connect field traffic signal controllers to city transport network.",
-      "scenario_assumption": true
-    },
-    {
-      "from_node": "asset_city_camera_gw",
-      "to_node": "service_camera_gateway",
-      "type": "monitors",
-      "failure_delay_hours": 0.0,
-      "reason": "Cisco router acts as edge video gateway for municipal surveillance system.",
-      "scenario_assumption": true
     }
   ]
 }

@@ -10,14 +10,14 @@
       "value": 0.5,
       "scenario_assumption": true,
       "justification": "KEV listing means exploitation has been confirmed in the wild, so a reachable KEV CVE should never rank as unlikely, even when its EPSS is low (common for ICS CVEs). 0.5 treats it as at least a coin flip once the attacker can reach it.",
-      "source": "CISA KEV catalog (BOD 22-01) confirms active exploitation in the wild; 0.5 is a deliberate design choice."
+      "source": "CISA KEV catalog (BOD 22-01): a CVE is only added with evidence of active exploitation. The 0.5 value itself is a design choice."
     },
     "credential_weakness_probabilities": {
       "default_credentials": {
         "value": 0.9,
         "scenario_assumption": true,
         "justification": "Default passwords are public and tried automatically by scanners and botnets; failure mostly comes from the device being changed or unreachable, not from difficulty.",
-        "source": "CISA/FBI Joint Advisory AA23-335A (IRGC exploitation of Unitronics default credentials in water sector)."
+        "source": "Joint advisory AA23-335A (Dec 2023): IRGC-affiliated actors compromised internet-exposed Unitronics PLCs, including at US water facilities, likely by exploiting poor password security such as default passwords. Supports 'this happens in practice', not the 0.9 number."
       },
       "exposed_remote_access_no_mfa": {
         "value": 0.3,
@@ -35,23 +35,24 @@
     "mfa_reduction_factor": {
       "value": 0.1,
       "scenario_assumption": true,
-      "justification": "Multiplies credential-attack probability by 0.1 (90% reduction). Deliberately more conservative than vendor 99.9% claims to account for targeted bypasses (push fatigue, adversary-in-the-middle, session token theft).",
-      "source": "Microsoft Security Blog (Aug 2019) reported 99.9% protection; we use 90% as a conservative design choice."
+      "justification": "Deliberately more conservative than vendor headline figures, because targeted attackers bypass MFA (push fatigue, session/token theft).",
+      "source": "Microsoft Security blog (Aug 2019) reported that accounts using MFA are over 99.9% less likely to be compromised; we use 90% to allow for targeted bypass. The 0.1 value is a design choice."
     },
     "consequence_weights": {
       "safety_severity": 0.5,
       "people_affected": 0.3,
       "outage_hours": 0.2,
       "scenario_assumption": true,
-      "justification": "Physical safety dominates in critical infrastructure; people affected comes next; duration matters but is partly captured by the other two. Sum = 1.0.",
-      "source": "Consequence-first framing follows INL Consequence-driven Cyber-informed Engineering (CCE)."
+      "justification": "Physical safety dominates in critical infrastructure; people affected comes next; duration matters but is partly captured by the other two.",
+      "source": "Consequence-first framing follows INL's Consequence-driven Cyber-informed Engineering (CCE). The weights themselves are a design choice."
     },
     "consequence_normalisation": {
-      "max_safety_severity": 4.0,
-      "city_population": 500000,
-      "max_outage_hours": 72.0,
+      "severity_divisor": 4.0,
+      "people_divisor": 500000.0,
+      "outage_hours_divisor": 72.0,
+      "formula": "Severity / 4; people affected / 500,000 (city population); outage hours / 72 (longest outage in the scenario)",
       "scenario_assumption": true,
-      "justification": "Normalises severity (0-4 / 4), people affected (/ 500,000 city population), and outage duration (/ 72 h max scenario duration).",
+      "justification": "Puts each component on 0–1 before weighting. People affected is the largest people_served among services lost, not the sum (see consequence_numbers.md, rule 4), so overlapping populations are not double-counted.",
       "source": "Design choice"
     },
     "personas": {
@@ -60,28 +61,31 @@
         "name": "Opportunistic Cybercriminal",
         "entry_points": ["asset_internet"],
         "max_hops": 3,
-        "cve_filter": "kev_or_epss_gte_0_1",
+        "cve_filter": "Only uses edges whose best CVE is KEV-listed or has EPSS >= 0.1",
         "scenario_assumption": true,
-        "justification": "Mass-scanning attackers go for exposed, known-exploited weaknesses and do not chain long paths into OT."
+        "justification": "Mass-scanning attackers go for exposed, known-exploited weaknesses and do not chain long paths into OT.",
+        "source": "Design choice"
       },
       "nation_state": {
         "id": "nation_state",
         "name": "State-Sponsored APT",
         "entry_points": ["asset_internet", "asset_vendor_vpn"],
         "max_hops": 8,
-        "cve_filter": "all",
+        "cve_filter": "All edges",
         "scenario_assumption": true,
-        "justification": "Patient, well-resourced actors chain through IT and DMZ into control layers and use third-party access."
+        "justification": "Patient, well-resourced actors chain through IT and DMZ into control layers and use third-party access.",
+        "source": "Design choice"
       },
       "insider": {
         "id": "insider",
         "name": "Disgruntled / Compromised Insider",
         "entry_points": ["asset_corp_ws1"],
         "max_hops": 6,
-        "cve_filter": "all",
+        "cve_filter": "All edges",
         "internal_credentials_probability": 1.0,
         "scenario_assumption": true,
-        "justification": "Models an employee or stolen employee account with valid domain credentials: no need to break in, only to move laterally."
+        "justification": "Models an employee or a stolen employee account: no need to break in, only to move laterally.",
+        "source": "Design choice"
       }
     },
     "remediation_profiles": {
@@ -89,30 +93,36 @@
         "type": "patch",
         "engineer_hours": 2.0,
         "downtime_hours": 0.5,
+        "patchable_now": true,
         "scenario_assumption": true,
-        "justification": "Standard OS/app patch plus a reboot, usually possible within the month."
+        "justification": "Standard OS/app patch plus a reboot, usually possible within the month.",
+        "source": "Design choice"
       },
       "patch_ot": {
         "type": "patch",
         "engineer_hours": 8.0,
         "downtime_hours": 4.0,
+        "patchable_now": false,
         "requires_maintenance_window": true,
         "scenario_assumption": true,
-        "justification": "Firmware updates on controllers need vendor validation, testing and a process shutdown, so they are deferred to scheduled windows."
+        "justification": "Firmware updates on controllers need vendor validation, testing and a process shutdown, so they are deferred (patchable_now = false).",
+        "source": "Design choice"
       },
       "segment_rule": {
         "type": "segment",
         "engineer_hours": 3.0,
         "downtime_hours": 0.0,
         "scenario_assumption": true,
-        "justification": "Rule change plus testing that operations traffic still flows; no process stop needed."
+        "justification": "Rule change plus testing that operations traffic still flows; no process stop needed.",
+        "source": "Design choice"
       },
       "disable_remote_access": {
         "type": "disable_remote_access",
         "engineer_hours": 1.0,
         "downtime_hours": 0.0,
         "scenario_assumption": true,
-        "justification": "Quick to switch off; operational vendor support SLA must be handled procedurally."
+        "justification": "Quick to switch off; the cost is operational (vendor support must be re-arranged), noted in the UI rather than counted as downtime.",
+        "source": "Design choice"
       },
       "add_mfa": {
         "type": "mfa",
@@ -120,7 +130,8 @@
         "downtime_hours": 0.0,
         "reduction_factor": 0.1,
         "scenario_assumption": true,
-        "justification": "Enrolment and testing for remote-access gateway users."
+        "justification": "Enrolment and testing for the remote-access gateway users.",
+        "source": "Design choice"
       },
       "enhanced_monitoring": {
         "type": "enhanced_monitoring",
@@ -128,7 +139,8 @@
         "downtime_hours": 0.0,
         "risk_reduction": 0.0,
         "scenario_assumption": true,
-        "justification": "Detection, not prevention: raises confidence, does not lower likelihood."
+        "justification": "Detection, not prevention: raises confidence, does not lower likelihood.",
+        "source": "Design choice"
       }
     }
   }

@@ -1,7 +1,6 @@
 """
 Tests for scenario and assumptions loading, graph consistency, and CVE verification.
 """
-import json
 import pytest
 from backend.engine.scenario import load_scenario, load_assumptions, analyze_kev_floor_impact
 from backend.engine.intel import get_cve, list_cached_cves
@@ -11,9 +10,28 @@ def test_scenario_loads_cleanly():
     scenario = load_scenario(validate_cves=True)
     assert scenario.scenario_metadata.city_name == "Navanagar"
     assert len(scenario.assets) >= 25
-    assert len(scenario.services) >= 10
+    assert len(scenario.services) == 12
     assert len(scenario.network_rules) >= 15
-    assert len(scenario.dependencies) >= 10
+    assert len(scenario.dependencies) == 9, "Dependencies must contain exactly the 9 edges in the Dependencies table"
+
+
+def test_rule_3_generator_override():
+    scenario = load_scenario(validate_cves=True)
+    assert scenario.rule_3_generator_override is not None
+    r3 = scenario.rule_3_generator_override
+    assert r3.trigger_asset_id == "asset_hosp_gen_ctrl"
+    assert r3.affected_edge.from_node == "service_feeder_substation_ss2"
+    assert r3.affected_edge.to_node == "service_district_hospital"
+    assert r3.default_failure_delay_hours == 24.0
+    assert r3.compromised_failure_delay_hours == 0.0
+
+
+def test_no_isolated_hospital_edges():
+    scenario = load_scenario(validate_cves=True)
+    # Ensure no direct dependency edge from BMS, IoT gateway or generator controller to hospital
+    for dep in scenario.dependencies:
+        assert dep.from_node not in ["service_hospital_bms", "service_medical_iot", "service_backup_gen_ctrl"], \
+            f"Unexpected edge from {dep.from_node} to {dep.to_node}"
 
 
 def test_every_cve_in_scenario_exists_in_cache():
@@ -65,6 +83,11 @@ def test_assumptions_content():
     assert "credential_weakness_probabilities" in params
     assert "anomaly_boost_alpha" in params
     assert "consequence_weights" in params
+    assert "consequence_normalisation" in params
+    norm = params["consequence_normalisation"]
+    assert norm["severity_divisor"] == 4.0
+    assert norm["people_divisor"] == 500000.0
+    assert norm["outage_hours_divisor"] == 72.0
     assert "personas" in params
 
 

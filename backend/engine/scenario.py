@@ -7,7 +7,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Dict, List, Literal, Optional
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 
 from backend.engine.intel import get_cve, list_cached_cves
 
@@ -35,6 +35,7 @@ class AssetModel(BaseModel):
     next_maintenance_window_days: int = 0
     criticality_note: str = ""
     anomaly_score: float = 0.0
+    controls_service_id: Optional[str] = None
 
 
 class ServiceModel(BaseModel):
@@ -68,6 +69,19 @@ class DependencyModel(BaseModel):
     scenario_assumption: bool = True
 
 
+class EdgeTargetModel(BaseModel):
+    from_node: str
+    to_node: str
+
+
+class Rule3GeneratorOverrideModel(BaseModel):
+    trigger_asset_id: str
+    affected_edge: EdgeTargetModel
+    default_failure_delay_hours: float = 24.0
+    compromised_failure_delay_hours: float = 0.0
+    description: str
+
+
 class ScenarioMetadataModel(BaseModel):
     city_name: str
     fictional_population: int
@@ -78,6 +92,7 @@ class ScenarioMetadataModel(BaseModel):
 
 class ScenarioModel(BaseModel):
     scenario_metadata: ScenarioMetadataModel
+    rule_3_generator_override: Optional[Rule3GeneratorOverrideModel] = None
     assets: List[AssetModel]
     services: List[ServiceModel]
     network_rules: List[NetworkRuleModel]
@@ -99,6 +114,7 @@ def load_scenario(validate_cves: bool = True) -> ScenarioModel:
       1. Every CVE ID exists in the offline threat intelligence cache.
       2. No dangling asset references in network_rules (attack graph edges).
       3. No dangling node references in dependencies (dependency graph edges).
+      4. Rule 3 generator override points to a valid asset and existing dependency edge.
     """
     if not SCENARIO_FILE.exists():
         raise FileNotFoundError(f"Scenario file missing: {SCENARIO_FILE}")
@@ -136,6 +152,7 @@ def load_scenario(validate_cves: bool = True) -> ScenarioModel:
             )
 
     # 3. Validate Dependencies
+    dep_pairs = set()
     for dep in scenario.dependencies:
         if dep.from_node not in all_known_nodes:
             raise ValueError(
@@ -144,6 +161,20 @@ def load_scenario(validate_cves: bool = True) -> ScenarioModel:
         if dep.to_node not in all_known_nodes:
             raise ValueError(
                 f"Validation Error in Dependency '{dep.from_node} -> {dep.to_node}': to_node '{dep.to_node}' does not exist!"
+            )
+        dep_pairs.add((dep.from_node, dep.to_node))
+
+    # 4. Validate Rule 3 Generator Override
+    if scenario.rule_3_generator_override:
+        r3 = scenario.rule_3_generator_override
+        if r3.trigger_asset_id not in asset_ids:
+            raise ValueError(
+                f"Validation Error in Rule 3: trigger_asset_id '{r3.trigger_asset_id}' does not exist!"
+            )
+        target = (r3.affected_edge.from_node, r3.affected_edge.to_node)
+        if target not in dep_pairs:
+            raise ValueError(
+                f"Validation Error in Rule 3: affected_edge '{target[0]} -> {target[1]}' is not in dependencies!"
             )
 
     logger.info("Successfully loaded and validated Navanagar scenario: %d assets, %d services, %d network rules, %d dependencies.",
