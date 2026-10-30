@@ -19,3 +19,4 @@ frontend:
 
 clean:
 	rm -rf .pytest_cache .venv frontend/node_modules frontend/dist
+

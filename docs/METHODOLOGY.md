@@ -10,3 +10,4 @@ It models critical OT/ICS operational environments alongside IT enterprise netwo
 3. **Risk Quantification**: Risk = Likelihood x Consequence (0-100 scale).
 4. **OT-Realistic Remediation Planning**: Choke-point identification and budget-constrained remediation action selection.
 5. **Regulatory Alignment**: Indian Computer Emergency Response Team (CERT-In) guidelines mapping for Smart Cities and Critical Information Infrastructure (CII).
+

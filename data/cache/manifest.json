@@ -1,0 +1,64 @@
+{
+  "manifest_version": "1.0",
+  "generated_at": "2026-10-30T17:46:57.010834+00:00",
+  "total_files": 7,
+  "total_records": 2038,
+  "files": {
+    "cisa_kev_map.json": {
+      "file": "cisa_kev_map.json",
+      "description": "CISA Known Exploited Vulnerabilities Catalog (Indexed)",
+      "source_url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+      "record_count": 1766,
+      "fetched_at": "2026-10-30T17:37:21.710572+00:00",
+      "file_size_bytes": 1565485
+    },
+    "attack_ics_techniques.json": {
+      "file": "attack_ics_techniques.json",
+      "description": "MITRE ATT&CK for ICS Techniques STIX Extract",
+      "source_url": "https://raw.githubusercontent.com/mitre/cti/master/ics-attack/ics-attack.json",
+      "record_count": 118,
+      "fetched_at": "2026-10-30T17:37:43.035844+00:00",
+      "file_size_bytes": 92992
+    },
+    "selected_cves.json": {
+      "file": "selected_cves.json",
+      "description": "Targeted ICS and edge remote-access candidate CVEs",
+      "source_url": "Derived from CISA KEV and NVD ICS equipment selections",
+      "record_count": 39,
+      "fetched_at": "2026-10-30T17:40:12.867050+00:00",
+      "file_size_bytes": 12029
+    },
+    "nvd_cve_details.json": {
+      "file": "nvd_cve_details.json",
+      "description": "NVD CVSS v3.x, Attack Vector, and CPE descriptions",
+      "source_url": "https://services.nvd.nist.gov/rest/json/cves/2.0",
+      "record_count": 38,
+      "fetched_at": "2026-10-30T17:45:08.760523+00:00",
+      "file_size_bytes": 48593
+    },
+    "epss_current.json": {
+      "file": "epss_current.json",
+      "description": "FIRST Exploit Prediction Scoring System (Current Batch)",
+      "source_url": "https://api.first.org/data/v1/epss",
+      "record_count": 38,
+      "fetched_at": "2026-10-30T17:46:08.251268+00:00",
+      "file_size_bytes": 7587
+    },
+    "epss_history.json": {
+      "file": "epss_history.json",
+      "description": "FIRST EPSS 30-day historical time-series per CVE",
+      "source_url": "https://api.first.org/data/v1/epss?scope=time-series",
+      "record_count": 38,
+      "fetched_at": "2026-10-30T17:46:08.251268+00:00",
+      "file_size_bytes": 117140
+    },
+    "threat_drop.json": {
+      "file": "threat_drop.json",
+      "description": "Reserved real KEV-listed ICS CVE for live demo threat drop",
+      "source_url": "CISA KEV / NVD reserved ICS vulnerability",
+      "record_count": 1,
+      "fetched_at": "2026-10-30T17:46:57.007624+00:00",
+      "file_size_bytes": 1129
+    }
+  }
+}

@@ -1,0 +1,359 @@
+{
+  "generated_at": "2026-10-30T17:40:12.867050+00:00",
+  "total_count": 39,
+  "kev_count": 22,
+  "non_kev_count": 17,
+  "cves": [
+    {
+      "cve_id": "CVE-2021-22681",
+      "vendor": "Rockwell",
+      "product": "Multiple Products",
+      "kev": true,
+      "kev_date_added": "2026-03-05",
+      "kev_required_action": "Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2023-6448",
+      "vendor": "Unitronics",
+      "product": "Vision PLC and HMI",
+      "kev": true,
+      "kev_date_added": "2023-12-11",
+      "kev_required_action": "Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2018-7841",
+      "vendor": "Schneider Electric",
+      "product": "U.motion Builder",
+      "kev": true,
+      "kev_date_added": "2022-04-15",
+      "kev_required_action": "The impacted product is end-of-life and should be disconnected if still in use.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2016-8562",
+      "vendor": "Siemens",
+      "product": "SIMATIC CP",
+      "kev": true,
+      "kev_date_added": "2022-03-03",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2022-42475",
+      "vendor": "Fortinet",
+      "product": "FortiOS",
+      "kev": true,
+      "kev_date_added": "2022-12-13",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2023-27997",
+      "vendor": "Fortinet",
+      "product": "FortiOS and FortiProxy SSL-VPN",
+      "kev": true,
+      "kev_date_added": "2023-06-13",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2024-21762",
+      "vendor": "Fortinet",
+      "product": "FortiOS",
+      "kev": true,
+      "kev_date_added": "2024-02-09",
+      "kev_required_action": "Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2018-13379",
+      "vendor": "Fortinet",
+      "product": "FortiOS",
+      "kev": true,
+      "kev_date_added": "2021-11-03",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2023-46805",
+      "vendor": "Ivanti",
+      "product": "Connect Secure and Policy Secure",
+      "kev": true,
+      "kev_date_added": "2024-01-10",
+      "kev_required_action": "Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2024-21887",
+      "vendor": "Ivanti",
+      "product": "Connect Secure and Policy Secure",
+      "kev": true,
+      "kev_date_added": "2024-01-10",
+      "kev_required_action": "Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2019-11510",
+      "vendor": "Ivanti",
+      "product": "Pulse Connect Secure",
+      "kev": true,
+      "kev_date_added": "2021-11-03",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2023-3519",
+      "vendor": "Citrix",
+      "product": "NetScaler ADC and NetScaler Gateway",
+      "kev": true,
+      "kev_date_added": "2023-07-19",
+      "kev_required_action": "Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2023-4966",
+      "vendor": "Citrix",
+      "product": "NetScaler ADC and NetScaler Gateway",
+      "kev": true,
+      "kev_date_added": "2023-10-18",
+      "kev_required_action": "Apply mitigations and kill all active and persistent sessions per vendor instructions [https://www.netscaler.com/blog/news/cve-2023-4966-critical-security-update-now-available-for-netscaler-adc-and-netscaler-gateway/] OR discontinue use of the product if mitigations are unavailable.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2024-3400",
+      "vendor": "Palo Alto Networks",
+      "product": "PAN-OS",
+      "kev": true,
+      "kev_date_added": "2024-04-12",
+      "kev_required_action": "Apply mitigations per vendor instructions as they become available. Otherwise, users with vulnerable versions of affected devices should enable Threat Prevention IDs available from the vendor. See the vendor bulletin for more details and a patch release schedule.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2020-2021",
+      "vendor": "Palo Alto Networks",
+      "product": "PAN-OS",
+      "kev": true,
+      "kev_date_added": "2022-03-25",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2023-20198",
+      "vendor": "Cisco",
+      "product": "IOS XE Web UI",
+      "kev": true,
+      "kev_date_added": "2023-10-16",
+      "kev_required_action": "Verify that instances of Cisco IOS XE Web UI are in compliance with BOD 23-02 and apply mitigations per vendor instructions. For affected products (Cisco IOS XE Web UI exposed to the internet or to untrusted networks), follow vendor instructions to determine if a system may have been compromised and immediately report positive findings to CISA.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2020-3118",
+      "vendor": "Cisco",
+      "product": "IOS XR",
+      "kev": true,
+      "kev_date_added": "2021-11-03",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2020-3452",
+      "vendor": "Cisco",
+      "product": "Adaptive Security Appliance (ASA) and Firepower Threat Defense (FTD)",
+      "kev": true,
+      "kev_date_added": "2021-11-03",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2020-1472",
+      "vendor": "Microsoft",
+      "product": "Netlogon",
+      "kev": true,
+      "kev_date_added": "2021-11-03",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2021-34527",
+      "vendor": "Microsoft",
+      "product": "Windows",
+      "kev": true,
+      "kev_date_added": "2021-11-03",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2021-26855",
+      "vendor": "Microsoft",
+      "product": "Exchange Server",
+      "kev": true,
+      "kev_date_added": "2021-11-03",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2017-0144",
+      "vendor": "Microsoft",
+      "product": "SMBv1",
+      "kev": true,
+      "kev_date_added": "2022-02-10",
+      "kev_required_action": "Apply updates per vendor instructions.",
+      "role": "Edge / Remote-Access / L4 / SCADA"
+    },
+    {
+      "cve_id": "CVE-2020-15782",
+      "vendor": "Siemens",
+      "product": "SIMATIC S7-1200 / S7-1500",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1 Basic Control (PLC)"
+    },
+    {
+      "cve_id": "CVE-2022-38465",
+      "vendor": "Siemens",
+      "product": "SIMATIC S7-1500 / ET 200SP",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1 Basic Control (PLC)"
+    },
+    {
+      "cve_id": "CVE-2019-19292",
+      "vendor": "Siemens",
+      "product": "SIMATIC S7-1200 CPU",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1 Basic Control (PLC)"
+    },
+    {
+      "cve_id": "CVE-2020-27664",
+      "vendor": "Siemens",
+      "product": "SIMATIC WinCC",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L2 Supervisory / HMI"
+    },
+    {
+      "cve_id": "CVE-2021-22779",
+      "vendor": "Schneider Electric",
+      "product": "Modicon M580 / M340",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1 Basic Control (PLC)"
+    },
+    {
+      "cve_id": "CVE-2020-28212",
+      "vendor": "Schneider Electric",
+      "product": "Modicon Quantum / Premium",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1 Basic Control (PLC)"
+    },
+    {
+      "cve_id": "CVE-2021-22800",
+      "vendor": "Schneider Electric",
+      "product": "EcoStruxure Control Expert",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L3 Engineering Workstation"
+    },
+    {
+      "cve_id": "CVE-2015-7937",
+      "vendor": "Schneider Electric",
+      "product": "Modicon M340 BMXNOE",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1 Ethernet Comm Module"
+    },
+    {
+      "cve_id": "CVE-2023-3595",
+      "vendor": "Rockwell Automation",
+      "product": "1756 ControlLogix EN2T/EN3T",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1/L2 Industrial Comm Module"
+    },
+    {
+      "cve_id": "CVE-2023-3596",
+      "vendor": "Rockwell Automation",
+      "product": "1756 ControlLogix",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1 Industrial Controller"
+    },
+    {
+      "cve_id": "CVE-2022-3157",
+      "vendor": "Rockwell Automation",
+      "product": "FactoryTalk View SE",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L2 Supervisory HMI"
+    },
+    {
+      "cve_id": "CVE-2022-44734",
+      "vendor": "Moxa",
+      "product": "NPort 5110 Serial Device Server",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1/L0 Field Serial Gateway"
+    },
+    {
+      "cve_id": "CVE-2021-31886",
+      "vendor": "Moxa",
+      "product": "EDS-510E Managed Switch",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L2/L3 Industrial Switch"
+    },
+    {
+      "cve_id": "CVE-2018-10609",
+      "vendor": "Moxa",
+      "product": "NPort 5000 Series",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L1/L0 Field Device Server"
+    },
+    {
+      "cve_id": "CVE-2023-28157",
+      "vendor": "PTC Kepware",
+      "product": "KEPServerEX OPC UA",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L3 OPC Gateway Server"
+    },
+    {
+      "cve_id": "CVE-2020-12034",
+      "vendor": "Advantech",
+      "product": "WebAccess/SCADA",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L3 Operations SCADA Node"
+    },
+    {
+      "cve_id": "CVE-2021-32944",
+      "vendor": "Advantech",
+      "product": "WebAccess/SCADA",
+      "kev": false,
+      "kev_date_added": null,
+      "kev_required_action": null,
+      "role": "L3 Operations SCADA Node"
+    }
+  ]
+}

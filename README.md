@@ -105,3 +105,4 @@ CASCADE is an AI-powered cyber-risk prediction and decision support system desig
    - **Backend API Health Status: `ok`**
    - **Endpoint**: `GET http://localhost:8000/api/health`
 3. Review the Purdue Model zones and the Unified Risk Scale Tokens (0–100).
+

@@ -77,3 +77,4 @@ export function getRiskLevel(score: number) {
   if (score <= 75) return RISK_SCALE.high;
   return RISK_SCALE.critical;
 }
+
