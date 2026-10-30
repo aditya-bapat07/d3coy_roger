@@ -1,0 +1,7 @@
+[
+  {"area": "IoT security", "cascade_feature": "asset profiling and vulnerability assessment of IoT/edge nodes", "guideline_section": "9", "section_title": "Internet of Things (IoT) Security in Smart Cities", "page": 25},
+  {"area": "Continuous monitoring", "cascade_feature": "Isolation Forest anomaly detection + \"what changed\" panel", "guideline_section": "16", "section_title": "Continuous Monitoring and Threat Intelligence", "page": 38},
+  {"area": "Vulnerability management", "cascade_feature": "KEV/EPSS-based prioritisation + budget fix planner", "guideline_section": "18", "section_title": "Penetration Testing and Vulnerability Management", "page": 40},
+  {"area": "Supply-chain / third-party security", "cascade_feature": "third-party vendor VPN modelled as an attack entry point", "guideline_section": "17", "section_title": "Supply Chain Security, Vendor Management and SBOM", "page": 39},
+  {"area": "Incident response", "cascade_feature": "per-asset recommendations + management briefing", "guideline_section": "15", "section_title": "Crisis Management & Incident Response", "page": 36}
+]
