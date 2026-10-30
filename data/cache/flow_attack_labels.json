@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-10-30T18:05:35.384444+00:00",
+  "attack_count": 6,
+  "labels": [
+    {
+      "asset_id": "asset_vendor_vpn",
+      "hour_window": 123,
+      "is_attack": true,
+      "attack_type": "Off-Hours Vendor VPN Ingress & Pivot",
+      "description": "Vendor-VPN login at 3 a.m. followed by new unsegmented RDP connection to Water Plant SCADA."
+    },
+    {
+      "asset_id": "asset_water_scada",
+      "hour_window": 123,
+      "is_attack": true,
+      "attack_type": "Direct Inbound Off-Hours Connection",
+      "description": "Water SCADA received sudden inbound RDP connection from Vendor VPN at 3 a.m."
+    },
+    {
+      "asset_id": "asset_corp_ws1",
+      "hour_window": 136,
+      "is_attack": true,
+      "attack_type": "Internal Reconnaissance / Port Scan",
+      "description": "High-velocity port scan across internal DMZ, Hospital BMS, and Traffic signal endpoints."
+    },
+    {
+      "asset_id": "asset_dmz_historian",
+      "hour_window": 150,
+      "is_attack": true,
+      "attack_type": "Mass Data Exfiltration Burst",
+      "description": "Unusually large outbound SMB data transfer (gigabytes) from Historian Mirror to workstation."
+    },
+    {
+      "asset_id": "asset_pwr_rtu",
+      "hour_window": 162,
+      "is_attack": true,
+      "attack_type": "Unauthorized PLC Engineering Command",
+      "description": "Never-before-seen CIP programming connection on port 44818 initiated from Corporate Workstation."
+    },
+    {
+      "asset_id": "asset_corp_ws1",
+      "hour_window": 162,
+      "is_attack": true,
+      "attack_type": "Direct OT Control Channel Manipulation",
+      "description": "Corporate Workstation directly transmitting EtherNet/IP control packets to Substation RTU."
+    }
+  ]
+}

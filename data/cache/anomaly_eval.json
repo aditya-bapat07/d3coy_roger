@@ -1,0 +1,32 @@
+{
+  "evaluation_type": "Synthetic data, injected attacks",
+  "timestamp": "2026-10-30T18:10:56.102111+00:00",
+  "model": "sklearn.ensemble.IsolationForest",
+  "contamination": 0.03,
+  "random_state": 42,
+  "train_windows": 1688,
+  "test_windows": 696,
+  "injected_attack_windows": 6,
+  "metrics": {
+    "precision": 0.125,
+    "recall": 0.8333,
+    "f1_score": 0.2174,
+    "confusion_matrix": {
+      "true_negative": 655,
+      "false_positive": 35,
+      "false_negative": 1,
+      "true_positive": 5
+    },
+    "matrix_2x2": [
+      [
+        655,
+        35
+      ],
+      [
+        1,
+        5
+      ]
+    ]
+  },
+  "notes": "Trained on first 5 days baseline; evaluated on final 2 days containing 6 injected attack windows across IT/DMZ/OT."
+}
