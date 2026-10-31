@@ -9,13 +9,11 @@ const NAV_LINKS = [
   { id: 'top', label: 'Home', href: '#top' },
   { id: 'problem', label: 'Problem', href: '#problem' },
   { id: 'method', label: 'Method', href: '#method' },
-  { id: 'views', label: 'Views', href: '#views' },
   { id: 'capabilities', label: 'Capabilities', href: '#capabilities' },
-  { id: 'validation', label: 'Validation', href: '#validation' },
   { id: 'personas', label: 'Personas', href: '#personas' },
 ];
 
-const SECTION_IDS = ['problem', 'method', 'views', 'capabilities', 'validation', 'personas'] as const;
+const SECTION_IDS = ['problem', 'method', 'capabilities', 'personas'] as const;
 
 export default function LandingNav({ onLaunch }: LandingNavProps) {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);

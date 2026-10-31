@@ -1,7 +1,11 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronUp, Shield } from 'lucide-react';
 
-export default function Footer() {
+export interface FooterProps {
+  onLaunchTab?: (tab: 'risk' | 'graph' | 'remediation' | 'how') => void;
+}
+
+export default function Footer({ onLaunchTab }: FooterProps) {
   const prefersReduced = useReducedMotion();
 
   const handleScrollToSection = (id: string) => {
@@ -73,21 +77,21 @@ export default function Footer() {
               </span>
               <button
                 type="button"
-                onClick={() => handleScrollToSection('views')}
+                onClick={() => (onLaunchTab ? onLaunchTab('risk') : handleScrollToSection('method'))}
                 className={`text-left ${linkClass}`}
               >
                 Risk Analysis
               </button>
               <button
                 type="button"
-                onClick={() => handleScrollToSection('views')}
+                onClick={() => (onLaunchTab ? onLaunchTab('graph') : handleScrollToSection('method'))}
                 className={`text-left ${linkClass}`}
               >
                 Attack Graph
               </button>
               <button
                 type="button"
-                onClick={() => handleScrollToSection('views')}
+                onClick={() => (onLaunchTab ? onLaunchTab('remediation') : handleScrollToSection('method'))}
                 className={`text-left ${linkClass}`}
               >
                 Remediation

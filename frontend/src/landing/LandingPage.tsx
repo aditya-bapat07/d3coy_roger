@@ -3,9 +3,7 @@ import LandingNav from './sections/LandingNav';
 import Hero from './sections/Hero';
 import ProblemCards from './sections/ProblemCards';
 import HowItWorks from './sections/HowItWorks';
-import Views from './sections/Views';
 import Capabilities from './sections/Capabilities';
-import Validation from './sections/Validation';
 import Personas from './sections/Personas';
 import Footer from './sections/Footer';
 import { PersonaType } from '../types/api';
@@ -34,11 +32,9 @@ export default function LandingPage({
         <Hero onLaunch={onLaunch} onThreatDemo={onThreatDemo} />
         <ProblemCards />
         <HowItWorks />
-        <Views onLaunchTab={onLaunchTab} />
         <Capabilities />
-        <Validation />
         <Personas onLaunchPersona={onLaunchPersona} />
-        <Footer />
+        <Footer onLaunchTab={onLaunchTab} />
       </div>
     </div>
   );
