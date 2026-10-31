@@ -912,61 +912,6 @@ export default function HeroDiagram() {
                 </motion.g>
               );
             })}
-
-            {/* Default Pinned Glass Callout near Chlorine PLC (shown when no node is actively expanded) */}
-            {!activeNode && (
-              <g
-                className="cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleItem(11);
-                }}
-              >
-                <line
-                  x1="238"
-                  y1="345"
-                  x2="256"
-                  y2="333"
-                  stroke="#FF4D4F"
-                  strokeWidth="1.2"
-                  strokeDasharray="2 2"
-                />
-                <rect
-                  x="256"
-                  y="316"
-                  width="244"
-                  height="34"
-                  rx="6"
-                  fill="#120D0B"
-                  fillOpacity="0.92"
-                  stroke="rgba(255,255,255,0.22)"
-                  strokeWidth="1"
-                />
-                <circle
-                  cx="270"
-                  cy="333"
-                  r="3.5"
-                  fill="#FF4D4F"
-                  className="animate-pulse"
-                />
-                <text
-                  x="281"
-                  y="336"
-                  fontSize="9.5"
-                  fontFamily="JetBrains Mono, monospace"
-                >
-                  <tspan fill="#FFFFFF" fontWeight="600">
-                    Chlorine PLC
-                  </tspan>
-                  <tspan fill="#6F6863"> · </tspan>
-                  <tspan fill="#FF4D4F" fontWeight="600">
-                    risk 87
-                  </tspan>
-                  <tspan fill="#6F6863"> · </tspan>
-                  <tspan fill="#A09A96">4.2 h to impact</tspan>
-                </text>
-              </g>
-            )}
           </motion.svg>
 
           {/* Interactive Floating shadcn Card Popover (from radial-orbital-timeline.tsx) */}
