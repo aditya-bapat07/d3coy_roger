@@ -10,6 +10,36 @@ RiskLevel = Literal["low", "medium", "high", "critical"]
 ActionType = Literal["patch", "segment", "disable_remote_access", "mfa", "enhanced_monitoring"]
 
 
+class PathDetail(BaseModel):
+    path: List[str]
+    probability: float
+    likelihood_score: float
+    technique_ids: List[str] = Field(default_factory=list)
+    hop_count: int = 0
+
+
+class RiskDropFactor(BaseModel):
+    factor_id: str
+    factor_type: str
+    description: str
+    risk_drop: float
+    risk_without_factor: float
+
+
+class RiskDropIfRemoved(BaseModel):
+    factors: List[RiskDropFactor] = Field(default_factory=list)
+    note: str = (
+        "Single-factor risk drops isolate each element's contribution and do not sum to "
+        "total risk due to non-linear and overlapping path dependencies."
+    )
+
+
+class ConfidenceRating(BaseModel):
+    rating: Literal["High", "Medium", "Low"] = "High"
+    score: float = 1.0
+    reasons: List[str] = Field(default_factory=list)
+
+
 class AssetRiskResponse(BaseModel):
     asset_id: str
     name: str
@@ -40,6 +70,9 @@ class AssetRiskResponse(BaseModel):
     max_outage_hours: float = 0.0
     path_from_entry: List[str] = Field(default_factory=list)
     path_technique_ids: List[str] = Field(default_factory=list)
+    top_3_paths: List[PathDetail] = Field(default_factory=list)
+    risk_drop_if_removed: Optional[RiskDropIfRemoved] = None
+    confidence: Optional[ConfidenceRating] = None
     is_choke_point: bool = False
     criticality_note: str = ""
     scenario_assumption: bool = True
@@ -210,3 +243,4 @@ class ThreatDropResponse(BaseModel):
     delta_risk: float
     date_added: str
     required_action: str
+

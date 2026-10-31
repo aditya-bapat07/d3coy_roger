@@ -6,6 +6,33 @@ export type PersonaType = 'opportunistic' | 'nation_state' | 'insider';
 export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
 export type ActionType = 'patch' | 'segment' | 'disable_remote_access' | 'mfa' | 'enhanced_monitoring';
 
+export interface PathDetail {
+  path: string[];
+  probability: number;
+  likelihood_score: number;
+  technique_ids: string[];
+  hop_count: number;
+}
+
+export interface RiskDropFactor {
+  factor_id: string;
+  factor_type: string;
+  description: string;
+  risk_drop: number;
+  risk_without_factor: number;
+}
+
+export interface RiskDropIfRemoved {
+  factors: RiskDropFactor[];
+  note: string;
+}
+
+export interface ConfidenceRating {
+  rating: 'High' | 'Medium' | 'Low';
+  score: number;
+  reasons: string[];
+}
+
 export interface AssetRiskResponse {
   asset_id: string;
   name: string;
@@ -36,6 +63,9 @@ export interface AssetRiskResponse {
   max_outage_hours: number;
   path_from_entry: string[];
   path_technique_ids: string[];
+  top_3_paths?: PathDetail[];
+  risk_drop_if_removed?: RiskDropIfRemoved;
+  confidence?: ConfidenceRating;
   is_choke_point: boolean;
   criticality_note: string;
   scenario_assumption: boolean;

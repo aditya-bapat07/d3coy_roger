@@ -2,8 +2,8 @@
 Attack Graph Engine for Vidura.
 Builds a directed reachability graph from network rules, calculates conditional edge exploitability
 probabilities using real CISA KEV and EPSS data, incorporates ML anomaly score boosts,
-implements Dijkstra shortest paths in log-space, filters paths by threat actor persona,
-and maps MITRE ATT&CK for ICS techniques to every traversal hop.
+implements Yen's top-k shortest paths in log-space (-log10(p)) using networkx.shortest_simple_paths,
+filters paths by threat actor persona, and maps MITRE ATT&CK for ICS techniques to every traversal hop.
 """
 import json
 import logging
@@ -170,7 +170,7 @@ class AttackGraphEngine:
                 rule.from_asset, rule.to_asset, rule.protocol, rule.port
             )
 
-            # Dijkstra weight in log-space: -log10(prob) >= 0
+            # Dijkstra/Yen weight in log-space: -log10(prob) >= 0
             weight = -math.log10(prob)
 
             self.g.add_edge(
@@ -192,7 +192,10 @@ class AttackGraphEngine:
     ) -> Dict[str, Dict[str, Any]]:
         """
         Computes the most likely attack path and normalized likelihood score for every asset
-        under the constraints of the chosen threat persona.
+        using Yen's top-k algorithm (networkx.shortest_simple_paths) with -log10(p) weights.
+        Drops edges with p = 0 before searching.
+        Takes up to 50 paths per target respecting max_hops, stopping after examining 500 candidate paths.
+        Returns both the single best path and top-3 paths with individual probabilities.
         """
         personas_cfg = self.assumptions.get("parameters", {}).get("personas", {})
         p_cfg = personas_cfg.get(persona_type, personas_cfg.get("nation_state", {}))
@@ -200,12 +203,25 @@ class AttackGraphEngine:
         entry_points = p_cfg.get("entry_points", ["asset_internet"])
         max_hops = p_cfg.get("max_hops", 8)
 
-        # Opportunistic persona edge filter:
-        # Only traverses edges whose best CVE is KEV or EPSS >= 0.1, or default_credentials
+        # Opportunistic persona edge filter
         opportunistic_filter = persona_type == "opportunistic"
 
-        # Insider persona: initial access at asset_corp_ws1 with valid credentials
+        # Insider persona internal credential boost
         internal_cred_bonus = persona_type == "insider"
+
+        # Drop every edge with p <= 0 before searching (since -log10(0) is infinite)
+        search_graph = nx.DiGraph()
+        for node, data in self.g.nodes(data=True):
+            search_graph.add_node(node, **data)
+
+        for u, v, data in self.g.edges(data=True):
+            p = data.get("exploit_probability", 0.0)
+            if p > 0:
+                # -log10(p) >= 0
+                w = -math.log10(max(1e-6, min(1.0, p)))
+                edge_attrs = dict(data)
+                edge_attrs["weight"] = w
+                search_graph.add_edge(u, v, **edge_attrs)
 
         results: Dict[str, Dict[str, Any]] = {}
 
@@ -220,32 +236,47 @@ class AttackGraphEngine:
                     "path": [target_id],
                     "technique_ids": [],
                     "hop_count": 0,
+                    "top_3_paths": [
+                        {
+                            "path": [target_id],
+                            "probability": 1.0,
+                            "likelihood_score": 1.0,
+                            "technique_ids": [],
+                            "hop_count": 0,
+                        }
+                    ],
                 }
                 continue
 
-            best_prob = 0.0
-            best_path = []
-            best_techniques = []
+            candidates_examined = 0
+            valid_paths: List[Dict[str, Any]] = []
 
             for entry in entry_points:
-                if not self.g.has_node(entry) or not self.g.has_node(target_id):
+                if not search_graph.has_node(entry) or not search_graph.has_node(target_id):
+                    continue
+                if not nx.has_path(search_graph, entry, target_id):
                     continue
 
-                # Find all simple paths up to max_hops
                 try:
-                    for path in nx.all_simple_paths(self.g, source=entry, target=target_id, cutoff=max_hops):
-                        valid_path = True
-                        path_prob = 1.0
-                        techniques = []
+                    # Yen's algorithm via networkx.shortest_simple_paths
+                    path_gen = nx.shortest_simple_paths(
+                        search_graph, source=entry, target=target_id, weight="weight"
+                    )
 
-                        for i in range(len(path) - 1):
-                            u = path[i]
-                            v = path[i + 1]
-                            edge_data = self.g[u][v]
+                    for path in path_gen:
+                        candidates_examined += 1
+                        if candidates_examined > 500:
+                            break
 
-                            # Apply opportunistic filter
-                            if opportunistic_filter:
-                                v_asset = self.asset_map.get(v)
+                        hops = len(path) - 1
+                        if hops > max_hops or hops <= 0:
+                            continue
+
+                        # Check opportunistic edge filter
+                        if opportunistic_filter:
+                            valid_opp = True
+                            for node in path[1:]:
+                                v_asset = self.asset_map.get(node)
                                 has_kev = False
                                 epss_high = False
                                 if v_asset:
@@ -258,36 +289,58 @@ class AttackGraphEngine:
                                                 epss_high = True
                                 default_creds = v_asset.default_credentials if v_asset else False
                                 if not (has_kev or epss_high or default_creds):
-                                    valid_path = False
+                                    valid_opp = False
                                     break
+                            if not valid_opp:
+                                continue
 
+                        # Calculate path probability and extract techniques
+                        path_prob = 1.0
+                        techniques = []
+                        for i in range(len(path) - 1):
+                            u_node = path[i]
+                            v_node = path[i + 1]
+                            edge_data = search_graph[u_node][v_node]
                             edge_p = edge_data["exploit_probability"]
-                            # Insider internal credential boost
-                            if internal_cred_bonus and (u.startswith("asset_corp") or u.startswith("asset_dmz")):
+                            if internal_cred_bonus and (u_node.startswith("asset_corp") or u_node.startswith("asset_dmz")):
                                 edge_p = max(edge_p, 0.9)
-
                             path_prob *= edge_p
                             techniques.append(edge_data.get("technique_id", "T0886"))
 
-                        if valid_path and path_prob > best_prob:
-                            best_prob = path_prob
-                            best_path = path
-                            best_techniques = techniques
-                except Exception as ex:
-                    logger.debug("Path search error from %s to %s: %s", entry, target_id, ex)
+                        path_prob = float(max(1e-6, min(1.0, path_prob)))
+                        log_val = math.log10(max(path_prob, 1e-6))
+                        norm_l = max(0.0, min(1.0, (log_val + 6.0) / 6.0))
 
-            if best_prob > 0.0 and best_path:
-                # Log scale normalization: L_n = (log10(max(L, 1e-6)) + 6) / 6
-                log_val = math.log10(max(best_prob, 1e-6))
-                norm_l = max(0.0, min(1.0, (log_val + 6.0) / 6.0))
+                        valid_paths.append({
+                            "path": path,
+                            "probability": round(path_prob, 6),
+                            "likelihood_score": round(norm_l, 4),
+                            "technique_ids": techniques,
+                            "hop_count": hops,
+                        })
 
+                        if len(valid_paths) >= 50:
+                            break
+
+                except (nx.NetworkXNoPath, nx.NodeNotFound):
+                    pass
+
+                if candidates_examined >= 500 or len(valid_paths) >= 50:
+                    break
+
+            # Sort valid paths descending by probability
+            valid_paths.sort(key=lambda x: -x["probability"])
+
+            if valid_paths:
+                best = valid_paths[0]
                 results[target_id] = {
                     "reachable": True,
-                    "likelihood_raw": round(best_prob, 6),
-                    "likelihood_score": round(norm_l, 4),
-                    "path": best_path,
-                    "technique_ids": best_techniques,
-                    "hop_count": len(best_path) - 1,
+                    "likelihood_raw": best["probability"],
+                    "likelihood_score": best["likelihood_score"],
+                    "path": best["path"],
+                    "technique_ids": best["technique_ids"],
+                    "hop_count": best["hop_count"],
+                    "top_3_paths": valid_paths[:3],
                 }
             else:
                 results[target_id] = {
@@ -297,6 +350,7 @@ class AttackGraphEngine:
                     "path": [],
                     "technique_ids": [],
                     "hop_count": 0,
+                    "top_3_paths": [],
                 }
 
         return results

@@ -202,6 +202,7 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
                 <th className="py-3 px-3.5">Zone</th>
                 <th className="py-3 px-3.5">Site</th>
                 <th className="py-3 px-3.5">Threat Intel & Weaknesses</th>
+                <th className="py-3 px-3.5 text-center">Confidence</th>
                 <th
                   onClick={() => toggleSort('anomaly')}
                   className="py-3 px-3.5 cursor-pointer hover:text-white"
@@ -240,14 +241,14 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
             <tbody className="divide-y divide-[#1F2C42]">
               {loading ? (
                 <tr>
-                  <td colSpan={10} className="py-12 text-center text-slate-400">
+                  <td colSpan={11} className="py-12 text-center text-slate-400">
                     <Activity className="w-6 h-6 animate-spin mx-auto mb-2 text-blue-400" />
                     Calculating risk matrices across Navanagar attack paths...
                   </td>
                 </tr>
               ) : filteredAssets.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="py-10 text-center text-slate-400">
+                  <td colSpan={11} className="py-10 text-center text-slate-400">
                     No assets matching the filter criteria.
                   </td>
                 </tr>
@@ -340,6 +341,22 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
                             <span className="text-slate-500 text-[11px]">No known CVE</span>
                           )}
                         </div>
+                      </td>
+
+                      {/* Confidence Rating Badge */}
+                      <td className="py-3 px-3.5 text-center">
+                        <span
+                          className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border ${
+                            asset.confidence?.rating === 'High'
+                              ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300'
+                              : asset.confidence?.rating === 'Medium'
+                              ? 'bg-amber-950/80 border-amber-500/50 text-amber-300'
+                              : 'bg-rose-950/80 border-rose-500/50 text-rose-300'
+                          }`}
+                          title={asset.confidence?.reasons?.join('\n')}
+                        >
+                          {asset.confidence?.rating ?? 'High'}
+                        </span>
                       </td>
 
                       {/* Anomaly Bar */}

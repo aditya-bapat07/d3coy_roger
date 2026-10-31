@@ -74,6 +74,13 @@ export default function App() {
       ]);
 
       setOverview(riskRes);
+      // Auto-select asset from URL parameter if provided (deep linking)
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetAssetId = urlParams.get('asset');
+      if (targetAssetId && riskRes?.assets) {
+        const matched = riskRes.assets.find((a: any) => a.asset_id === targetAssetId);
+        if (matched) setSelectedAsset(matched);
+      }
       setAttackGraph(attackRes);
       setDependencyGraph(depRes);
       setChokePoints(chokeRes);

@@ -7,6 +7,9 @@ import {
   Zap,
   Activity,
   Radio,
+  HelpCircle,
+  TrendingDown,
+  CheckCircle,
 } from 'lucide-react';
 import { AssetRiskResponse } from '../types/api';
 import { PURDUE_ZONE_COLORS, getRiskLevel } from '../tokens';
@@ -23,11 +26,15 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
   onInjectAnomaly,
 }) => {
   const [injecting, setInjecting] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   if (!asset) return null;
 
   const riskLevel = getRiskLevel(asset.risk_score);
   const purdueColor = PURDUE_ZONE_COLORS[asset.purdue_level] || '#94A3B8';
+  const confidence = asset.confidence;
+  const whyBreakdown = asset.risk_drop_if_removed;
+  const topPaths = asset.top_3_paths || [];
 
   const handleInject = async () => {
     setInjecting(true);
@@ -36,6 +43,12 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
     } finally {
       setInjecting(false);
     }
+  };
+
+  const getConfidenceBadgeColor = (rating?: string) => {
+    if (rating === 'High') return 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300';
+    if (rating === 'Medium') return 'bg-amber-950/80 border-amber-500/50 text-amber-300';
+    return 'bg-rose-950/80 border-rose-500/50 text-rose-300';
   };
 
   return (
@@ -56,9 +69,21 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
               {asset.purdue_level}
             </div>
             <div>
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
-                {asset.name}
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-bold text-white flex items-center gap-2">
+                  {asset.name}
+                </h2>
+                {confidence && (
+                  <span
+                    className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold border ${getConfidenceBadgeColor(
+                      confidence.rating
+                    )}`}
+                    title={confidence.reasons.join('\n')}
+                  >
+                    {confidence.rating} Confidence
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-slate-400">
                 {asset.vendor} • {asset.product} ({asset.version})
               </p>
@@ -116,6 +141,81 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
             </div>
           </div>
 
+          {/* Confidence Evaluation Box */}
+          {confidence && (
+            <div className="bg-[#162032] border border-[#23324A] rounded-lg p-3.5 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-300 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                  <CheckCircle className="w-3.5 h-3.5 text-blue-400" />
+                  Model Confidence: <span className="text-white">{confidence.rating}</span>
+                </span>
+                <span className="text-[11px] text-slate-400 font-mono">
+                  Reliability Score: {(confidence.score * 100).toFixed(0)}%
+                </span>
+              </div>
+              {confidence.reasons.length > 0 ? (
+                <ul className="text-xs text-slate-300 space-y-1 list-disc list-inside">
+                  {confidence.reasons.map((r, i) => (
+                    <li key={i} className="text-slate-300 text-[11px]">
+                      {r}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="text-[11px] text-emerald-400">
+                  ✓ High grounding confidence: live CISA KEV verified, exact CPE match, and active telemetry.
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* 'Why' Breakdown: Single-Factor Risk Drops (Sensitivity) */}
+          {whyBreakdown && whyBreakdown.factors.length > 0 && (
+            <div className="bg-[#162032] border border-[#23324A] rounded-lg p-4 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                  <TrendingDown className="w-4 h-4 text-emerald-400" />
+                  Why is this asset at risk? (Single-Factor Sensitivity)
+                </h3>
+                <div className="relative">
+                  <button
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                    className="text-slate-400 hover:text-white"
+                  >
+                    <HelpCircle className="w-4 h-4 text-slate-400 hover:text-blue-400" />
+                  </button>
+                  {showTooltip && (
+                    <div className="absolute right-0 bottom-6 w-64 p-2.5 rounded-lg bg-slate-900 border border-slate-700 text-[10px] text-slate-200 shadow-2xl z-30 pointer-events-none">
+                      {whyBreakdown.note}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <p className="text-[11px] text-slate-400">
+                Risk drop if each individual factor on the best path or consequence cascade is eliminated:
+              </p>
+
+              <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                {whyBreakdown.factors.map((f) => (
+                  <div
+                    key={f.factor_id}
+                    className="p-2 rounded bg-[#111827] border border-[#23324A] flex items-center justify-between text-xs"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-slate-300 text-[11px] font-medium">{f.description}</span>
+                    </div>
+                    <div className="flex items-center gap-2 font-mono">
+                      <span className="text-emerald-400 font-bold">-{f.risk_drop.toFixed(1)}</span>
+                      <span className="text-[10px] text-slate-400">({f.risk_without_factor.toFixed(1)})</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Vulnerability & Threat Intelligence */}
           <div className="bg-[#162032] border border-[#23324A] rounded-lg p-4 space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
@@ -154,20 +254,6 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
                 No active CVE or credential weaknesses registered. Protected by host isolation.
               </div>
             )}
-
-            {/* Operational Attributes */}
-            <div className="grid grid-cols-2 gap-2 text-xs pt-1">
-              <div className="flex items-center justify-between p-2 rounded bg-[#111827] border border-[#23324A]">
-                <span className="text-slate-400">Patchable Immediately:</span>
-                <span className={asset.patchable_now ? 'text-emerald-400 font-medium' : 'text-amber-400 font-medium'}>
-                  {asset.patchable_now ? 'Yes (IT System)' : 'No (OT Maintenance Window)'}
-                </span>
-              </div>
-              <div className="flex items-center justify-between p-2 rounded bg-[#111827] border border-[#23324A]">
-                <span className="text-slate-400">Next Maint. Window:</span>
-                <span className="text-white font-mono">{asset.next_maintenance_window_days} days</span>
-              </div>
-            </div>
           </div>
 
           {/* Physical Consequence Cascade */}
@@ -215,8 +301,44 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
             )}
           </div>
 
-          {/* Attack Path Traversal */}
-          {asset.path_from_entry.length > 0 && (
+          {/* Attack Path Traversal & Yen's Top-3 Paths */}
+          {topPaths.length > 0 ? (
+            <div className="bg-[#162032] border border-[#23324A] rounded-lg p-4 space-y-2.5">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                <Radio className="w-4 h-4 text-blue-400" />
+                Attack Traversal Chains (Yen's Top-{topPaths.length} Paths)
+              </h3>
+              <div className="space-y-2">
+                {topPaths.map((pDetail, idx) => (
+                  <div
+                    key={idx}
+                    className="p-2.5 rounded bg-[#111827] border border-[#23324A] text-xs font-mono space-y-1"
+                  >
+                    <div className="flex items-center justify-between text-[11px] text-slate-400">
+                      <span className="font-bold text-blue-300">
+                        {idx === 0 ? 'Primary Attack Path (Most Likely)' : `Alternative Path #${idx + 1}`}
+                      </span>
+                      <span>
+                        Probability: <strong className="text-white">{(pDetail.probability * 100).toFixed(2)}%</strong> ({pDetail.hop_count} hops)
+                      </span>
+                    </div>
+                    <div className="flex items-center flex-wrap gap-1.5 pt-1">
+                      {pDetail.path.map((step, sIdx) => (
+                        <React.Fragment key={step}>
+                          <span className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-200 text-[10px]">
+                            {step}
+                          </span>
+                          {sIdx < pDetail.path.length - 1 && (
+                            <ArrowRight className="w-3 h-3 text-slate-500" />
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : asset.path_from_entry.length > 0 && (
             <div className="bg-[#162032] border border-[#23324A] rounded-lg p-4 space-y-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
                 <Radio className="w-4 h-4 text-blue-400" />

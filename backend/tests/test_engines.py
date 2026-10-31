@@ -126,3 +126,75 @@ def test_what_if_simulation():
     target_delta = next((d for d in res_drop["asset_deltas"] if d["asset_id"] == "asset_water_plc_chlorine"), None)
     assert target_delta is not None
     assert target_delta["new_risk"] >= target_delta["baseline_risk"]
+
+
+def test_yens_top_k_attack_paths():
+    """Verifies Yen's top-k shortest paths algorithm implementation in AttackGraphEngine."""
+    ag = AttackGraphEngine()
+    res = ag.compute_likelihoods_for_persona("nation_state")
+
+    # asset_water_plc_chlorine is a deep OT target reachable via multiple routes
+    chlorine_info = res.get("asset_water_plc_chlorine")
+    assert chlorine_info is not None
+    assert chlorine_info["reachable"] is True
+
+    top_paths = chlorine_info.get("top_3_paths", [])
+    assert 1 <= len(top_paths) <= 3
+
+    # Check top path ordering: descending probability
+    prev_prob = 1.0
+    for p_detail in top_paths:
+        assert "path" in p_detail
+        assert "probability" in p_detail
+        assert "likelihood_score" in p_detail
+        assert "technique_ids" in p_detail
+        assert "hop_count" in p_detail
+        assert p_detail["probability"] <= prev_prob
+        assert p_detail["probability"] > 0.0
+        assert p_detail["hop_count"] <= 8  # nation_state max_hops
+        assert p_detail["path"][-1] == "asset_water_plc_chlorine"
+        prev_prob = p_detail["probability"]
+
+    # Best path should match the first of top_3_paths
+    assert chlorine_info["path"] == top_paths[0]["path"]
+
+
+def test_why_breakdown_and_confidence():
+    """Verifies 'Why' breakdown (risk_drop_if_removed) and confidence ratings in RiskCalculator."""
+    rc = RiskCalculator()
+    overview = rc.calculate_all("nation_state")
+
+    chlorine_asset = next((a for a in overview["assets"] if a["asset_id"] == "asset_water_plc_chlorine"), None)
+    assert chlorine_asset is not None
+
+    # Verify 'Why' breakdown
+    why = chlorine_asset.get("risk_drop_if_removed")
+    assert why is not None
+    assert "factors" in why
+    assert "note" in why
+    assert "do not sum to total risk" in why["note"]
+
+    factors = why["factors"]
+    assert len(factors) > 0
+
+    # Factors must be sorted descending by risk_drop
+    drops = [f["risk_drop"] for f in factors]
+    assert drops == sorted(drops, reverse=True)
+
+    # Top drops should include key controls or perimeter/firewall factors
+    for factor in factors:
+        assert "factor_id" in factor
+        assert "factor_type" in factor
+        assert "description" in factor
+        assert factor["risk_drop"] >= 0.0
+        assert 0.0 <= factor["risk_without_factor"] <= chlorine_asset["risk_score"]
+
+    # Verify Confidence Rating
+    conf = chlorine_asset.get("confidence")
+    assert conf is not None
+    assert conf["rating"] in ["High", "Medium", "Low"]
+    assert 0.0 <= conf["score"] <= 1.0
+    assert isinstance(conf["reasons"], list)
+    assert len(conf["reasons"]) > 0  # Water PLC has inferred versions / rule assumptions
+
+
