@@ -22,7 +22,7 @@ export default function LandingPage({
   onLaunchPersona?: (persona: PersonaType) => void;
 }) {
   return (
-    <div id="top" className="relative min-h-screen bg-[#0A0706] text-white overflow-x-clip">
+    <div id="top" className="relative min-h-screen bg-[#0A0706] text-white">
       {/* Full-viewport ambient background layer (fixed, z-0, pointer-events: none) */}
       <AmbientBackground />
 

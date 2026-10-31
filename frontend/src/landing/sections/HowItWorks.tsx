@@ -3,6 +3,7 @@ import {
   motion,
   useReducedMotion,
 } from 'framer-motion';
+import { Check } from 'lucide-react';
 
 interface StepData {
   number: number;
@@ -297,8 +298,9 @@ export default function HowItWorks() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
   const [activeStep, setActiveStep] = useState(0);
+  const [allCompleted, setAllCompleted] = useState(false);
 
-  // Track active step based on scroll reading position
+  // Track active step and completed checkpoints based on scroll reading position
   useEffect(() => {
     const handleScroll = () => {
       const vh = window.innerHeight;
@@ -333,6 +335,15 @@ export default function HowItWorks() {
         }
       }
 
+      // Check if the final step has been fully scrolled through to mark final checkpoint completed
+      const lastStepEl = document.getElementById(`method-step-${STEPS.length - 1}`);
+      if (lastStepEl && bestIdx === STEPS.length - 1) {
+        const lastRect = lastStepEl.getBoundingClientRect();
+        setAllCompleted(lastRect.top < 0 && lastRect.bottom < vh * 0.7);
+      } else {
+        setAllCompleted(false);
+      }
+
       setActiveStep(bestIdx);
     };
 
@@ -362,7 +373,7 @@ export default function HowItWorks() {
         {/* ── DESKTOP LAYOUT (Sticky Stepper Left, Content Blocks Right) ──────── */}
         <div className="hidden md:flex gap-12 lg:gap-16 items-start relative">
           {/* Left Column: Constant Sticky Vertical Stepper */}
-          <div className="w-1/3 sticky top-28 lg:top-32 self-start py-6 z-20">
+          <div className="w-1/3 sticky top-28 lg:top-32 self-start py-6 z-20 h-fit">
             <div className="relative pl-2">
               {/* Vertical connector line track spanning between circle 1 and circle 4 */}
               <div className="absolute left-[27px] top-5 bottom-5 w-[2px] -z-0">
@@ -371,6 +382,8 @@ export default function HowItWorks() {
                   className="absolute top-0 left-0 w-full bg-[#F26A1B] origin-top rounded-full"
                   animate={{
                     height: prefersReduced
+                      ? '100%'
+                      : allCompleted
                       ? '100%'
                       : `${(activeStep / (STEPS.length - 1)) * 100}%`,
                   }}
@@ -384,8 +397,8 @@ export default function HowItWorks() {
               {/* Stepper items */}
               <div className="space-y-12 relative z-10">
                 {STEPS.map((step, idx) => {
-                  const isActive = activeStep === idx;
-                  const isPassed = activeStep > idx;
+                  const isPassed = allCompleted || activeStep > idx;
+                  const isActive = !allCompleted && activeStep === idx;
 
                   return (
                     <div
@@ -396,42 +409,64 @@ export default function HowItWorks() {
                         if (el) el.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
                       }}
                     >
-                      {/* Circle 40px */}
+                      {/* Checkpoint Circle 40px */}
                       <div
                         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-mono text-sm font-bold transition-all duration-300 ${
                           isActive
-                            ? 'border-2 border-[#F26A1B] bg-[#120D0B] text-white shadow-[0_0_20px_rgba(242,106,27,0.4)] scale-110'
+                            ? 'border-2 border-[#F26A1B] bg-[#F26A1B] text-white shadow-[0_0_24px_rgba(242,106,27,0.6)] scale-110 ring-4 ring-[#F26A1B]/20'
                             : isPassed
-                            ? 'border-2 border-[#F26A1B]/70 bg-[#120D0B] text-white/90 shadow-[0_0_10px_rgba(242,106,27,0.2)]'
-                            : 'border-2 border-white/[0.12] bg-[#120D0B] text-[#6F6863]'
+                            ? 'border-2 border-[#F26A1B] bg-[#F26A1B]/20 text-[#F26A1B] shadow-[0_0_16px_rgba(242,106,27,0.35)]'
+                            : 'border-2 border-white/[0.12] bg-[#120D0B] text-[#6F6863] group-hover:border-white/25 group-hover:text-white/60'
                         }`}
                       >
-                        {step.number}
+                        {isPassed ? (
+                          <Check className="w-5 h-5 text-[#F26A1B] stroke-[3]" />
+                        ) : (
+                          step.number
+                        )}
                       </div>
 
-                      {/* Step Title Label */}
+                      {/* Step Title Label & Checkpoint Status */}
                       <div className="flex flex-col">
                         <div className="flex items-center gap-2">
                           <span
-                            className={`text-sm font-semibold transition-colors duration-300 ${
+                            className={`text-sm transition-colors duration-300 ${
                               isActive
-                                ? 'text-white'
+                                ? 'text-white font-bold text-base'
                                 : isPassed
-                                ? 'text-[#A09A96]'
-                                : 'text-[#6F6863]'
+                                ? 'text-white/95 font-semibold'
+                                : 'text-[#6F6863] font-medium group-hover:text-[#A09A96]'
                             }`}
                           >
                             {step.title}
                           </span>
                           {isActive && (
-                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-[#F26A1B]/15 text-[#F26A1B] border border-[#F26A1B]/30 font-semibold shadow-[0_0_8px_rgba(242,106,27,0.2)]">
-                              <span className="w-1 h-1 rounded-full bg-[#F26A1B] animate-pulse" />
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-[#F26A1B]/20 text-[#F26A1B] border border-[#F26A1B]/40 font-bold shadow-[0_0_10px_rgba(242,106,27,0.25)]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#F26A1B] animate-ping" />
                               Active
                             </span>
                           )}
+                          {isPassed && (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-[#F26A1B]/15 text-[#F26A1B] border border-[#F26A1B]/30 font-semibold shadow-[0_0_8px_rgba(242,106,27,0.2)]">
+                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                              Completed
+                            </span>
+                          )}
                         </div>
-                        <span className="text-[11px] font-mono text-[#6F6863]">
-                          Step 0{step.number}
+                        <span
+                          className={`text-[11px] font-mono transition-colors duration-300 ${
+                            isActive
+                              ? 'text-[#F26A1B]'
+                              : isPassed
+                              ? 'text-[#F26A1B]/75'
+                              : 'text-[#6F6863]'
+                          }`}
+                        >
+                          {isPassed
+                            ? `Step 0${step.number} • Checkpoint completed`
+                            : isActive
+                            ? `Step 0${step.number} • In progress`
+                            : `Step 0${step.number}`}
                         </span>
                       </div>
                     </div>
