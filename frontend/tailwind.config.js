@@ -28,15 +28,40 @@ export default {
         accent: {
           DEFAULT: 'var(--accent-primary)',
           hover: 'var(--accent-hover)',
+          glow: 'var(--accent-glow)',
         },
         line: {
           DEFAULT: 'var(--border-default)',
           subtle: 'var(--border-subtle)',
+          hover: 'var(--border-hover)',
+        },
+        cybrix: {
+          bg: '#0A0706',
+          surface: '#120D0B',
+          elevated: '#18120F',
+          orange: '#F26A1B',
+          'orange-bright': '#FF7A2B',
+          gold: '#FFB340',
+          text: '#FFFFFF',
+          muted: '#A09A96',
+          subtle: '#6F6863',
         },
       },
       fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        sans: ['Manrope', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+      },
+      boxShadow: {
+        'glass-hover': '0 0 30px rgba(242, 106, 27, 0.15)',
+        'orange-glow': '0 0 25px rgba(242, 106, 27, 0.35)',
+        'orange-glow-sm': '0 0 12px rgba(242, 106, 27, 0.25)',
+        'star-glow': '0 0 10px rgba(255, 179, 64, 0.6)',
+      },
+      borderRadius: {
+        'glass': '18px',
+      },
+      backdropBlur: {
+        'glass': '12px',
       },
     },
   },
