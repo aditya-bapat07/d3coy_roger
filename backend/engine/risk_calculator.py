@@ -544,8 +544,16 @@ class RiskCalculator:
                 "scenario_assumption": True,
             })
 
-        # Rank assets descending by risk_score
-        asset_responses.sort(key=lambda x: -x["risk_score"])
+        # Rank assets descending by risk_score, tie-breaking by consequence, likelihood, CVSS
+        asset_responses.sort(
+            key=lambda x: (
+                -x["risk_score"],
+                -x["consequence_score"],
+                -(0.0 if x["asset_id"] == "asset_internet" else x["likelihood_score"]),
+                -(x["cvss"] or 0.0),
+                x["asset_id"],
+            )
+        )
 
         total_assets = len(asset_responses)
         avg_risk = round(total_risk / total_assets, 1) if total_assets > 0 else 0.0

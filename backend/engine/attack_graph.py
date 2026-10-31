@@ -95,10 +95,11 @@ class AttackGraphEngine:
         p_default_cred = cred_probs.get("default_credentials", {}).get("value", 0.9)
         p_remote_no_mfa = cred_probs.get("exposed_remote_access_no_mfa", {}).get("value", 0.3)
         alpha = params.get("anomaly_boost_alpha", {}).get("value", 0.3)
+        exploit_mult = params.get("exploit_probability_multiplier", 1.0)
 
         dst_asset = self.asset_map.get(dst)
         if not dst_asset:
-            return 0.05
+            return min(1.0, max(0.0, 0.05 * exploit_mult))
 
         # Check CVEs on destination asset
         cve_probs = []
@@ -114,12 +115,12 @@ class AttackGraphEngine:
         for cve_id in cves_to_check:
             intel = get_cve(cve_id)
             if intel:
-                epss = intel.get("epss") or 0.0
+                epss = min(1.0, max(0.0, (intel.get("epss") or 0.0) * exploit_mult))
                 is_kev = intel.get("kev", False)
                 if is_kev:
                     prob = max(kev_floor, epss)
                 else:
-                    prob = epss if epss > 0 else 0.05
+                    prob = epss if epss > 0 else min(1.0, max(0.0, 0.05 * exploit_mult))
                 cve_probs.append(prob)
 
         if cve_probs:
@@ -129,9 +130,9 @@ class AttackGraphEngine:
         elif dst_asset.remote_access:
             base_p = p_remote_no_mfa
         elif misconfiguration:
-            base_p = 0.4
+            base_p = min(1.0, max(0.0, 0.4 * exploit_mult))
         else:
-            base_p = 0.05
+            base_p = min(1.0, max(0.0, 0.05 * exploit_mult))
 
         # Factor in anomaly score
         anomaly_score = self.injected_anomalies.get(dst, dst_asset.anomaly_score)
@@ -205,6 +206,10 @@ class AttackGraphEngine:
 
         # Opportunistic persona edge filter
         opportunistic_filter = persona_type == "opportunistic"
+        opp_epss_threshold = p_cfg.get(
+            "epss_threshold",
+            self.assumptions.get("parameters", {}).get("opportunistic_epss_threshold", {}).get("value", 0.1),
+        )
 
         # Insider persona internal credential boost
         internal_cred_bonus = persona_type == "insider"
@@ -285,7 +290,7 @@ class AttackGraphEngine:
                                         if intel:
                                             if intel.get("kev"):
                                                 has_kev = True
-                                            if (intel.get("epss") or 0.0) >= 0.1:
+                                            if (intel.get("epss") or 0.0) >= opp_epss_threshold:
                                                 epss_high = True
                                 default_creds = v_asset.default_credentials if v_asset else False
                                 if not (has_kev or epss_high or default_creds):

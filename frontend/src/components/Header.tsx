@@ -7,13 +7,14 @@ import {
   Activity,
   Layers,
   Wrench,
+  BookOpen,
   RotateCcw,
 } from 'lucide-react';
 import { PersonaType } from '../types/api';
 
 interface HeaderProps {
-  currentTab: 'risk' | 'graph' | 'remediation';
-  onTabChange: (tab: 'risk' | 'graph' | 'remediation') => void;
+  currentTab: 'risk' | 'graph' | 'remediation' | 'how';
+  onTabChange: (tab: 'risk' | 'graph' | 'remediation' | 'how') => void;
   persona: PersonaType;
   onPersonaChange: (p: PersonaType) => void;
   threatDropActive: boolean;
@@ -94,6 +95,17 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Wrench className="w-3.5 h-3.5" />
             3. What do I do first?
+          </button>
+          <button
+            onClick={() => onTabChange('how')}
+            className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-medium rounded-md transition ${
+              currentTab === 'how'
+                ? 'bg-blue-600 text-white shadow'
+                : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+            }`}
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            How it works
           </button>
         </nav>
 

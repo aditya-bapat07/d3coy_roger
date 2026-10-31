@@ -69,11 +69,11 @@ class RemediationPlanner:
                 "asset_id": "asset_water_plc_chlorine",
                 "asset_name": "Disinfection Chlorine Dosing Skid PLC",
                 "action_type": "enhanced_monitoring",
-                "description": "Deploy OT Network Intrusion Detection sensor to inspect Modbus TCP registers (compensating control, avoids plant shutdown)",
+                "description": "Deploy OT IDS sensor to collect Modbus/TCP register & process history logs (DET0776/DET0752 — detection only, raises confidence, risk reduction = 0)",
                 "engineer_hours": 3.0,
                 "downtime_hours": 0.0,
                 "patchable_now": False,
-                "risk_reduction": 0.18,
+                "risk_reduction": 0.0,
                 "priority": 4,
             },
             {

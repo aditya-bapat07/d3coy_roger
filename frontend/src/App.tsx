@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { RiskTableView } from './components/RiskTableView';
 import { GraphView } from './components/GraphView';
 import { RemediationView } from './components/RemediationView';
+import { HowItWorksView } from './components/HowItWorksView';
 import { AssetDetailModal } from './components/AssetDetailModal';
 import {
   AssetRiskResponse,
@@ -13,14 +14,23 @@ import {
   RemediationPlanResponse,
   SimulationResponse,
   ThreatDropResponse,
+  MetaResponse,
+  ValidationResponse,
   PersonaType,
+  fetchMetaInfo,
+  fetchValidationReport,
 } from './types/api';
 
 const API_BASE = 'http://127.0.0.1:8000/api';
 
 export default function App() {
-  const initialTab = (new URLSearchParams(window.location.search).get('tab') as 'risk' | 'graph' | 'remediation') || 'risk';
-  const [currentTab, setCurrentTab] = useState<'risk' | 'graph' | 'remediation'>(initialTab);
+  const initialTab =
+    (new URLSearchParams(window.location.search).get('tab') as
+      | 'risk'
+      | 'graph'
+      | 'remediation'
+      | 'how') || 'risk';
+  const [currentTab, setCurrentTab] = useState<'risk' | 'graph' | 'remediation' | 'how'>(initialTab);
   const [persona, setPersona] = useState<PersonaType>('nation_state');
   const [threatDropActive, setThreatDropActive] = useState<boolean>(false);
   const [engineerBudget, setEngineerBudget] = useState<number>(20);
@@ -33,6 +43,8 @@ export default function App() {
   const [plan, setPlan] = useState<RemediationPlanResponse | null>(null);
   const [simulation, setSimulation] = useState<SimulationResponse | null>(null);
   const [threatDropInfo, setThreatDropInfo] = useState<ThreatDropResponse | null>(null);
+  const [metaInfo, setMetaInfo] = useState<MetaResponse | null>(null);
+  const [validationReport, setValidationReport] = useState<ValidationResponse | null>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,12 +77,14 @@ export default function App() {
         }),
       }).then((r) => r.json());
 
-      const [riskRes, attackRes, depRes, chokeRes, tdRes] = await Promise.all([
+      const [riskRes, attackRes, depRes, chokeRes, tdRes, metaRes, valRes] = await Promise.all([
         fetch(`${API_BASE}/risk/assets?persona=${persona}`).then((r) => r.json()),
         fetch(`${API_BASE}/graph/attack?persona=${persona}`).then((r) => r.json()),
         fetch(`${API_BASE}/graph/dependency`).then((r) => r.json()),
         fetch(`${API_BASE}/choke-points`).then((r) => r.json()),
         fetch(`${API_BASE}/threat-drop`).then((r) => r.json()),
+        fetchMetaInfo(API_BASE),
+        fetchValidationReport(API_BASE),
       ]);
 
       setOverview(riskRes);
@@ -87,6 +101,8 @@ export default function App() {
       setPlan(planData);
       setSimulation(simRes);
       setThreatDropInfo(tdRes);
+      setMetaInfo(metaRes);
+      setValidationReport(valRes);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to connect to Vidura API';
       setError(msg);
@@ -234,6 +250,15 @@ export default function App() {
             onToggleAction={handleTogglePlanAction}
             onToggleThreatDrop={handleToggleThreatDrop}
             onExportPdf={handleExportPdf}
+            loading={loading}
+          />
+        )}
+
+        {/* Tab 4: How it works (Methodology, Provenance & Validation) */}
+        {currentTab === 'how' && (
+          <HowItWorksView
+            meta={metaInfo}
+            validation={validationReport}
             loading={loading}
           />
         )}

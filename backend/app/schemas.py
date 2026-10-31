@@ -3,7 +3,7 @@ Pydantic v2 API Schemas and Contracts for Vidura.
 All models are strictly typed and serve as the single source of truth for API serialization.
 """
 from typing import Any, Dict, List, Literal, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 PersonaType = Literal["opportunistic", "nation_state", "insider"]
 RiskLevel = Literal["low", "medium", "high", "critical"]
@@ -243,4 +243,193 @@ class ThreatDropResponse(BaseModel):
     delta_risk: float
     date_added: str
     required_action: str
+
+
+class InvariantCheckItem(BaseModel):
+    id: str
+    name: str
+    passed: bool
+    details: str
+
+
+class InvariantsSection(BaseModel):
+    total_checks: int
+    passed_checks: int
+    all_passed: bool
+    summary: str
+    checks: List[InvariantCheckItem]
+
+
+class SensitivityParameterResult(BaseModel):
+    parameter: str
+    label: str
+    persona_evaluated: str
+    baseline_value: float
+    minus_50_pct_value: float
+    plus_50_pct_value: float
+    kendall_tau_minus_50: float
+    kendall_tau_plus_50: float
+    min_kendall_tau: float
+    top_10_rank_shifts_minus_50: int
+    top_10_rank_shifts_plus_50: int
+    max_top_10_rank_shifts: int
+    top_3_minus_50: List[str] = Field(default_factory=list)
+    top_3_plus_50: List[str] = Field(default_factory=list)
+
+
+class SensitivityBaselineItem(BaseModel):
+    rank: int
+    asset_id: str
+    name: str
+    risk_score: float
+
+
+class SensitivityAnalysisSection(BaseModel):
+    methodology: str
+    baseline_top_10: List[SensitivityBaselineItem]
+    mean_min_kendall_tau: float
+    most_influential_parameters: List[str]
+    honest_assessment: str
+    parameters: List[SensitivityParameterResult]
+
+
+class CvssComparisonItem(BaseModel):
+    asset_id: str
+    name: str
+    site: str
+    purdue_level: str
+    cvss: float
+    best_cve: Optional[str] = None
+    cisa_kev: bool
+    epss: float
+    vidura_risk_score: float
+    likelihood_score: float
+    consequence_score: float
+    vidura_rank: int
+    cvss_rank: int
+    rank_delta: int
+    abs_rank_delta: int
+    direction: str
+    computed_reason: str
+
+
+class CvssComparisonSection(BaseModel):
+    kendall_tau_vs_cvss: float
+    total_assets_compared: int
+    summary: str
+    biggest_disagreements: List[CvssComparisonItem]
+    full_comparison: List[CvssComparisonItem]
+
+
+class SyntheticAnomalyEval(BaseModel):
+    label: str
+    model: str
+    contamination: float
+    train_windows: int
+    test_windows: int
+    injected_attack_windows: int
+    precision: float
+    recall: float
+    f1_score: float
+    confusion_matrix: Dict[str, int]
+    notes: str
+
+
+class HaiTestbedEval(BaseModel):
+    label: str
+    dataset: str
+    process_target: str
+    tags: List[str]
+    rows_train: int
+    protocol: str
+    threshold_from_train_p99_5: float
+    pointwise_precision: float
+    pointwise_recall: float
+    event_recall: float
+    attack_events_total: int
+    attack_events_detected: int
+    false_alarm_episodes: int
+    normal_hours: float
+    false_alarm_episodes_per_24h: float
+    tp: int
+    fp: int
+    fn: int
+    per_file: List[Dict[str, Any]] = Field(default_factory=list)
+    note: str
+
+
+class AnomalyEvaluationsSection(BaseModel):
+    separation_note: str
+    synthetic_evaluation: SyntheticAnomalyEval
+    hai_testbed_evaluation: Optional[HaiTestbedEval] = None
+
+
+class KevEvidenceRow(BaseModel):
+    group: str
+    kev_cves: int
+    with_epss: int
+    median_epss: float
+    p25_epss: float
+    p75_epss: float
+    share_below_0_1: float
+    share_below_0_5: float
+    ransomware_known: int
+
+
+class KevFloorEvidenceSection(BaseModel):
+    sources: Dict[str, str]
+    definition: str
+    small_sample_note: str
+    rows: List[KevEvidenceRow]
+
+
+class ValidationResponse(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    generated_at: str
+    invariants: InvariantsSection
+    sensitivity_analysis: SensitivityAnalysisSection
+    cvss_comparison: CvssComparisonSection
+    anomaly_evaluations: AnomalyEvaluationsSection
+    kev_floor_evidence: KevFloorEvidenceSection
+
+
+class FormulaSummary(BaseModel):
+    risk_formula: str
+    likelihood_sentence: str
+    consequence_sentence: str
+    attack_graph_role: str
+    dependency_graph_role: str
+
+
+class DataSourceItem(BaseModel):
+    key: str
+    file: str
+    description: str
+    source: str
+    record_count: int
+    fetched_at: str
+    file_size_bytes: int
+
+
+class AssumptionTableRow(BaseModel):
+    parameter: str
+    value: str
+    justification: str
+    source: str
+    scenario_assumption: bool = True
+
+
+class LimitationItem(BaseModel):
+    title: str
+    description: str
+
+
+class MetaResponse(BaseModel):
+    formula_summary: FormulaSummary
+    data_sources: List[DataSourceItem]
+    assumptions_table: List[AssumptionTableRow]
+    limitations: List[LimitationItem]
+    kev_floor_evidence: KevFloorEvidenceSection
+
 

@@ -15,12 +15,14 @@ from backend.app.schemas import (
     AttackGraphResponse,
     ChokePointResponse,
     DependencyGraphResponse,
+    MetaResponse,
     RemediationPlanRequest,
     RemediationPlanResponse,
     RiskOverviewResponse,
     SimulationRequest,
     SimulationResponse,
     ThreatDropResponse,
+    ValidationResponse,
 )
 from backend.engine.anomaly import get_anomaly, inject_anomaly
 from backend.engine.attack_graph import AttackGraphEngine
@@ -30,6 +32,7 @@ from backend.engine.remediation import RemediationPlanner
 from backend.engine.report_generator import generate_executive_briefing_pdf
 from backend.engine.risk_calculator import RiskCalculator
 from backend.engine.scenario import load_assumptions, load_scenario
+from backend.engine.validation import VALIDATION_FILE, build_meta_response, build_validation_report
 from backend.engine.what_if import WhatIfSimulationEngine
 
 logger = logging.getLogger(__name__)
@@ -254,3 +257,29 @@ async def download_briefing_pdf(
         media_type="application/pdf",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
+
+
+@app.get("/api/meta", response_model=MetaResponse)
+async def get_meta_info():
+    return build_meta_response()
+
+
+@app.get("/api/validation", response_model=ValidationResponse)
+async def get_validation_report(refresh: bool = Query(False)):
+    if not refresh and VALIDATION_FILE.exists():
+        try:
+            with open(VALIDATION_FILE, "r", encoding="utf-8") as f:
+                cached = json.load(f)
+            required_keys = {
+                "invariants",
+                "sensitivity_analysis",
+                "cvss_comparison",
+                "anomaly_evaluations",
+                "kev_floor_evidence",
+            }
+            if required_keys.issubset(cached.keys()):
+                return cached
+        except Exception:
+            pass
+    return build_validation_report(save_and_merge=True)
+

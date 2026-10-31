@@ -92,11 +92,9 @@ class WhatIfSimulationEngine:
                 if r.id != "misconfig_corp_ws1_to_traffic_ctrl"
             ]
 
-        # 6. Enhanced monitoring on water PLC (compensating control, raises detection / restricts registers)
+        # 6. Enhanced monitoring on water PLC (detection only: raises confidence, leaves risk unchanged)
         if "act_mon_water_plc" in applied_set:
-            for asset in mod_scenario.assets:
-                if asset.id == "asset_water_plc_chlorine":
-                    asset.cves = asset.cves[:1]  # Reduced attack surface
+            pass
 
         # Prepare anomaly injections map
         anomalies_map = {asset_id: 0.95 for asset_id in injected_anomalies}

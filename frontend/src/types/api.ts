@@ -237,3 +237,207 @@ export interface ThreatDropResponse {
   date_added: string;
   required_action: string;
 }
+
+export interface InvariantCheckItem {
+  id: string;
+  name: string;
+  passed: boolean;
+  details: string;
+}
+
+export interface InvariantsSection {
+  total_checks: number;
+  passed_checks: number;
+  all_passed: boolean;
+  summary: string;
+  checks: InvariantCheckItem[];
+}
+
+export interface SensitivityParameterResult {
+  parameter: string;
+  label: string;
+  persona_evaluated: string;
+  baseline_value: number;
+  minus_50_pct_value: number;
+  plus_50_pct_value: number;
+  kendall_tau_minus_50: number;
+  kendall_tau_plus_50: number;
+  min_kendall_tau: number;
+  top_10_rank_shifts_minus_50: number;
+  top_10_rank_shifts_plus_50: number;
+  max_top_10_rank_shifts: number;
+  top_3_minus_50: string[];
+  top_3_plus_50: string[];
+}
+
+export interface SensitivityBaselineItem {
+  rank: number;
+  asset_id: string;
+  name: string;
+  risk_score: number;
+}
+
+export interface SensitivityAnalysisSection {
+  methodology: string;
+  baseline_top_10: SensitivityBaselineItem[];
+  mean_min_kendall_tau: number;
+  most_influential_parameters: string[];
+  honest_assessment: string;
+  parameters: SensitivityParameterResult[];
+}
+
+export interface CvssComparisonItem {
+  asset_id: string;
+  name: string;
+  site: string;
+  purdue_level: string;
+  cvss: number;
+  best_cve: string | null;
+  cisa_kev: boolean;
+  epss: number;
+  vidura_risk_score: number;
+  likelihood_score: number;
+  consequence_score: number;
+  vidura_rank: number;
+  cvss_rank: number;
+  rank_delta: number;
+  abs_rank_delta: number;
+  direction: 'elevated_by_vidura' | 'demoted_by_vidura' | 'aligned';
+  computed_reason: string;
+}
+
+export interface CvssComparisonSection {
+  kendall_tau_vs_cvss: number;
+  total_assets_compared: number;
+  summary: string;
+  biggest_disagreements: CvssComparisonItem[];
+  full_comparison: CvssComparisonItem[];
+}
+
+export interface SyntheticAnomalyEval {
+  label: string;
+  model: string;
+  contamination: number;
+  train_windows: number;
+  test_windows: number;
+  injected_attack_windows: number;
+  precision: number;
+  recall: number;
+  f1_score: number;
+  confusion_matrix: Record<string, number>;
+  notes: string;
+}
+
+export interface HaiTestbedEval {
+  label: string;
+  dataset: string;
+  process_target: string;
+  tags: string[];
+  rows_train: number;
+  protocol: string;
+  threshold_from_train_p99_5: number;
+  pointwise_precision: number;
+  pointwise_recall: number;
+  event_recall: number;
+  attack_events_total: number;
+  attack_events_detected: number;
+  false_alarm_episodes: number;
+  normal_hours: number;
+  false_alarm_episodes_per_24h: number;
+  tp: number;
+  fp: number;
+  fn: number;
+  per_file: Record<string, any>[];
+  note: string;
+}
+
+export interface AnomalyEvaluationsSection {
+  separation_note: string;
+  synthetic_evaluation: SyntheticAnomalyEval;
+  hai_testbed_evaluation: HaiTestbedEval | null;
+}
+
+export interface KevEvidenceRow {
+  group: string;
+  kev_cves: number;
+  with_epss: number;
+  median_epss: number;
+  p25_epss: number;
+  p75_epss: number;
+  share_below_0_1: number;
+  share_below_0_5: number;
+  ransomware_known: number;
+}
+
+export interface KevFloorEvidenceSection {
+  sources: Record<string, string>;
+  definition: string;
+  small_sample_note: string;
+  rows: KevEvidenceRow[];
+}
+
+export interface ValidationResponse {
+  generated_at: string;
+  invariants: InvariantsSection;
+  sensitivity_analysis: SensitivityAnalysisSection;
+  cvss_comparison: CvssComparisonSection;
+  anomaly_evaluations: AnomalyEvaluationsSection;
+  kev_floor_evidence: KevFloorEvidenceSection;
+  [key: string]: any;
+}
+
+export interface FormulaSummary {
+  risk_formula: string;
+  likelihood_sentence: string;
+  consequence_sentence: string;
+  attack_graph_role: string;
+  dependency_graph_role: string;
+}
+
+export interface DataSourceItem {
+  key: string;
+  file: string;
+  description: string;
+  source: string;
+  record_count: number;
+  fetched_at: string;
+  file_size_bytes: number;
+}
+
+export interface AssumptionTableRow {
+  parameter: string;
+  value: string;
+  justification: string;
+  source: string;
+  scenario_assumption: boolean;
+}
+
+export interface LimitationItem {
+  title: string;
+  description: string;
+}
+
+export interface MetaResponse {
+  formula_summary: FormulaSummary;
+  data_sources: DataSourceItem[];
+  assumptions_table: AssumptionTableRow[];
+  limitations: LimitationItem[];
+  kev_floor_evidence: KevFloorEvidenceSection;
+}
+
+export async function fetchValidationReport(apiBase = '/api'): Promise<ValidationResponse> {
+  const res = await fetch(`${apiBase}/validation`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch validation report: ${res.status}`);
+  }
+  return res.json();
+}
+
+export async function fetchMetaInfo(apiBase = '/api'): Promise<MetaResponse> {
+  const res = await fetch(`${apiBase}/meta`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch methodology metadata: ${res.status}`);
+  }
+  return res.json();
+}
+

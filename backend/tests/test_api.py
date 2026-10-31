@@ -146,3 +146,38 @@ def test_pdf_report_download():
     assert res.headers["content-type"] == "application/pdf"
     assert len(res.content) > 1000
     assert res.content.startswith(b"%PDF")
+
+
+def test_meta_endpoint():
+    res = client.get("/api/meta")
+    assert res.status_code == 200
+    data = res.json()
+    assert "formula_summary" in data
+    assert data["formula_summary"]["risk_formula"] == "Risk = 100 × normalised likelihood × consequence"
+    assert "data_sources" in data
+    assert len(data["data_sources"]) >= 7
+    assert "assumptions_table" in data
+    assert len(data["assumptions_table"]) >= 17
+    assert all(row["scenario_assumption"] is True for row in data["assumptions_table"])
+    assert "limitations" in data
+    assert len(data["limitations"]) >= 3
+    assert "kev_floor_evidence" in data
+    assert len(data["kev_floor_evidence"]["rows"]) == 6
+
+
+def test_validation_endpoint():
+    res = client.get("/api/validation")
+    assert res.status_code == 200
+    data = res.json()
+    assert "invariants" in data
+    assert data["invariants"]["all_passed"] is True
+    assert "sensitivity_analysis" in data
+    assert len(data["sensitivity_analysis"]["parameters"]) >= 10
+    assert "cvss_comparison" in data
+    assert len(data["cvss_comparison"]["biggest_disagreements"]) >= 4
+    assert "anomaly_evaluations" in data
+    assert data["anomaly_evaluations"]["synthetic_evaluation"]["label"] == "Synthetic data, injected attacks"
+    assert data["anomaly_evaluations"]["hai_testbed_evaluation"]["label"] == "HAI 21.03 real testbed data"
+    assert "kev_floor_evidence" in data
+    assert len(data["kev_floor_evidence"]["rows"]) == 6
+
