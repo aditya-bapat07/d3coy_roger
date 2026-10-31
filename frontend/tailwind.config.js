@@ -4,45 +4,41 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        control: {
-          bg: '#0A0E17',          // Near-black control room navy
-          surface: '#111827',     // Dark slate surface
-          card: '#162032',        // Elevated panel
-          cardHover: '#1C293F',   // Hover state
-          border: '#23324A',      // Subtle slate border
-          subtle: '#64748B',      // Secondary text / icon
-          text: '#F1F5F9',        // Primary readable text
+        canvas: {
+          DEFAULT: 'var(--bg-primary)',
+          secondary: 'var(--bg-secondary)',
+          elevated: 'var(--bg-elevated)',
+          graph: 'var(--bg-graph)',
+        },
+        ink: {
+          DEFAULT: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          tertiary: 'var(--text-tertiary)',
         },
         risk: {
-          low: '#10B981',         // 0-25 Green
-          medium: '#F59E0B',      // 26-50 Amber
-          high: '#EF4444',        // 51-75 Red
-          critical: '#991B1B',    // 76-100 Deep Red
-          criticalBg: '#450A0A',
+          critical: 'var(--risk-critical)',
+          high: 'var(--risk-high)',
+          medium: 'var(--risk-medium)',
+          low: 'var(--risk-low)',
+          minimal: 'var(--risk-minimal)',
         },
-        purdue: {
-          l4: '#3B82F6',          // Enterprise IT
-          dmz: '#8B5CF6',         // L3.5 DMZ
-          l3: '#06B6D4',          // Operations
-          l2: '#F59E0B',          // Control SCADA/HMI
-          l1: '#EC4899',          // Basic Control (PLC/RTU)
-          l0: '#10B981',          // Field Devices / Physical
-        }
+        accent: {
+          DEFAULT: 'var(--accent-primary)',
+          hover: 'var(--accent-hover)',
+        },
+        line: {
+          DEFAULT: 'var(--border-default)',
+          subtle: 'var(--border-subtle)',
+        },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['JetBrains Mono', 'SFMono-Regular', 'Menlo', 'monospace'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
-      boxShadow: {
-        glow: '0 0 15px -3px rgba(59, 130, 246, 0.25)',
-        alert: '0 0 20px -3px rgba(239, 68, 68, 0.35)',
-      }
     },
   },
   plugins: [],
 }
-

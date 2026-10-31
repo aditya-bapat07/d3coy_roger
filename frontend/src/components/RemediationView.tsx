@@ -1,26 +1,9 @@
 import React, { useState } from 'react';
 import {
-  Wrench,
-  TrendingDown,
-  Flame,
-  FileDown,
-  CheckCircle2,
-  Sliders,
-  Zap,
-} from 'lucide-react';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from 'recharts';
-import {
   RemediationPlanResponse,
   SimulationResponse,
   ThreatDropResponse,
+  AssetRiskResponse,
 } from '../types/api';
 
 interface RemediationViewProps {
@@ -34,6 +17,7 @@ interface RemediationViewProps {
   onToggleThreatDrop: () => void;
   onExportPdf: () => void;
   loading?: boolean;
+  assets?: AssetRiskResponse[];
 }
 
 export const RemediationView: React.FC<RemediationViewProps> = ({
@@ -45,274 +29,233 @@ export const RemediationView: React.FC<RemediationViewProps> = ({
   onBudgetChange,
   onToggleAction,
   onToggleThreatDrop,
-  onExportPdf,
-  loading = false,
+  assets = [],
 }) => {
   const [zeroDowntimeOnly, setZeroDowntimeOnly] = useState(false);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
-  if (loading && !plan) {
-    return (
-      <div className="space-y-6 animate-pulse">
-        <div className="h-28 bg-[#162032] rounded-xl border border-[#23324A]"></div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 h-96 bg-[#162032] rounded-xl border border-[#23324A]"></div>
-          <div className="h-96 bg-[#162032] rounded-xl border border-[#23324A]"></div>
-        </div>
-      </div>
-    );
-  }
+  const actions = plan?.actions ?? [];
+  const initialRisk = plan?.initial_aggregate_risk ?? simulation?.baseline_aggregate_risk ?? 8.9;
+  const projectedRisk = plan?.projected_aggregate_risk ?? simulation?.new_aggregate_risk ?? 4.2;
 
-  const actions = plan?.actions || [];
-  const initialRisk = plan?.initial_aggregate_risk ?? 8.9;
-  const projectedRisk = plan?.projected_aggregate_risk ?? 4.2;
-  const reductionPct = plan?.risk_reduction_pct ?? 52.8;
-
-  // Chart data comparing top assets before and after
-  const chartData = (simulation?.asset_deltas || []).slice(0, 6).map((item) => ({
-    name: item.name.length > 20 ? item.name.substring(0, 18) + '...' : item.name,
-    Baseline: item.baseline_risk,
-    Projected: item.new_risk,
-    delta: item.delta_risk,
-  }));
+  const assetMap = new Map(assets.map((a) => [a.asset_id, a]));
+  const deltaMap = new Map((simulation?.asset_deltas ?? []).map((d) => [d.asset_id, d]));
 
   const filteredActions = actions.filter((act) => {
     if (zeroDowntimeOnly && act.downtime_hours > 0) return false;
     return true;
   });
 
+  const toggleExpand = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   return (
     <div className="space-y-6">
-      {/* Top Banner: Budget & Impact Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {/* Budget Controller */}
-        <div className="md:col-span-2 p-4 rounded-xl bg-[#162032] border border-[#23324A] space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-blue-400" />
-              Engineering Hours Budget
-            </span>
-            <span className="text-base font-black font-mono text-blue-400">
-              {engineerBudget} <span className="text-xs text-slate-400 font-sans">Hours</span>
-            </span>
+      {/* Top summary & budget strip */}
+      <div className="bg-white border border-[--border-default] rounded-lg p-4 flex flex-wrap items-center justify-between gap-6">
+        <div className="flex items-center gap-6">
+          <div>
+            <div className="text-xs text-ink-secondary">Aggregate Risk (Before → After)</div>
+            <div className="mt-0.5 flex items-baseline gap-2 font-mono">
+              <span className="text-lg font-semibold text-ink">{initialRisk.toFixed(1)}</span>
+              <span className="text-ink-tertiary">→</span>
+              <span className="text-lg font-semibold text-risk-low">{projectedRisk.toFixed(1)}</span>
+              <span className="text-xs text-risk-low">
+                (↓{Math.max(0, initialRisk - projectedRisk).toFixed(1)} pts)
+              </span>
+            </div>
           </div>
 
-          <input
-            type="range"
-            min="0"
-            max="40"
-            step="1"
-            value={engineerBudget}
-            onChange={(e) => onBudgetChange(Number(e.target.value))}
-            className="w-full accent-blue-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
-          />
+          <div className="h-8 w-px bg-[--border-default]" />
 
-          <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={zeroDowntimeOnly}
-                onChange={(e) => setZeroDowntimeOnly(e.target.checked)}
-                className="rounded border-slate-700 bg-slate-900 text-blue-500 focus:ring-0 cursor-pointer"
-              />
-              <span>Enforce Zero Process Downtime in OT</span>
+          <div>
+            <div className="text-xs text-ink-secondary">Scheduled Downtime</div>
+            <div className="mt-0.5 font-mono text-sm font-semibold text-ink">
+              {plan?.total_downtime_hours ?? 0}h{' '}
+              <span className="font-sans font-normal text-xs text-ink-tertiary">(0h OT process loss)</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3">
+            <label htmlFor="budget-slider" className="text-xs text-ink-secondary whitespace-nowrap">
+              Budget:{' '}
+              <span className="font-mono font-semibold text-ink">
+                {plan?.used_engineer_hours ?? 0}h / {engineerBudget}h
+              </span>
             </label>
-            <span>
-              Used: <strong className="text-white font-mono">{plan?.used_engineer_hours ?? 0}h</strong> / {engineerBudget}h
-            </span>
+            <input
+              id="budget-slider"
+              type="range"
+              min="0"
+              max="40"
+              step="1"
+              value={engineerBudget}
+              onChange={(e) => onBudgetChange(Number(e.target.value))}
+              className="w-36 accent-[--accent-primary] cursor-pointer"
+            />
           </div>
-        </div>
 
-        {/* Aggregate Risk Delta Card */}
-        <div className="p-4 rounded-xl bg-[#162032] border border-[#23324A] flex flex-col justify-between">
-          <div className="text-xs text-slate-400 uppercase font-semibold">City-Wide Risk Reduction</div>
-          <div className="flex items-baseline gap-2 mt-2">
-            <span className="text-3xl font-black font-mono text-emerald-400">
-              -{reductionPct}%
-            </span>
-            <span className="text-xs text-slate-300">
-              ({initialRisk} → {projectedRisk})
-            </span>
-          </div>
-          <div className="text-[11px] text-emerald-400/80 flex items-center gap-1 mt-1">
-            <TrendingDown className="w-3.5 h-3.5" />
-            Compensating controls protect OT availability
-          </div>
-        </div>
-
-        {/* Downtime Impact Card */}
-        <div className="p-4 rounded-xl bg-[#162032] border border-[#23324A] flex flex-col justify-between">
-          <div className="text-xs text-slate-400 uppercase font-semibold">Scheduled Downtime</div>
-          <div className="text-3xl font-black font-mono text-amber-400 mt-2">
-            {plan?.total_downtime_hours ?? 0} <span className="text-xs text-slate-400 font-sans">Hours</span>
-          </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            IT reboots only; 0h disruption to water/power
-          </div>
+          <label className="flex items-center gap-2 text-xs text-ink-secondary cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={zeroDowntimeOnly}
+              onChange={(e) => setZeroDowntimeOnly(e.target.checked)}
+              className="rounded border-[--border-default] text-[--accent-primary] focus:ring-0"
+            />
+            <span>Zero OT downtime only</span>
+          </label>
         </div>
       </div>
 
-      {/* Main Grid: Action Matrix + What-If Delta Chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Action Priority Matrix (7 Cols) */}
-        <div className="lg:col-span-7 space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-blue-400" />
-              Prioritised Mitigation Plan ({filteredActions.filter((a) => a.selected).length} Selected)
-            </h3>
-            <span className="text-xs text-slate-400">Greedy knapsack ranked by ΔRisk / Cost</span>
-          </div>
-
-          <div className="space-y-2.5">
-            {filteredActions.map((action, idx) => (
-              <div
-                key={action.id}
-                onClick={() => onToggleAction(action.id)}
-                className={`p-3.5 rounded-xl border transition cursor-pointer flex items-start gap-3 ${
-                  action.selected
-                    ? 'bg-[#111827] border-blue-500/60 shadow-lg'
-                    : 'bg-[#111827]/40 border-[#23324A] opacity-60 hover:opacity-90'
-                }`}
-              >
-                <div className="pt-0.5">
-                  {action.selected ? (
-                    <CheckCircle2 className="w-5 h-5 text-blue-400" />
-                  ) : (
-                    <div className="w-5 h-5 rounded-full border border-slate-600" />
-                  )}
-                </div>
-
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-white text-xs flex items-center gap-2">
-                      <span className="font-mono text-slate-500 text-[11px]">#{idx + 1}</span>
-                      {action.asset_name}
-                    </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-blue-950 border border-blue-500/30 text-blue-300">
-                      {action.action_type.replace('_', ' ')}
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-slate-300">
-                    {action.description}
-                  </p>
-
-                  <div className="flex items-center gap-4 text-[11px] text-slate-400 font-mono pt-1">
-                    <span>Labor: <strong className="text-white">{action.engineer_hours}h</strong></span>
-                    <span>Downtime: <strong className={action.downtime_hours > 0 ? 'text-amber-400' : 'text-emerald-400'}>{action.downtime_hours}h</strong></span>
-                    <span className="text-emerald-400 font-bold">ΔRisk: -{(action.risk_reduction * 100).toFixed(0)}%</span>
-                    {!action.patchable_now && (
-                      <span className="text-amber-300 text-[10px] font-sans">Compensating Control</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Ordered list of fixes */}
+      <div className="bg-white border border-[--border-default] rounded-lg divide-y divide-[--border-subtle]">
+        <div className="px-4 py-2.5 flex items-center justify-between text-xs text-ink-secondary bg-canvas-secondary/60">
+          <span className="font-medium uppercase tracking-wide">
+            Prioritised Remediation Actions ({filteredActions.filter((a) => a.selected).length} active)
+          </span>
+          <span>Ranked by risk reduction per engineer-hour</span>
         </div>
 
-        {/* Right Column: Chart + Live Demos (5 Cols) */}
-        <div className="lg:col-span-5 space-y-4">
-          {/* Recharts What-If Comparison */}
-          <div className="p-4 rounded-xl bg-[#162032] border border-[#23324A] space-y-3">
-            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-              <Zap className="w-4 h-4 text-emerald-400" />
-              What-If Risk Score Comparison (Pre vs Post Mitigation)
-            </h3>
-
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
-                  <XAxis
-                    dataKey="name"
-                    stroke="#64748B"
-                    fontSize={10}
-                    tickLine={false}
-                    interval={0}
-                    angle={-25}
-                    textAnchor="end"
-                  />
-                  <YAxis stroke="#64748B" fontSize={10} tickLine={false} domain={[0, 100]} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: '#0F172A',
-                      borderColor: '#334155',
-                      fontSize: '11px',
-                      color: '#F8FAFC',
-                    }}
-                  />
-                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                  <Bar dataKey="Baseline" fill="#EF4444" radius={[4, 4, 0, 0]} name="Baseline Risk" />
-                  <Bar dataKey="Projected" fill="#10B981" radius={[4, 4, 0, 0]} name="Projected Risk" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+        {filteredActions.length === 0 ? (
+          <div className="px-4 py-8 text-center text-sm text-ink-tertiary">
+            No remediation actions match the current constraints.
           </div>
+        ) : (
+          <ol className="divide-y divide-[--border-subtle]">
+            {filteredActions.map((action, idx) => {
+              const isExpanded = expandedIds.has(action.id);
+              const assetObj = assetMap.get(action.asset_id);
+              const assetDelta = deltaMap.get(action.asset_id);
+              const baseScore = assetObj?.risk_score ?? assetDelta?.baseline_risk ?? 60;
+              const pointDrop = Math.max(
+                0,
+                Math.round(
+                  assetDelta && action.selected
+                    ? Math.abs(assetDelta.delta_risk)
+                    : baseScore * action.risk_reduction
+                )
+              );
+              const cves = assetObj?.cves ?? [];
 
-          {/* Interactive Threat Drop Card */}
-          <div
-            className={`p-4 rounded-xl border transition ${
-              threatDropActive
-                ? 'bg-red-950/40 border-red-500'
-                : 'bg-[#162032] border-[#23324A]'
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-red-300">
-                <Flame className="w-4 h-4 text-red-400" />
-                Live Demo: Zero-Day / KEV Threat Drop
-              </div>
-              <button
-                onClick={onToggleThreatDrop}
-                className={`px-3 py-1 rounded text-xs font-semibold transition ${
-                  threatDropActive
-                    ? 'bg-red-600 text-white'
-                    : 'bg-red-600/20 text-red-300 hover:bg-red-600/30 border border-red-500/40'
-                }`}
-              >
-                {threatDropActive ? 'Active (Revert)' : 'Trigger Drop'}
-              </button>
-            </div>
+              return (
+                <li key={action.id} className="px-4 py-3 transition-colors duration-150 hover:bg-canvas-secondary/40">
+                  <div className="flex items-center justify-between gap-4">
+                    <div
+                      className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer"
+                      onClick={() => toggleExpand(action.id)}
+                    >
+                      <span className="font-mono text-xs text-ink-tertiary w-5">{idx + 1}.</span>
+                      <span className="text-sm font-medium text-ink truncate">{action.description}</span>
+                      <span className="text-xs text-ink-secondary whitespace-nowrap">({action.asset_name})</span>
+                      <span className="text-xs text-ink-tertiary">{isExpanded ? '▾' : '▸'}</span>
+                    </div>
 
-            <p className="text-xs text-slate-300 mt-2">
-              Injects <strong>CVE-2023-6448</strong> (Unitronics Vision PLC default password vulnerability, CISA KEV BOD 22-01) into water infrastructure.
-            </p>
+                    <div className="flex items-center gap-4 shrink-0">
+                      <span className="text-sm font-mono text-risk-low whitespace-nowrap">
+                        ↓{pointDrop} points
+                      </span>
 
+                      <label
+                        className="inline-flex items-center gap-2 cursor-pointer select-none"
+                        title="Apply fix in simulation"
+                      >
+                        <span className="text-xs text-ink-secondary">Apply fix</span>
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={action.selected}
+                          onClick={() => onToggleAction(action.id)}
+                          className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border border-transparent transition-colors duration-150 ${
+                            action.selected ? 'bg-[--accent-primary]' : 'bg-gray-300'
+                          }`}
+                        >
+                          <span
+                            className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white transition duration-150 ${
+                              action.selected ? 'translate-x-4' : 'translate-x-0'
+                            }`}
+                          />
+                        </button>
+                      </label>
+                    </div>
+                  </div>
+
+                  {isExpanded && (
+                    <div className="mt-2.5 pl-8 pr-2 py-2 bg-canvas-secondary/60 rounded border border-[--border-subtle] text-xs text-ink-secondary grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      <div>
+                        <div className="text-ink-tertiary">Mitigation ID</div>
+                        <div className="font-mono text-ink mt-0.5">
+                          {action.id} · {action.action_type.toUpperCase()}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-ink-tertiary">CVE / Advisory</div>
+                        <div className="font-mono text-ink mt-0.5">
+                          {cves.length > 0 ? cves.join(', ') : 'Config / Architecture'}
+                          {assetObj?.cisa_kev ? ' (CISA KEV)' : ''}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-ink-tertiary">Cost Estimate</div>
+                        <div className="font-mono text-ink mt-0.5">
+                          {action.engineer_hours}h labor · {action.downtime_hours}h downtime
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-ink-tertiary">OT Window</div>
+                        <div className="text-ink mt-0.5">
+                          {action.patchable_now
+                            ? 'Immediate online change'
+                            : `Compensating control (next window ${assetObj?.next_maintenance_window_days ?? 30}d)`}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        )}
+      </div>
+
+      {/* Compact Threat-Drop Simulation Row */}
+      <div className="bg-white border border-[--border-default] rounded-lg p-4 flex flex-wrap items-center justify-between gap-4 text-sm">
+        <div className="space-y-0.5">
+          <div className="font-medium text-ink flex items-center gap-2">
+            <span>Incoming Threat Drop Simulation</span>
             {threatDropInfo && (
-              <div className="mt-3 p-2.5 rounded bg-[#0A0E17] border border-[#23324A] text-[11px] font-mono space-y-1">
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Target Asset:</span>
-                  <span className="text-white font-bold">{threatDropInfo.affected_asset_name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Risk Delta:</span>
-                  <span className="text-red-400 font-bold">
-                    {threatDropInfo.pre_drop_risk} → {threatDropInfo.post_drop_risk} (+{threatDropInfo.delta_risk})
-                  </span>
-                </div>
-              </div>
+              <span className="font-mono text-xs text-ink-secondary">
+                ({threatDropInfo.cve_id} · {threatDropInfo.vendor} {threatDropInfo.product})
+              </span>
             )}
           </div>
-
-          {/* PDF Report Export Card */}
-          <div className="p-4 rounded-xl bg-[#162032] border border-[#23324A] flex items-center justify-between">
-            <div>
-              <div className="text-xs font-bold text-white flex items-center gap-2">
-                <FileDown className="w-4 h-4 text-emerald-400" />
-                CERT-In Aligned Briefing PDF
-              </div>
-              <p className="text-[11px] text-slate-400 mt-0.5">
-                1-page executive summary mapped to Smart City guidelines
-              </p>
+          {threatDropInfo && (
+            <div className="text-xs text-ink-secondary">
+              Target: <span className="text-ink">{threatDropInfo.affected_asset_name}</span> · Risk before/after drop:{' '}
+              <span className="font-mono text-ink">{threatDropInfo.pre_drop_risk}</span>
+              {' → '}
+              <span className="font-mono font-semibold text-risk-critical">{threatDropInfo.post_drop_risk}</span>
             </div>
-            <button
-              onClick={onExportPdf}
-              className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition"
-            >
-              Download PDF
-            </button>
-          </div>
+          )}
         </div>
+
+        <button
+          onClick={onToggleThreatDrop}
+          className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors duration-150 ${
+            threatDropActive
+              ? 'border-risk-critical text-risk-critical bg-red-50'
+              : 'border-[--border-default] text-ink hover:bg-canvas-secondary'
+          }`}
+        >
+          {threatDropActive ? 'Revert Threat Drop' : 'Trigger Threat Drop'}
+        </button>
       </div>
     </div>
   );

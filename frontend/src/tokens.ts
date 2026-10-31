@@ -1,89 +1,86 @@
 /**
- * Vidura Design Tokens
- * Control room dark theme & unified 0-100 risk color scale.
+ * Vidura Design Tokens — analyst light theme.
+ * The same values are mirrored as CSS custom properties in index.css
+ * (for Tailwind classes) and used directly here (for Cytoscape styles).
  */
 
-export const THEME_COLORS = {
-  background: '#0A0E17',
-  surface: '#111827',
-  card: '#162032',
-  cardHover: '#1C293F',
-  border: '#23324A',
-  text: '#F1F5F9',
-  subtle: '#64748B',
+export const TOKENS = {
+  // Background
+  bgPrimary: '#FAFBFC',
+  bgSecondary: '#F1F3F5',
+  bgElevated: '#FFFFFF',
+  bgGraph: '#F8F9FA',
+
+  // Text
+  textPrimary: '#1A1D21',
+  textSecondary: '#5E6C84',
+  textTertiary: '#8993A4',
+
+  // Risk palette
+  riskCritical: '#D32029',
+  riskHigh: '#E8590C',
+  riskMedium: '#E8A817',
+  riskLow: '#2B8A3E',
+  riskMinimal: '#868E96',
+
+  // Accent
+  accentPrimary: '#1864AB',
+  accentHover: '#1971C2',
+  borderDefault: '#DEE2E6',
+  borderSubtle: '#E9ECEF',
+
+  // Graph-specific
+  edgeExploit: '#D32029',
+  edgeCredential: '#E8590C',
+  edgeControls: '#1864AB',
+  edgeDependency: '#868E96',
+  edgeHighlighted: '#1864AB',
+  nodeStroke: '#495057',
+  nodeSelected: '#1864AB',
+
+  // Typography
+  fontSans: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+  fontMono: "'JetBrains Mono', 'Fira Code', monospace",
 } as const;
 
-export const RISK_SCALE = {
-  low: {
-    min: 0,
-    max: 25,
-    color: '#10B981',
-    bgColor: '#064E3B',
-    borderColor: '#047857',
-    label: 'Low',
-  },
-  medium: {
-    min: 26,
-    max: 50,
-    color: '#F59E0B',
-    bgColor: '#78350F',
-    borderColor: '#B45309',
-    label: 'Medium',
-  },
-  high: {
-    min: 51,
-    max: 75,
-    color: '#EF4444',
-    bgColor: '#7F1D1D',
-    borderColor: '#B91C1C',
-    label: 'High',
-  },
-  critical: {
-    min: 76,
-    max: 100,
-    color: '#991B1B',
-    bgColor: '#450A0A',
-    borderColor: '#7F1D1D',
-    label: 'Critical',
-  },
-} as const;
+export type RiskBandKey = 'critical' | 'high' | 'medium' | 'low' | 'minimal';
 
-export const PURDUE_ZONE_COLORS: Record<string, string> = {
-  INTERNET: '#64748B',
-  L4: '#3B82F6',
-  'L3.5': '#8B5CF6',
-  L3: '#06B6D4',
-  L2: '#F59E0B',
-  L1: '#EC4899',
-  L0: '#10B981',
-};
-
-export const SITE_COLORS: Record<string, { color: string; bg: string; border: string }> = {
-  power: { color: '#FBBF24', bg: '#451A03', border: '#B45309' },
-  water: { color: '#38BDF8', bg: '#082F49', border: '#0284C7' },
-  hospital: { color: '#F87171', bg: '#450A0A', border: '#B91C1C' },
-  city: { color: '#C084FC', bg: '#3B0764', border: '#7E22CE' },
-  corporate: { color: '#60A5FA', bg: '#172554', border: '#1D4ED8' },
-  vendor: { color: '#F472B6', bg: '#500724', border: '#BE185D' },
-  external: { color: '#94A3B8', bg: '#0F172A', border: '#334155' },
-};
-
-/**
- * Returns the exact color code for a risk score between 0 and 100.
- */
-export function getRiskColor(score: number): string {
-  if (score <= 25) return RISK_SCALE.low.color;
-  if (score <= 50) return RISK_SCALE.medium.color;
-  if (score <= 75) return RISK_SCALE.high.color;
-  return RISK_SCALE.critical.color;
+export interface RiskBand {
+  key: RiskBandKey;
+  label: string;
+  min: number;
+  color: string;
 }
 
-/**
- * Returns the risk level definition object for a score between 0 and 100.
- */
-export function getRiskLevel(score: number) {
-  if (score <= 25) return RISK_SCALE.low;
-  if (score <= 50) return RISK_SCALE.medium;
-  if (score <= 75) return RISK_SCALE.high;
-  return RISK_SCALE.critical;
+/** 5-stop display palette (score bands 80/60/40/20). */
+export const RISK_BANDS: RiskBand[] = [
+  { key: 'critical', label: 'Critical', min: 80, color: TOKENS.riskCritical },
+  { key: 'high', label: 'High', min: 60, color: TOKENS.riskHigh },
+  { key: 'medium', label: 'Medium', min: 40, color: TOKENS.riskMedium },
+  { key: 'low', label: 'Low', min: 20, color: TOKENS.riskLow },
+  { key: 'minimal', label: 'Minimal', min: 0, color: TOKENS.riskMinimal },
+];
+
+export function getRiskBand(score: number): RiskBand {
+  return RISK_BANDS.find((b) => score >= b.min) ?? RISK_BANDS[RISK_BANDS.length - 1];
+}
+
+export function getRiskColor(score: number): string {
+  return getRiskBand(score).color;
+}
+
+/** Human-readable Purdue zone labels. */
+export const PURDUE_LABELS: Record<string, string> = {
+  INTERNET: 'Internet',
+  L4: 'IT · Level 4',
+  'L3.5': 'DMZ · Level 3.5',
+  L3: 'OT · Level 3',
+  L2: 'OT · Level 2',
+  L1: 'OT · Level 1',
+  L0: 'OT · Level 0',
+  SERVICES: 'City services',
+};
+
+export function purdueLabel(level: string): string {
+  return PURDUE_LABELS[level] ?? level;
 }

@@ -21,17 +21,12 @@ import {
   fetchValidationReport,
 } from './types/api';
 import { apiFetchJson, isFallbackMode, API_BASE } from './apiClient';
-import {
-  X,
-  Keyboard,
-  ShieldAlert,
-} from 'lucide-react';
+import { ScenarioMeta } from './display';
 
 export default function App() {
   const queryParams = useMemo(() => new URLSearchParams(window.location.search), []);
   const isDemoMode = queryParams.get('demo') === '1';
 
-  // Demo mode defaults to 'graph' tab and 'nation_state' persona
   const initialTab =
     (queryParams.get('tab') as 'risk' | 'graph' | 'remediation' | 'how') ||
     (isDemoMode ? 'graph' : 'risk');
@@ -52,17 +47,16 @@ export default function App() {
   const [threatDropInfo, setThreatDropInfo] = useState<ThreatDropResponse | null>(null);
   const [metaInfo, setMetaInfo] = useState<MetaResponse | null>(null);
   const [validationReport, setValidationReport] = useState<ValidationResponse | null>(null);
+  const [scenarioMeta, setScenarioMeta] = useState<ScenarioMeta | null>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Core data fetching callback
   const loadData = useCallback(async (isInitialDemoReset = false) => {
     setLoading(true);
     setError(null);
     try {
       if (isInitialDemoReset) {
-        // Reset backend session state on demo initialization
         await apiFetchJson('/reset', { method: 'POST' }).catch(() => {});
       }
 
@@ -77,8 +71,8 @@ export default function App() {
       });
 
       const selectedActionIds = (planData?.actions || [])
-        .filter((a: any) => a.selected)
-        .map((a: any) => a.id);
+        .filter((a) => a.selected)
+        .map((a) => a.id);
 
       const simRes = await apiFetchJson<SimulationResponse>('/simulate', {
         method: 'POST',
@@ -90,7 +84,7 @@ export default function App() {
         }),
       });
 
-      const [riskRes, attackRes, depRes, chokeRes, tdRes, metaRes, valRes] = await Promise.all([
+      const [riskRes, attackRes, depRes, chokeRes, tdRes, metaRes, valRes, scenRes] = await Promise.all([
         apiFetchJson<RiskOverviewResponse>(`/risk/assets?persona=${persona}`),
         apiFetchJson<AttackGraphResponse>(`/graph/attack?persona=${persona}`),
         apiFetchJson<DependencyGraphResponse>('/graph/dependency'),
@@ -98,17 +92,20 @@ export default function App() {
         apiFetchJson<ThreatDropResponse>('/threat-drop'),
         fetchMetaInfo('/api'),
         fetchValidationReport('/api'),
+        apiFetchJson<ScenarioMeta>('/scenario'),
       ]);
 
       setOverview(riskRes);
+      setScenarioMeta(scenRes);
 
-      // Preselection logic:
-      // In demo mode or explicit query param, preselect the water plant crown jewel
       const urlParams = new URLSearchParams(window.location.search);
-      const targetAssetId = urlParams.get('asset') || (isDemoMode ? 'asset_water_plc_chlorine' : null);
+      const targetAssetId = urlParams.get('asset') || (isDemoMode && isInitialDemoReset ? 'asset_water_plc_chlorine' : null);
       if (targetAssetId && riskRes?.assets) {
-        const matched = riskRes.assets.find((a: any) => a.asset_id === targetAssetId);
+        const matched = riskRes.assets.find((a) => a.asset_id === targetAssetId);
         if (matched) setSelectedAsset(matched);
+      } else if (selectedAsset && riskRes?.assets) {
+        const refreshed = riskRes.assets.find((a) => a.asset_id === selectedAsset.asset_id);
+        if (refreshed) setSelectedAsset(refreshed);
       }
 
       setAttackGraph(attackRes);
@@ -125,17 +122,16 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }, [persona, threatDropActive, engineerBudget, isDemoMode]);
+  }, [persona, threatDropActive, engineerBudget, isDemoMode, selectedAsset]);
 
-  // Initial load effect
   useEffect(() => {
     loadData(isDemoMode);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Reload data when parameters change (unless initial load)
   useEffect(() => {
     loadData(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [persona, threatDropActive, engineerBudget]);
 
   const handleToggleThreatDrop = useCallback(async () => {
@@ -156,11 +152,7 @@ export default function App() {
       body: JSON.stringify({ asset_id: assetId }),
     }).catch(() => {});
     await loadData(false);
-    if (selectedAsset && selectedAsset.asset_id === assetId) {
-      const updated = overview?.assets.find((a) => a.asset_id === assetId);
-      if (updated) setSelectedAsset(updated);
-    }
-  }, [selectedAsset, overview, loadData]);
+  }, [loadData]);
 
   const handleResetSession = useCallback(async () => {
     await apiFetchJson('/reset', { method: 'POST' }).catch(() => {});
@@ -212,7 +204,6 @@ export default function App() {
     setSimulation(simRes);
   };
 
-  // Keyboard shortcut listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
@@ -232,7 +223,17 @@ export default function App() {
   }, [handleToggleThreatDrop, handleResetSession]);
 
   return (
-    <div className="min-h-screen bg-[#0A0E17] text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-[--bg-primary] text-[--text-primary] flex flex-col font-sans">
+      {/* Thin 2px top viewport loading bar */}
+      <div className="fixed top-0 left-0 right-0 h-[2px] z-50 overflow-hidden pointer-events-none">
+        {loading && (
+          <div
+            className="h-full w-2/5 progress-indeterminate"
+            style={{ backgroundColor: 'var(--accent-primary)' }}
+          />
+        )}
+      </div>
+
       {/* Top Application Header */}
       <Header
         currentTab={currentTab}
@@ -244,36 +245,39 @@ export default function App() {
         onExportPdf={handleExportPdf}
         onResetSession={handleResetSession}
         loading={loading}
+        isDemoMode={isDemoMode}
       />
 
       {/* Main Content Workspace */}
-      <main className="flex-1 max-w-7xl mx-auto w-full p-4 md:p-6 space-y-6">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-5 space-y-5">
         {error && (
-          <div className="p-4 rounded-xl bg-red-950/40 border border-red-500/60 text-red-200 text-xs flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <ShieldAlert className="w-4 h-4 text-red-400" />
-              <span>{error}</span>
-            </div>
+          <div className="text-red-600 text-sm flex items-center gap-3">
+            <span>{error}</span>
             <button
               onClick={() => loadData(false)}
-              className="px-3 py-1 rounded bg-red-900/60 hover:bg-red-800 text-white font-medium transition-colors"
+              className="underline text-ink hover:text-accent transition-colors duration-150"
             >
               Retry
             </button>
           </div>
         )}
 
-        {/* Tab 1: What is most at risk? */}
+        {/* Tab 1: Dashboard */}
         {currentTab === 'risk' && (
           <RiskTableView
             overview={overview}
             loading={loading}
             onSelectAsset={setSelectedAsset}
             onInjectAnomaly={handleInjectAnomaly}
+            selectedAssetId={selectedAsset?.asset_id ?? null}
+            simulation={simulation}
+            scenarioMeta={scenarioMeta}
+            threatDropActive={threatDropActive}
+            threatDropInfo={threatDropInfo}
           />
         )}
 
-        {/* Tab 2: Why? (Attack & Dependency Graphs) */}
+        {/* Tab 2: Graph */}
         {currentTab === 'graph' && (
           <GraphView
             attackGraph={attackGraph}
@@ -281,10 +285,14 @@ export default function App() {
             chokePoints={chokePoints}
             loading={loading}
             onSelectAssetId={handleSelectAssetId}
+            onClearSelection={() => setSelectedAsset(null)}
+            overview={overview}
+            scenarioMeta={scenarioMeta}
+            selectedAssetId={selectedAsset?.asset_id ?? null}
           />
         )}
 
-        {/* Tab 3: What do I do first? (Remediation & What-If) */}
+        {/* Tab 3: Remediation */}
         {currentTab === 'remediation' && (
           <RemediationView
             plan={plan}
@@ -297,10 +305,11 @@ export default function App() {
             onToggleThreatDrop={handleToggleThreatDrop}
             onExportPdf={handleExportPdf}
             loading={loading}
+            assets={overview?.assets ?? []}
           />
         )}
 
-        {/* Tab 4: How it works (Methodology, Provenance & Validation) */}
+        {/* Tab 4: How It Works */}
         {currentTab === 'how' && (
           <HowItWorksView
             meta={metaInfo}
@@ -310,90 +319,42 @@ export default function App() {
         )}
       </main>
 
-      {/* Floating Shortcut Legend HUD */}
-      {showShortcutLegend && (
+      {/* Compact Shortcut Legend for Demo Mode */}
+      {showShortcutLegend && !selectedAsset && (
         <aside
           role="region"
-          aria-label="Demo Shortcuts"
-          className="fixed bottom-4 right-4 z-40 bg-[#0F172A]/95 border border-slate-700/80 rounded-xl p-3.5 shadow-2xl backdrop-blur-md max-w-xs text-xs animate-in fade-in slide-in-from-bottom-2 duration-200"
+          aria-label="Keyboard Shortcuts"
+          className="fixed bottom-3 right-3 z-20 bg-white border border-[--border-default] rounded-lg px-3 py-2 text-xs text-ink-secondary"
         >
-          <div className="flex items-center justify-between border-b border-slate-700/60 pb-2 mb-2.5">
-            <div className="flex items-center space-x-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="font-semibold text-slate-200">
-                {isDemoMode ? 'Demo Mode: Active' : 'Keyboard Shortcuts'}
-              </span>
-              {isFallbackMode() && (
-                <span className="px-1.5 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  Offline Fallback
-                </span>
-              )}
-            </div>
+          <div className="flex items-center justify-between gap-4 border-b border-[--border-subtle] pb-1 mb-1.5">
+            <span className="font-medium text-ink">
+              Shortcuts {isFallbackMode() ? '(Fallback)' : ''}
+            </span>
             <button
               onClick={() => setShowShortcutLegend(false)}
-              className="text-slate-400 hover:text-white p-0.5"
-              title="Close Legend (? to reopen)"
+              className="text-ink-tertiary hover:text-ink"
+              title="Close (? to toggle)"
             >
-              <X className="w-3.5 h-3.5" />
+              ×
             </button>
           </div>
-
-          <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-slate-300 font-mono text-[11px]">
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Risk Table</span>
-              <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-blue-400">1</kbd>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Topology Map</span>
-              <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-blue-400">2</kbd>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Remediation</span>
-              <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-blue-400">3</kbd>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Methodology</span>
-              <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-blue-400">4</kbd>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Threat Drop</span>
-              <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-amber-400">T</kbd>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Reset Demo</span>
-              <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-emerald-400">D</kbd>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Close Modal</span>
-              <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-slate-400">Esc</kbd>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Toggle HUD</span>
-              <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-slate-400">?</kbd>
-            </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 font-mono text-[11px]">
+            <span>1–4 Tabs</span>
+            <span>T Threat drop</span>
+            <span>D Reset</span>
+            <span>Esc Close panel</span>
           </div>
         </aside>
       )}
 
-      {/* Button to reopen shortcut legend if dismissed */}
-      {!showShortcutLegend && (
-        <button
-          onClick={() => setShowShortcutLegend(true)}
-          className="fixed bottom-4 right-4 z-30 p-2.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 shadow-lg backdrop-blur-sm transition-all"
-          title="Show keyboard shortcuts (?)"
-        >
-          <Keyboard className="w-4 h-4" />
-        </button>
-      )}
-
-      {/* Deep-Dive Inspection Modal */}
+      {/* Right-Sliding Asset Detail Panel */}
       <AssetDetailModal
         asset={selectedAsset}
         onClose={() => setSelectedAsset(null)}
         onInjectAnomaly={handleInjectAnomaly}
+        overview={overview}
+        attackGraph={attackGraph}
+        dependencyGraph={dependencyGraph}
       />
     </div>
   );

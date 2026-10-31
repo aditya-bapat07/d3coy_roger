@@ -1,20 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
-import cytoscape, { Core } from 'cytoscape';
-import {
-  Network,
-  Shield,
-  Zap,
-  Maximize2,
-  ZoomIn,
-  ZoomOut,
-  AlertTriangle,
-} from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import cytoscape, { Core, EventObject } from 'cytoscape';
+import { Maximize2, ZoomIn, ZoomOut } from 'lucide-react';
 import {
   AttackGraphResponse,
   DependencyGraphResponse,
   ChokePointResponse,
+  RiskOverviewResponse,
 } from '../types/api';
-import { PURDUE_ZONE_COLORS, getRiskColor } from '../tokens';
+import { TOKENS, getRiskColor, purdueLabel } from '../tokens';
+import { ScenarioMeta, isCrownJewel, shortName } from '../display';
 
 interface GraphViewProps {
   attackGraph: AttackGraphResponse | null;
@@ -22,466 +16,508 @@ interface GraphViewProps {
   chokePoints: ChokePointResponse | null;
   loading?: boolean;
   onSelectAssetId: (assetId: string) => void;
+  onClearSelection?: () => void;
+  overview?: RiskOverviewResponse | null;
+  scenarioMeta?: ScenarioMeta | null;
+  selectedAssetId?: string | null;
+}
+
+type EdgeKind = 'exploit' | 'credential' | 'controls' | 'dependency';
+
+interface HoverInfo {
+  x: number;
+  y: number;
+  text: string;
+}
+
+const BANDS = ['INTERNET', 'L4', 'L3.5', 'L3', 'L2', 'L1', 'L0', 'SERVICES'];
+const SITE_ORDER = ['external', 'vendor', 'corporate', 'dmz', 'power', 'water', 'hospital', 'city'];
+const X_SPACING = 104;
+const BAND_HEIGHT = 92;
+const CREDENTIAL_TECHNIQUES = new Set(['T1694.001', 'T0859', 'T0812']);
+
+const EDGE_COLORS: Record<EdgeKind, string> = {
+  exploit: TOKENS.edgeExploit,
+  credential: TOKENS.edgeCredential,
+  controls: TOKENS.edgeControls,
+  dependency: TOKENS.edgeDependency,
+};
+
+const EDGE_LABELS: Record<EdgeKind, string> = {
+  exploit: 'Exploit',
+  credential: 'Credential',
+  controls: 'Controls',
+  dependency: 'Dependency',
+};
+
+function shapeForType(type: string | undefined): { shape: string; w: number; h: number } {
+  const t = (type ?? '').toLowerCase();
+  if (t === 'network zone') return { shape: 'ellipse', w: 22, h: 22 };
+  if (!t.includes('domain') && /plc|rtu|ied|controller/.test(t)) return { shape: 'hexagon', w: 40, h: 36 };
+  if (/switch|firewall|vpn/.test(t)) return { shape: 'diamond', w: 40, h: 40 };
+  if (/physical/.test(t)) return { shape: 'rectangle', w: 34, h: 24 };
+  return { shape: 'round-rectangle', w: 40, h: 28 };
 }
 
 export const GraphView: React.FC<GraphViewProps> = ({
   attackGraph,
   dependencyGraph,
   chokePoints,
-  loading = false,
   onSelectAssetId,
+  onClearSelection,
+  overview,
+  scenarioMeta,
+  selectedAssetId,
 }) => {
-  const [graphMode, setGraphMode] = useState<'attack' | 'dependency'>('attack');
-  const [selectedNodeInfo, setSelectedNodeInfo] = useState<any | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
+  const [hover, setHover] = useState<HoverInfo | null>(null);
 
-  // Initialize or re-render Cytoscape
+  const assetMap = useMemo(() => new Map((overview?.assets ?? []).map((a) => [a.asset_id, a])), [overview]);
+  const typeMap = useMemo(() => new Map((scenarioMeta?.assets ?? []).map((a) => [a.id, a])), [scenarioMeta]);
+
+  // Keep callbacks fresh without rebuilding the graph.
+  const selectRef = useRef(onSelectAssetId);
+  const clearRef = useRef(onClearSelection);
+  selectRef.current = onSelectAssetId;
+  clearRef.current = onClearSelection;
+
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !attackGraph || attackGraph.nodes.length === 0) return;
 
-    // Destroy existing instance
-    if (cyRef.current) {
-      cyRef.current.destroy();
-      cyRef.current = null;
+    cyRef.current?.destroy();
+    cyRef.current = null;
+
+    // ── Collect nodes into Purdue bands ──────────────────────────
+    interface LayoutNode {
+      id: string;
+      band: string;
+      site: string;
+      data: Record<string, unknown>;
     }
+    const layoutNodes: LayoutNode[] = [];
 
-    if (graphMode === 'attack') {
-      if (!attackGraph || attackGraph.nodes.length === 0) return;
-
-      const elements: any[] = [];
-      const chokeSet = new Set((chokePoints?.choke_points || []).map((cp) => cp.asset_id));
-
-      // Purdue Y-coordinate mapping for layered layout
-      const purdueY: Record<string, number> = {
-        INTERNET: 50,
-        L4: 150,
-        'L3.5': 270,
-        L3: 390,
-        L2: 510,
-        L1: 630,
-        L0: 750,
-      };
-
-      const xOffsets: Record<string, number> = {
-        INTERNET: 400,
-        L4: 150,
-        'L3.5': 250,
-        L3: 200,
-        L2: 150,
-        L1: 150,
-        L0: 150,
-      };
-
-      attackGraph.nodes.forEach((n) => {
-        const pLevel = n.purdue_level || 'L3';
-        const y = purdueY[pLevel] || 300;
-        const x = xOffsets[pLevel] || 200;
-        xOffsets[pLevel] = x + 160;
-
-        const isChoke = chokeSet.has(n.id);
-        const nodeColor = PURDUE_ZONE_COLORS[pLevel] || '#3B82F6';
-        const riskBorder = getRiskColor(n.risk_score);
-
-        elements.push({
-          data: {
-            id: n.id,
-            label: `${n.label}\n[${n.risk_score.toFixed(0)}]`,
-            purdue: n.purdue_level,
-            riskScore: n.risk_score,
-            color: nodeColor,
-            borderColor: isChoke ? '#A855F7' : riskBorder,
-            borderWidth: isChoke ? 4 : 2,
-            isChoke,
-            rawNode: n,
-          },
-          position: { x, y },
-        });
-      });
-
-      attackGraph.edges.forEach((e) => {
-        elements.push({
-          data: {
-            id: e.id,
-            source: e.source,
-            target: e.target,
-            label: `${e.protocol} (${(e.exploit_probability * 100).toFixed(0)}%)`,
-            technique: e.technique_id,
-            probability: e.exploit_probability,
-            misconfiguration: e.misconfiguration,
-          },
-        });
-      });
-
-      const cy = cytoscape({
-        container: containerRef.current,
-        elements,
-        style: [
-          {
-            selector: 'node',
-            style: {
-              label: 'data(label)',
-              color: '#F1F5F9',
-              'font-size': '10px',
-              'font-family': 'JetBrains Mono, monospace',
-              'text-valign': 'center',
-              'text-halign': 'center',
-              'text-wrap': 'wrap',
-              'text-max-width': '95px',
-              'background-color': '#162032',
-              'border-color': 'data(borderColor)',
-              'border-width': 'data(borderWidth)',
-              width: 100,
-              height: 48,
-              shape: 'round-rectangle',
-            },
-          },
-          {
-            selector: 'edge',
-            style: {
-              width: 2,
-              'line-color': '#334155',
-              'target-arrow-color': '#334155',
-              'target-arrow-shape': 'triangle',
-              'curve-style': 'bezier',
-              label: 'data(label)',
-              'font-size': '8px',
-              'font-family': 'JetBrains Mono, monospace',
-              color: '#94A3B8',
-              'text-rotation': 'autorotate',
-              'text-background-opacity': 0.8,
-              'text-background-color': '#0F172A',
-              'text-background-padding': '2px',
-            },
-          },
-          {
-            selector: 'edge[?misconfiguration]',
-            style: {
-              'line-color': '#EF4444',
-              'target-arrow-color': '#EF4444',
-              width: 2.5,
-              'line-style': 'dashed',
-            },
-          },
-          {
-            selector: 'node:selected',
-            style: {
-              'border-color': '#38BDF8',
-              'border-width': 4,
-              'background-color': '#1E293B',
-            },
-          },
-        ],
-        layout: {
-          name: 'preset',
+    attackGraph.nodes.forEach((n) => {
+      const meta = typeMap.get(n.id);
+      const risk = assetMap.get(n.id);
+      const { shape, w, h } = shapeForType(meta?.type);
+      const crown = risk ? isCrownJewel(risk) : false;
+      const scale = crown ? 1.2 : 1;
+      layoutNodes.push({
+        id: n.id,
+        band: BANDS.includes(n.purdue_level) ? n.purdue_level : 'L3',
+        site: (n.site || '').toLowerCase(),
+        data: {
+          id: n.id,
+          label: shortName(n.id, n.label),
+          fullName: n.label,
+          kind: 'asset',
+          shape,
+          w: w * scale,
+          h: h * scale,
+          stroke: shape === 'ellipse' ? TOKENS.nodeStroke : getRiskColor(n.risk_score),
+          risk: n.risk_score,
+          zone: purdueLabel(n.purdue_level),
+          crown,
         },
-        minZoom: 0.2,
-        maxZoom: 3,
-        wheelSensitivity: 0.3,
       });
+    });
 
-      cy.on('tap', 'node', (evt) => {
-        const node = evt.target;
-        setSelectedNodeInfo(node.data('rawNode'));
-        onSelectAssetId(node.id());
-      });
-
-      cy.fit(undefined, 40);
-      cyRef.current = cy;
-    } else {
-      // Dependency Graph Mode
-      if (!dependencyGraph || dependencyGraph.nodes.length === 0) return;
-
-      const elements: any[] = [];
-      dependencyGraph.nodes.forEach((n) => {
-        elements.push({
+    (dependencyGraph?.nodes ?? [])
+      .filter((n) => n.type === 'service')
+      .forEach((n) => {
+        layoutNodes.push({
+          id: n.id,
+          band: 'SERVICES',
+          site: (n.site || '').toLowerCase(),
           data: {
             id: n.id,
-            label: `${n.label}\n(${n.baseline_outage_hours}h)`,
-            site: n.site,
-            type: n.type,
+            label: shortName(n.id, n.label),
+            fullName: n.label,
+            kind: 'service',
+            shape: 'rectangle',
+            w: 56,
+            h: 24,
+            stroke: TOKENS.nodeStroke,
             people: n.people_served,
-            rawNode: n,
+            zone: 'City service',
+            crown: false,
           },
         });
       });
 
-      dependencyGraph.edges.forEach((e) => {
-        elements.push({
-          data: {
-            id: e.id,
-            source: e.source,
-            target: e.target,
-            label: `${e.type} (+${e.failure_delay_hours}h delay)`,
-            delay: e.failure_delay_hours,
-            depType: e.type,
-          },
-        });
-      });
+    const bandNodes = new Map<string, LayoutNode[]>();
+    BANDS.forEach((b) => bandNodes.set(b, []));
+    layoutNodes.forEach((n) => bandNodes.get(n.band)!.push(n));
+    const siteRank = (s: string) => {
+      const i = SITE_ORDER.indexOf(s);
+      return i === -1 ? SITE_ORDER.length : i;
+    };
+    bandNodes.forEach((list) => list.sort((a, b) => siteRank(a.site) - siteRank(b.site) || a.id.localeCompare(b.id)));
 
-      const cy = cytoscape({
-        container: containerRef.current,
-        elements,
-        style: [
-          {
-            selector: 'node',
-            style: {
-              label: 'data(label)',
-              color: '#F1F5F9',
-              'font-size': '10px',
-              'font-family': 'Inter, sans-serif',
-              'text-valign': 'center',
-              'text-halign': 'center',
-              'text-wrap': 'wrap',
-              'text-max-width': '120px',
-              'background-color': '#162032',
-              'border-color': '#0284C7',
-              'border-width': 2,
-              width: 130,
-              height: 52,
-              shape: 'round-rectangle',
-            },
-          },
-          {
-            selector: 'node[type = "asset"]',
-            style: {
-              'background-color': '#1E293B',
-              'border-color': '#EC4899',
-              'border-width': 2,
-              shape: 'diamond',
-              width: 80,
-              height: 50,
-            },
-          },
-          {
-            selector: 'edge',
-            style: {
-              width: 2.5,
-              'line-color': '#0284C7',
-              'target-arrow-color': '#0284C7',
-              'target-arrow-shape': 'triangle',
-              'curve-style': 'bezier',
-              label: 'data(label)',
-              'font-size': '8.5px',
-              color: '#38BDF8',
-              'text-background-opacity': 0.85,
-              'text-background-color': '#0F172A',
-              'text-background-padding': '2px',
-            },
-          },
-        ],
-        layout: {
-          name: 'breadthfirst',
-          directed: true,
-          padding: 30,
-          spacingFactor: 1.4,
+    const activeBands = BANDS.filter((b) => bandNodes.get(b)!.length > 0);
+    const maxCount = Math.max(...activeBands.map((b) => bandNodes.get(b)!.length));
+    const contentWidth = (maxCount - 1) * X_SPACING;
+    const zoneWidth = contentWidth + 150;
+
+    const elements: cytoscape.ElementDefinition[] = [];
+
+    activeBands.forEach((band, bandIdx) => {
+      const y = bandIdx * BAND_HEIGHT;
+      const list = bandNodes.get(band)!;
+      const label = purdueLabel(band);
+
+      // Zone background rectangle (inert)
+      elements.push({
+        group: 'nodes',
+        data: {
+          id: `zone_${band}`,
+          label,
+          labelDx: -zoneWidth / 2 + label.length * 3.1 + 12,
+          zw: zoneWidth,
+          zh: BAND_HEIGHT - 10,
         },
-        minZoom: 0.2,
-        maxZoom: 3,
-        wheelSensitivity: 0.3,
+        position: { x: 0, y: y + 6 },
+        classes: 'zone',
+        selectable: false,
+        grabbable: false,
       });
 
-      cy.on('tap', 'node', (evt) => {
-        const node = evt.target;
-        setSelectedNodeInfo(node.data('rawNode'));
+      const startX = -((list.length - 1) * X_SPACING) / 2;
+      list.forEach((n, i) => {
+        const x = startX + i * X_SPACING;
+        elements.push({ group: 'nodes', data: n.data, position: { x, y }, classes: n.data.kind as string });
+        if (n.data.crown) {
+          elements.push({
+            group: 'nodes',
+            data: { id: `star_${n.id}`, label: '★' },
+            position: { x: x + (n.data.w as number) / 2 - 2, y: y - (n.data.h as number) / 2 + 2 },
+            classes: 'star',
+            selectable: false,
+            grabbable: false,
+          });
+        }
       });
+    });
 
-      cy.fit(undefined, 40);
-      cyRef.current = cy;
-    }
-  }, [graphMode, attackGraph, dependencyGraph, chokePoints]);
+    const nodeIds = new Set(layoutNodes.map((n) => n.id));
 
-  const handleZoomIn = () => cyRef.current?.zoom(cyRef.current.zoom() * 1.25);
-  const handleZoomOut = () => cyRef.current?.zoom(cyRef.current.zoom() * 0.8);
-  const handleFit = () => cyRef.current?.fit(undefined, 40);
+    attackGraph.edges.forEach((e) => {
+      if (!nodeIds.has(e.source) || !nodeIds.has(e.target)) return;
+      const isCred =
+        (e.technique_id && CREDENTIAL_TECHNIQUES.has(e.technique_id)) ||
+        /credential|valid accounts/i.test(e.technique_name ?? '');
+      const kind: EdgeKind = isCred ? 'credential' : 'exploit';
+      const target = assetMap.get(e.target);
+      elements.push({
+        group: 'edges',
+        data: {
+          id: `atk_${e.id}`,
+          source: e.source,
+          target: e.target,
+          kind,
+          color: EDGE_COLORS[kind],
+          cve: kind === 'exploit' ? target?.best_cve ?? null : null,
+          technique: e.technique_id ? `${e.technique_id} ${e.technique_name ?? ''}` : '',
+          proto: `${e.protocol}/${e.port}`,
+          prob: e.exploit_probability,
+        },
+        classes: e.misconfiguration ? 'misconfig' : '',
+      });
+    });
+
+    (dependencyGraph?.edges ?? []).forEach((e) => {
+      if (!nodeIds.has(e.source) || !nodeIds.has(e.target)) return;
+      const srcIsService = e.source.startsWith('service_');
+      const kind: EdgeKind = srcIsService ? 'dependency' : 'controls';
+      elements.push({
+        group: 'edges',
+        data: {
+          id: `dep_${e.id}`,
+          source: e.source,
+          target: e.target,
+          kind,
+          color: EDGE_COLORS[kind],
+          depType: e.type,
+          delay: e.failure_delay_hours,
+        },
+      });
+    });
+
+    const cy = cytoscape({
+      container: containerRef.current,
+      elements,
+      layout: { name: 'preset' },
+      autoungrabify: true,
+      boxSelectionEnabled: false,
+      minZoom: 0.3,
+      maxZoom: 2.5,
+      wheelSensitivity: 0.25,
+      style: [
+        {
+          selector: 'node',
+          style: {
+            shape: 'data(shape)' as any,
+            width: 'data(w)',
+            height: 'data(h)',
+            'background-color': '#FFFFFF',
+            'border-width': 2,
+            'border-color': 'data(stroke)',
+            label: 'data(label)',
+            'font-family': 'Inter, sans-serif',
+            'font-size': 11,
+            color: TOKENS.textPrimary,
+            'text-valign': 'bottom',
+            'text-halign': 'center',
+            'text-margin-y': 4,
+            'text-background-color': TOKENS.bgGraph,
+            'text-background-opacity': 0.85,
+            'text-background-padding': '1px',
+          },
+        },
+        {
+          selector: 'node.service',
+          style: {
+            'background-fill': 'linear-gradient',
+            'background-gradient-direction': 'to-right',
+            'background-gradient-stop-colors': `${TOKENS.accentPrimary} ${TOKENS.accentPrimary} #FFFFFF #FFFFFF`,
+            'background-gradient-stop-positions': '0% 9% 9% 100%',
+            'border-width': 1,
+          } as any,
+        },
+        {
+          selector: 'node.zone',
+          style: {
+            shape: 'round-rectangle',
+            width: 'data(zw)',
+            height: 'data(zh)',
+            'background-color': TOKENS.bgSecondary,
+            'background-opacity': 0.55,
+            'border-width': 1,
+            'border-color': TOKENS.borderSubtle,
+            label: 'data(label)',
+            'font-size': 10,
+            color: TOKENS.textTertiary,
+            'text-valign': 'top',
+            'text-halign': 'center',
+            'text-margin-x': 'data(labelDx)' as any,
+            'text-margin-y': 15,
+            'text-background-opacity': 0,
+            events: 'no',
+            'z-index': 0,
+            'z-compound-depth': 'bottom',
+          } as any,
+        },
+        {
+          selector: 'node.star',
+          style: {
+            width: 1,
+            height: 1,
+            'background-opacity': 0,
+            'border-width': 0,
+            label: 'data(label)',
+            color: TOKENS.riskCritical,
+            'font-size': 12,
+            'text-valign': 'center',
+            'text-margin-y': 0,
+            'text-background-opacity': 0,
+            events: 'no',
+            'z-index': 20,
+          } as any,
+        },
+        {
+          selector: 'edge',
+          style: {
+            width: 1.5,
+            'line-color': 'data(color)',
+            'target-arrow-color': 'data(color)',
+            'target-arrow-shape': 'triangle',
+            'arrow-scale': 0.7,
+            'curve-style': 'bezier',
+            opacity: 0.7,
+            'z-index': 5,
+          },
+        },
+        { selector: 'edge.misconfig', style: { 'line-style': 'dashed', 'line-dash-pattern': [5, 3] } as any },
+        { selector: 'edge.faded', style: { opacity: 0.15 } },
+        { selector: 'node.faded', style: { opacity: 0.45 } },
+        {
+          selector: 'edge.hl',
+          style: {
+            width: 2.5,
+            'line-color': TOKENS.edgeHighlighted,
+            'target-arrow-color': TOKENS.edgeHighlighted,
+            opacity: 1,
+            'z-index': 10,
+          },
+        },
+        { selector: 'node.path', style: { 'font-weight': 600 as any, opacity: 1 } },
+        {
+          selector: 'node.selected-node',
+          style: { 'border-color': TOKENS.nodeSelected, 'border-width': 3, 'font-weight': 600 as any, opacity: 1 },
+        },
+      ],
+    });
+
+    cy.on('tap', 'node.asset, node.service', (evt: EventObject) => {
+      const id = evt.target.id();
+      if (evt.target.hasClass('asset')) selectRef.current(id);
+    });
+    cy.on('tap', (evt: EventObject) => {
+      if (evt.target === cy) clearRef.current?.();
+    });
+
+    cy.on('mouseover', 'node.asset, node.service', (evt: EventObject) => {
+      const d = evt.target.data();
+      const p = evt.renderedPosition ?? evt.target.renderedPosition();
+      const text =
+        d.kind === 'service'
+          ? `${d.fullName} · ${Number(d.people).toLocaleString()} people`
+          : `${d.fullName} · Risk: ${Number(d.risk).toFixed(1)} · ${d.zone}`;
+      setHover({ x: p.x, y: p.y, text });
+      containerRef.current!.style.cursor = d.kind === 'asset' ? 'pointer' : 'default';
+    });
+    cy.on('mouseover', 'edge', (evt: EventObject) => {
+      const d = evt.target.data();
+      const p = evt.renderedPosition;
+      let text = EDGE_LABELS[d.kind as EdgeKind];
+      if (d.kind === 'exploit' || d.kind === 'credential') {
+        text += ` · ${d.proto}`;
+        if (d.cve) text += ` · ${d.cve}`;
+        if (d.technique) text += ` · ${d.technique.trim()}`;
+        if (evt.target.hasClass('misconfig')) text += ' · misconfigured rule';
+      } else {
+        text += ` · ${d.depType}${d.delay ? ` (+${d.delay}h)` : ''}`;
+      }
+      setHover({ x: p.x, y: p.y, text });
+    });
+    cy.on('mouseout', 'node, edge', () => {
+      setHover(null);
+      if (containerRef.current) containerRef.current.style.cursor = 'default';
+    });
+    cy.on('viewport', () => setHover(null));
+
+    cy.fit(undefined, 24);
+    cyRef.current = cy;
+
+    return () => {
+      cy.destroy();
+      if (cyRef.current === cy) cyRef.current = null;
+    };
+  }, [attackGraph, dependencyGraph, assetMap, typeMap]);
+
+  // Apply focus highlighting whenever the selection changes.
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    cy.batch(() => {
+      cy.elements().removeClass('hl faded path selected-node');
+      if (!selectedAssetId) return;
+      const node = cy.getElementById(selectedAssetId);
+      if (node.empty()) return;
+      node.addClass('selected-node');
+      const path = assetMap.get(selectedAssetId)?.path_from_entry ?? [];
+      const hlEdges = cy.collection();
+      for (let i = 0; i < path.length - 1; i++) {
+        hlEdges.merge(cy.edges(`[source = "${path[i]}"][target = "${path[i + 1]}"]`));
+        cy.getElementById(path[i]).addClass('path');
+      }
+      cy.edges().not(hlEdges).addClass('faded');
+      hlEdges.addClass('hl');
+      const pathIds = new Set([...path, selectedAssetId]);
+      cy.nodes('.asset, .service')
+        .filter((n) => !pathIds.has(n.id()))
+        .addClass('faded');
+    });
+  }, [selectedAssetId, assetMap, attackGraph, dependencyGraph]);
+
+  const zoomBy = (f: number) => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    cy.zoom({ level: cy.zoom() * f, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } });
+  };
+
+  const chokes = (chokePoints?.choke_points ?? []).slice(0, 3);
 
   return (
-    <div className="space-y-4">
-      {/* View Mode & Controls Bar */}
-      <div className="p-3 rounded-xl bg-[#162032] border border-[#23324A] flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center bg-[#111827] border border-[#23324A] rounded-lg p-1 text-xs">
-            <button
-              onClick={() => setGraphMode('attack')}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition ${
-                graphMode === 'attack'
-                  ? 'bg-blue-600 text-white shadow'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Network className="w-3.5 h-3.5" />
-              Purdue Attack Reachability Graph
-            </button>
-            <button
-              onClick={() => setGraphMode('dependency')}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition ${
-                graphMode === 'dependency'
-                  ? 'bg-blue-600 text-white shadow'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Zap className="w-3.5 h-3.5" />
-              Physical Consequence Cascade (CCE)
-            </button>
-          </div>
-
-          <div className="text-xs text-slate-400 hidden md:block">
-            {graphMode === 'attack'
-              ? 'Click any node to view traversal path & exploit chain.'
-              : 'Displays cascading service failure delays and generator override.'}
-          </div>
-        </div>
-
-        {/* Zoom & Fit Tools */}
-        <div className="flex items-center gap-1.5">
-          <button
-            onClick={handleZoomIn}
-            className="p-1.5 rounded-lg bg-[#111827] border border-[#23324A] text-slate-300 hover:text-white transition"
-            title="Zoom In"
-          >
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-ink-secondary">
+          Attack reachability (Purdue levels, top to bottom) and the city services each OT asset operates. Click an asset
+          to trace its most likely attack path.
+        </p>
+        <div className="flex items-center gap-1">
+          <button onClick={() => zoomBy(1.2)} title="Zoom in" className="p-1.5 rounded text-ink-secondary hover:text-ink hover:bg-canvas-secondary transition-colors duration-150">
             <ZoomIn className="w-4 h-4" />
           </button>
-          <button
-            onClick={handleZoomOut}
-            className="p-1.5 rounded-lg bg-[#111827] border border-[#23324A] text-slate-300 hover:text-white transition"
-            title="Zoom Out"
-          >
+          <button onClick={() => zoomBy(1 / 1.2)} title="Zoom out" className="p-1.5 rounded text-ink-secondary hover:text-ink hover:bg-canvas-secondary transition-colors duration-150">
             <ZoomOut className="w-4 h-4" />
           </button>
-          <button
-            onClick={handleFit}
-            className="p-1.5 rounded-lg bg-[#111827] border border-[#23324A] text-slate-300 hover:text-white transition"
-            title="Reset View"
-          >
+          <button onClick={() => cyRef.current?.fit(undefined, 24)} title="Fit to view" className="p-1.5 rounded text-ink-secondary hover:text-ink hover:bg-canvas-secondary transition-colors duration-150">
             <Maximize2 className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Main Canvas Area */}
-      <div className="relative rounded-xl border border-[#23324A] bg-[#0A0E17] h-[580px] overflow-hidden shadow-2xl">
-        <div ref={containerRef} className="w-full h-full" />
+      <div className="relative bg-canvas-graph border border-line rounded-lg overflow-hidden" style={{ height: 'calc(100vh - 190px)', minHeight: 480 }}>
+        <div ref={containerRef} className="absolute inset-0" />
 
-        {loading && (
-          <div className="absolute inset-0 bg-[#0A0E17]/80 backdrop-blur-sm flex flex-col items-center justify-center z-30">
-            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-            <p className="text-xs font-mono text-slate-300">Rendering Cyber-Physical Graph Topology...</p>
+        {!attackGraph && <div className="absolute inset-0 flex items-center justify-center text-sm text-ink-tertiary">Loading graph…</div>}
+
+        {hover && (
+          <div
+            className="pointer-events-none absolute z-20 px-2 py-1 rounded border border-line bg-canvas-elevated text-xs text-ink whitespace-nowrap"
+            style={{ left: hover.x + 12, top: hover.y + 12 }}
+          >
+            {hover.text}
           </div>
         )}
 
-        {/* Graph Legend Overlay */}
-        <div className="absolute top-3 left-3 bg-[#111827]/90 border border-[#23324A] rounded-lg p-2.5 text-[11px] space-y-1.5 backdrop-blur z-10 pointer-events-none">
-          <div className="font-bold text-slate-300 uppercase tracking-wider text-[10px]">
-            {graphMode === 'attack' ? 'Purdue Model Zones' : 'Dependency Types'}
+        <div className="absolute bottom-3 left-3 z-10 rounded border border-line bg-white/85 px-3 py-2 text-xs text-ink-secondary space-y-1.5">
+          <div className="flex items-center gap-3">
+            {(Object.keys(EDGE_COLORS) as EdgeKind[]).map((k) => (
+              <span key={k} className="flex items-center gap-1">
+                <span className="inline-block w-4 h-0.5" style={{ backgroundColor: EDGE_COLORS[k] }} />
+                {EDGE_LABELS[k]}
+              </span>
+            ))}
           </div>
-          {graphMode === 'attack' ? (
-            <div className="grid grid-cols-2 gap-x-3 gap-y-1">
-              {Object.entries(PURDUE_ZONE_COLORS).map(([lvl, color]) => (
-                <div key={lvl} className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }} />
-                  <span className="text-slate-300">{lvl}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-1">
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-0.5 bg-blue-400" />
-                <span className="text-slate-300">powers / controls</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-0.5 bg-cyan-400" />
-                <span className="text-slate-300">supplies_water</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-0.5 bg-purple-400" />
-                <span className="text-slate-300">monitors (level/sensor)</span>
-              </div>
-            </div>
-          )}
+          <div className="flex items-center gap-3">
+            {[
+              ['Critical', TOKENS.riskCritical],
+              ['High', TOKENS.riskHigh],
+              ['Medium', TOKENS.riskMedium],
+              ['Low', TOKENS.riskLow],
+            ].map(([l, c]) => (
+              <span key={l} className="flex items-center gap-1">
+                <span className="inline-block w-2.5 h-2.5 rounded-full border-2 bg-white" style={{ borderColor: c }} />
+                {l}
+              </span>
+            ))}
+            <span className="flex items-center gap-1">
+              <span style={{ color: TOKENS.riskCritical }}>★</span> Crown jewel
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="inline-block w-4 border-t border-dashed" style={{ borderColor: TOKENS.nodeStroke }} /> Misconfigured
+            </span>
+          </div>
         </div>
+      </div>
 
-        {/* Selected Node Inspector Drawer */}
-        {selectedNodeInfo && (
-          <div className="absolute bottom-3 right-3 max-w-sm bg-[#111827]/95 border border-[#23324A] rounded-xl p-4 shadow-2xl text-xs space-y-2 backdrop-blur z-20">
-            <div className="flex items-center justify-between border-b border-[#23324A] pb-2">
-              <div className="font-bold text-white flex items-center gap-2">
-                <Shield className="w-4 h-4 text-blue-400" />
-                {selectedNodeInfo.label || selectedNodeInfo.name}
-              </div>
-              <button
-                onClick={() => setSelectedNodeInfo(null)}
-                className="text-slate-400 hover:text-white"
-              >
-                ✕
+      {chokes.length > 0 && (
+        <p className="text-sm text-ink-secondary">
+          <span className="text-xs font-medium uppercase tracking-wide mr-2">Choke points</span>
+          {chokes.map((cp, i) => (
+            <React.Fragment key={cp.asset_id}>
+              {i > 0 && <span className="mx-2 text-ink-tertiary">·</span>}
+              <button onClick={() => onSelectAssetId(cp.asset_id)} className="text-accent hover:text-accent-hover hover:underline transition-colors duration-150">
+                {cp.name}
               </button>
-            </div>
-            {selectedNodeInfo.risk_score !== undefined && (
-              <div className="flex items-center justify-between text-slate-300">
-                <span>Risk Score:</span>
-                <span className="font-mono font-bold text-white">
-                  {selectedNodeInfo.risk_score.toFixed(1)} / 100
-                </span>
-              </div>
-            )}
-            {selectedNodeInfo.purdue_level && (
-              <div className="flex items-center justify-between text-slate-300">
-                <span>Purdue Zone:</span>
-                <span className="font-mono text-blue-300 font-semibold">
-                  {selectedNodeInfo.purdue_level}
-                </span>
-              </div>
-            )}
-            {selectedNodeInfo.people_served !== undefined && (
-              <div className="flex items-center justify-between text-slate-300">
-                <span>People Served:</span>
-                <span className="font-mono text-white">
-                  {selectedNodeInfo.people_served.toLocaleString()}
-                </span>
-              </div>
-            )}
-            {selectedNodeInfo.vendor && (
-              <div className="text-slate-400 text-[11px]">
-                Product: {selectedNodeInfo.vendor} {selectedNodeInfo.product}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Strategic Choke Point Mitigations Bar */}
-      <div className="p-4 rounded-xl bg-[#162032] border border-[#23324A] space-y-2.5">
-        <h3 className="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-purple-400" />
-          Top Network Choke Points (Min-Cut / High Betweenness Bottlenecks)
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {(chokePoints?.choke_points || []).slice(0, 3).map((cp) => (
-            <div
-              key={cp.asset_id}
-              className="p-3 rounded-lg bg-[#111827] border border-[#23324A] hover:border-purple-500/50 transition cursor-pointer"
-              onClick={() => onSelectAssetId(cp.asset_id)}
-            >
-              <div className="flex items-center justify-between text-xs font-bold text-white">
-                <span>{cp.name}</span>
-                <span className="text-[10px] text-purple-400 font-mono">
-                  Btw: {cp.betweenness_centrality.toFixed(3)}
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-300 mt-1">
-                {cp.recommended_action}
-              </p>
-              <div className="flex items-center justify-between text-[10px] text-slate-400 mt-2 font-mono">
-                <span>Cost: {cp.cost_engineer_hours}h</span>
-                <span className="text-emerald-400 font-bold">
-                  ΔRisk: -{(cp.estimated_risk_reduction * 100).toFixed(0)}%
-                </span>
-              </div>
-            </div>
+              <span className="ml-1 font-mono text-xs text-ink-tertiary">btw {cp.betweenness_centrality.toFixed(2)}</span>
+            </React.Fragment>
           ))}
-        </div>
-      </div>
+        </p>
+      )}
     </div>
   );
 };

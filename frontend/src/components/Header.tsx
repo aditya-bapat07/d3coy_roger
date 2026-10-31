@@ -1,20 +1,12 @@
 import React from 'react';
-import {
-  ShieldAlert,
-  UserCheck,
-  FileDown,
-  Flame,
-  Activity,
-  Layers,
-  Wrench,
-  BookOpen,
-  RotateCcw,
-} from 'lucide-react';
+import { FileDown, RotateCcw } from 'lucide-react';
 import { PersonaType } from '../types/api';
 
+type TabKey = 'risk' | 'graph' | 'remediation' | 'how';
+
 interface HeaderProps {
-  currentTab: 'risk' | 'graph' | 'remediation' | 'how';
-  onTabChange: (tab: 'risk' | 'graph' | 'remediation' | 'how') => void;
+  currentTab: TabKey;
+  onTabChange: (tab: TabKey) => void;
   persona: PersonaType;
   onPersonaChange: (p: PersonaType) => void;
   threatDropActive: boolean;
@@ -22,7 +14,15 @@ interface HeaderProps {
   onExportPdf: () => void;
   onResetSession: () => void;
   loading: boolean;
+  isDemoMode?: boolean;
 }
+
+const TABS: { key: TabKey; label: string }[] = [
+  { key: 'risk', label: 'Dashboard' },
+  { key: 'graph', label: 'Graph' },
+  { key: 'remediation', label: 'Remediation' },
+  { key: 'how', label: 'How It Works' },
+];
 
 export const Header: React.FC<HeaderProps> = ({
   currentTab,
@@ -33,130 +33,88 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleThreatDrop,
   onExportPdf,
   onResetSession,
-  loading,
+  isDemoMode = false,
 }) => {
   return (
-    <header className="border-b border-[#23324A] bg-[#111827]/90 backdrop-blur sticky top-0 z-50 px-6 py-3.5">
-      <div className="flex items-center justify-between gap-4">
-        {/* Brand & City Context */}
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <ShieldAlert className="w-6 h-6 text-blue-400" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold tracking-wider text-lg text-white">Vidura</span>
-              <span className="text-[11px] px-2 py-0.5 rounded bg-blue-950 border border-blue-500/40 text-blue-300 font-mono">
-                Navanagar • 5 Lakh CII
-              </span>
-              {threatDropActive && (
-                <span className="text-[11px] px-2 py-0.5 rounded bg-red-950/80 border border-red-500/50 text-red-300 font-mono flex items-center gap-1 animate-pulse">
-                  <Flame className="w-3 h-3 text-red-400" /> KEV DROP ACTIVE
-                </span>
-              )}
-            </div>
-            <p className="text-xs text-slate-400">
-              AI-Based Critical Infrastructure Cyber-Risk Prediction & Prioritisation
-            </p>
-          </div>
-        </div>
+    <header className="sticky top-0 z-40 h-12 bg-white border-b border-[--border-default]">
+      <div className="h-full max-w-7xl mx-auto px-6 flex items-center gap-8">
+        <span
+          style={{
+            fontWeight: 600,
+            fontSize: '1.125rem',
+            letterSpacing: '-0.01em',
+            color: 'var(--text-primary)',
+          }}
+        >
+          Vidura
+        </span>
 
-        {/* 3 Core Triad Views */}
-        <nav className="flex items-center bg-[#162032] border border-[#23324A] rounded-lg p-1">
-          <button
-            onClick={() => onTabChange('risk')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-medium rounded-md transition ${
-              currentTab === 'risk'
-                ? 'bg-blue-600 text-white shadow'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-            }`}
-          >
-            <Activity className="w-3.5 h-3.5" />
-            1. What is most at risk?
-          </button>
-          <button
-            onClick={() => onTabChange('graph')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-medium rounded-md transition ${
-              currentTab === 'graph'
-                ? 'bg-blue-600 text-white shadow'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5" />
-            2. Why? (Attack & Cascade)
-          </button>
-          <button
-            onClick={() => onTabChange('remediation')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-medium rounded-md transition ${
-              currentTab === 'remediation'
-                ? 'bg-blue-600 text-white shadow'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-            }`}
-          >
-            <Wrench className="w-3.5 h-3.5" />
-            3. What do I do first?
-          </button>
-          <button
-            onClick={() => onTabChange('how')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-medium rounded-md transition ${
-              currentTab === 'how'
-                ? 'bg-blue-600 text-white shadow'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-            }`}
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            How it works
-          </button>
+        <nav className="flex items-stretch h-full gap-6">
+          {TABS.map((t) => {
+            const active = currentTab === t.key;
+            return (
+              <button
+                key={t.key}
+                onClick={() => onTabChange(t.key)}
+                className={`text-sm border-b-2 -mb-px transition-colors duration-150 ${
+                  active
+                    ? 'border-[--accent-primary] text-[--text-primary] font-medium'
+                    : 'border-transparent text-[--text-secondary] hover:text-[--text-primary]'
+                }`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
         </nav>
 
-        {/* Threat Actor Persona & Action Controls */}
-        <div className="flex items-center gap-2.5">
-          {/* Persona Selector */}
-          <div className="flex items-center gap-1.5 bg-[#162032] border border-[#23324A] rounded-lg px-2.5 py-1 text-xs">
-            <UserCheck className="w-3.5 h-3.5 text-blue-400" />
-            <span className="text-slate-400">Persona:</span>
+        <div className="ml-auto flex items-center gap-3">
+          {isDemoMode && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+              Demo mode
+            </span>
+          )}
+
+          <button
+            onClick={onToggleThreatDrop}
+            title="Simulate a new CISA KEV advisory (CVE-2023-6448) — shortcut T"
+            className={`text-xs px-2 py-1 rounded border transition-colors duration-150 ${
+              threatDropActive
+                ? 'border-[--risk-critical] text-[--risk-critical] bg-red-50'
+                : 'border-[--border-default] text-[--text-secondary] hover:text-[--text-primary]'
+            }`}
+          >
+            {threatDropActive ? 'Threat drop: on' : 'Threat drop'}
+          </button>
+
+          <label className="flex items-center gap-1.5 text-sm text-[--text-secondary]">
+            <span className="text-xs">Persona</span>
             <select
               value={persona}
               onChange={(e) => onPersonaChange(e.target.value as PersonaType)}
-              className="bg-transparent text-white font-medium focus:outline-none cursor-pointer"
+              className="text-sm text-[--text-primary] bg-white border border-[--border-default] rounded px-1.5 py-0.5 focus:outline-none focus:border-[--accent-primary] cursor-pointer"
             >
-              <option value="nation_state" className="bg-[#162032]">State-Sponsored APT</option>
-              <option value="opportunistic" className="bg-[#162032]">Opportunistic Criminal</option>
-              <option value="insider" className="bg-[#162032]">Compromised Insider</option>
+              <option value="nation_state">Nation-state APT</option>
+              <option value="opportunistic">Opportunistic</option>
+              <option value="insider">Insider</option>
             </select>
-          </div>
+          </label>
 
-          {/* Threat Drop Demo Toggle */}
-          <button
-            onClick={onToggleThreatDrop}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition ${
-              threatDropActive
-                ? 'bg-red-950/80 border-red-500 text-red-200'
-                : 'bg-[#162032] border-[#23324A] text-slate-300 hover:bg-[#1C293F]'
-            }`}
-            title="Simulate incoming CISA KEV Advisory on Unitronics PLCs"
-          >
-            <Flame className={`w-3.5 h-3.5 ${threatDropActive ? 'text-red-400' : 'text-slate-400'}`} />
-            {threatDropActive ? 'Revert Threat Drop' : 'Simulate Threat Drop'}
-          </button>
-
-          {/* PDF Export Button */}
           <button
             onClick={onExportPdf}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-medium transition"
-            title="Download CERT-In Aligned Executive PDF Briefing"
+            title="Download management briefing (PDF)"
+            aria-label="Download management briefing PDF"
+            className="p-1.5 rounded text-[--text-secondary] hover:text-[--text-primary] hover:bg-[--bg-secondary] transition-colors duration-150"
           >
-            <FileDown className="w-3.5 h-3.5" />
-            Export PDF
+            <FileDown className="w-4 h-4" />
           </button>
-
-          {/* Reset Demo State */}
           <button
             onClick={onResetSession}
-            className="p-1.5 rounded-lg bg-[#162032] hover:bg-[#1C293F] border border-[#23324A] text-slate-400 hover:text-white transition"
-            title="Reset Session Injections"
+            title="Reset demo session — shortcut D"
+            aria-label="Reset session"
+            className="p-1.5 rounded text-[--text-secondary] hover:text-[--text-primary] hover:bg-[--bg-secondary] transition-colors duration-150"
           >
-            <RotateCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <RotateCcw className="w-4 h-4" />
           </button>
         </div>
       </div>
