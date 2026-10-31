@@ -42,7 +42,7 @@ export default function Hero({ onLaunch, onThreatDemo }: HeroProps) {
 
           {/* Headline with Gradient Dynamic Accent */}
           <h1 className="h-display mt-5 text-[clamp(2.4rem,5.6vw,4.4rem)] text-white">
-            Know which cyber risk will{' '}
+            Know which cyber risk will hurt{' '}
             <span className="inline-block relative">
               <AnimatePresence mode="wait">
                 <motion.span
@@ -57,7 +57,7 @@ export default function Hero({ onLaunch, onThreatDemo }: HeroProps) {
                     WebkitBackgroundClip: 'text',
                   }}
                 >
-                  hurt {METRO_CITIES[cityIndex]}
+                  {METRO_CITIES[cityIndex]}
                 </motion.span>
               </AnimatePresence>
             </span>{' '}
