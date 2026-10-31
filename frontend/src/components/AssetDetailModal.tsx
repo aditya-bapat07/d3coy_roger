@@ -8,7 +8,6 @@ import {
 import { getRiskBand, purdueLabel } from '../tokens';
 import { shortName, truncate } from '../display';
 import { apiFetchJson, isFallbackMode } from '../apiClient';
-import { ArrowUpRight } from 'lucide-react';
 
 interface AssetDetailModalProps {
   asset: AssetRiskResponse | null;
@@ -157,80 +156,70 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
     <aside
       role="dialog"
       aria-label={`${asset.name} details`}
-      className="panel-slide-in fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[480px] bg-[#120D0B]/95 backdrop-blur-2xl border-l border-white/[0.08] flex flex-col shadow-[-16px_0_50px_rgba(0,0,0,0.85)] text-[#A09A96]"
+      className="panel-slide-in fixed top-12 right-0 bottom-0 z-30 w-[480px] bg-white border-l border-[--border-default] flex flex-col"
+      style={{ boxShadow: '-4px 0 24px rgba(0,0,0,0.08)' }}
     >
       {/* Sticky header */}
-      <div className="px-6 pt-5 pb-4 border-b border-white/[0.08] bg-[#120D0B]/90">
+      <div className="px-5 pt-4 pb-3 border-b border-[--border-default] bg-white">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h2 className="text-lg font-semibold text-white leading-snug tracking-tight">{asset.name}</h2>
-              <span className="text-xs px-2 py-0.5 rounded-full border border-white/10 bg-white/[0.03] text-[#A09A96] font-mono">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-lg font-semibold text-[--text-primary] leading-snug">{asset.name}</h2>
+              <span className="text-xs px-1.5 py-0.5 rounded border border-[--border-default] bg-[--bg-secondary] text-[--text-secondary]">
                 {purdueLabel(asset.purdue_level)}
               </span>
             </div>
-            <div className="mt-1 text-xs text-[#6F6863] truncate">
+            <div className="mt-0.5 text-xs text-[--text-secondary] truncate">
               {asset.vendor} · {asset.product} ({asset.version})
             </div>
           </div>
           <button
             onClick={onClose}
             aria-label="Close panel"
-            className="w-7 h-7 rounded-full flex items-center justify-center text-[#A09A96] hover:text-white hover:bg-white/10 transition-colors duration-150 text-xl leading-none"
+            className="text-2xl leading-none text-[--text-secondary] hover:text-[--text-primary] transition-colors duration-150"
           >
             ×
           </button>
         </div>
 
-        {/* Score & Risk bar */}
-        <div className="mt-4 flex items-center gap-5">
-          <span
-            className="font-mono font-bold tracking-tight drop-shadow-[0_0_12px_rgba(242,106,27,0.3)]"
-            style={{ fontSize: 34, lineHeight: 1, color: band.color }}
-          >
+        <div className="mt-3 flex items-center gap-4">
+          <span className="font-mono font-bold" style={{ fontSize: 32, lineHeight: 1, color: band.color }}>
             {asset.risk_score.toFixed(1)}
           </span>
-          <div className="flex-1">
-            <div className="w-full h-2 rounded-full bg-white/[0.06] overflow-hidden">
+          <div>
+            <div className="w-[120px] h-1.5 rounded-full bg-[--bg-secondary] overflow-hidden">
               <div
-                className="h-full rounded-full transition-all duration-300"
-                style={{
-                  width: `${Math.min(100, asset.risk_score)}%`,
-                  backgroundColor: band.color,
-                  boxShadow: `0 0 10px ${band.color}66`,
-                }}
+                className="h-full rounded-full"
+                style={{ width: `${Math.min(100, asset.risk_score)}%`, backgroundColor: band.color }}
               />
             </div>
-            <div className="mt-1.5 text-xs text-[#6F6863] flex justify-between">
-              <span className="font-medium text-white">{band.label} Risk</span>
-              <span className="font-mono">L {asset.likelihood_score.toFixed(2)} × C {asset.consequence_score.toFixed(2)}</span>
+            <div className="mt-1 text-xs text-[--text-secondary]">
+              {band.label} risk · L {asset.likelihood_score.toFixed(2)} × C {asset.consequence_score.toFixed(2)}
             </div>
           </div>
         </div>
 
-        {/* Confidence metric */}
         {confidence && (
-          <div className="mt-3.5 pt-3 border-t border-white/[0.04]">
-            <div className="flex items-center gap-2 text-xs text-white">
-              <span className="w-2 h-2 rounded-full shadow-[0_0_6px_currentColor]" style={{ backgroundColor: CONFIDENCE_DOT[confidence.rating], color: CONFIDENCE_DOT[confidence.rating] }} />
-              <span className="font-medium">{confidence.rating} Confidence</span>
+          <div className="mt-2.5">
+            <div className="flex items-center gap-1.5 text-xs text-[--text-primary]">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: CONFIDENCE_DOT[confidence.rating] }} />
+              <span className="font-medium">{confidence.rating} confidence</span>
             </div>
             {confidence.rating !== 'High' && confidence.reasons[0] && (
-              <p className="mt-1 text-xs text-[#6F6863] leading-relaxed">{confidence.reasons[0]}</p>
+              <p className="mt-0.5 text-xs text-[--text-secondary]">{confidence.reasons[0]}</p>
             )}
           </div>
         )}
 
-        {/* Sub-tab navigation */}
-        <nav className="mt-4 -mb-4 flex gap-6 text-xs sm:text-sm border-t border-white/[0.06] pt-3">
+        <nav className="mt-3.5 -mb-3 flex gap-5 text-sm">
           {tabs.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`pb-2 border-b-2 font-medium transition-all duration-150 ${
+              className={`pb-2 border-b-2 transition-colors duration-150 ${
                 tab === t.key
-                  ? 'border-[#F26A1B] text-[#F26A1B] shadow-[0_2px_8px_rgba(242,106,27,0.4)]'
-                  : 'border-transparent text-[#6F6863] hover:text-[#A09A96]'
+                  ? 'border-[--accent-primary] text-[--text-primary] font-medium'
+                  : 'border-transparent text-[--text-secondary] hover:text-[--text-primary]'
               }`}
             >
               {t.label}
@@ -239,33 +228,42 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
         </nav>
       </div>
 
-      {/* Scrollable content body */}
-      <div className="flex-1 overflow-y-auto px-6 py-5 text-sm space-y-6">
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto px-5 py-4 text-sm bg-white">
         {tab === 'breakdown' && (
-          <div className="space-y-6">
-            <section className="glass-card p-4">
-              <h3 className="text-xs font-semibold text-[#6F6863] uppercase tracking-wider mb-3">
+          <div className="space-y-5">
+            <section>
+              <h3 className="text-xs font-medium text-[--text-secondary] uppercase tracking-wide mb-2">
                 Why this score
               </h3>
               {activeFactors.length === 0 ? (
-                <p className="text-[#6F6863] text-sm">No active risk-drop factors on the current path.</p>
+                <p className="text-[--text-tertiary] text-sm">No active risk-drop factors on the current path.</p>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {activeFactors.map((f) => (
                     <div key={f.factor_id}>
                       <div className="flex items-baseline justify-between gap-3 text-xs">
-                        <span className="text-white truncate font-medium" title={f.description}>
+                        <span className="text-[--text-primary] truncate" title={f.description}>
                           {f.description}
                         </span>
-                        <span className="font-mono text-[#F26A1B] whitespace-nowrap font-semibold">
+                        <span className="font-mono text-[--text-secondary] whitespace-nowrap">
                           −{f.risk_drop.toFixed(1)}
                         </span>
                       </div>
-                      <div className="mt-1.5 h-2 rounded-full bg-white/[0.06] overflow-hidden">
+                      <div
+                        className="mt-1 h-2 rounded-sm"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          backgroundImage:
+                            'repeating-linear-gradient(to right, var(--border-default) 0, var(--border-default) 1px, transparent 1px, transparent 25%)',
+                        }}
+                      >
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-[#F26A1B] to-[#FF7A2B]"
+                          className="h-full rounded-sm"
                           style={{
                             width: `${(f.risk_drop / maxDrop) * 100}%`,
+                            backgroundColor: 'var(--accent-primary)',
+                            opacity: 0.8,
                           }}
                         />
                       </div>
@@ -273,49 +271,45 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
                   ))}
                 </div>
               )}
-              <p className="mt-3 text-[11px] text-[#6F6863] italic">
-                Factors overlap — individual drops do not sum directly to total risk.
+              <p className="mt-2.5 text-xs text-[--text-tertiary] italic" title={asset.risk_drop_if_removed?.note}>
+                Factors overlap — drops don&apos;t sum to total risk.
               </p>
             </section>
 
-            <section className="glass-card p-4">
-              <h3 className="text-xs font-semibold text-[#6F6863] uppercase tracking-wider mb-3">
+            <section>
+              <h3 className="text-xs font-medium text-[--text-secondary] uppercase tracking-wide mb-2">
                 Top Attack Paths
               </h3>
               {topPaths.length === 0 ? (
-                <p className="text-[#6F6863] text-sm">
+                <p className="text-[--text-tertiary] text-sm">
                   No attack path reaches this asset for the selected persona.
                 </p>
               ) : (
-                <ol className="space-y-3">
+                <ol className="space-y-2.5">
                   {topPaths.map((p, idx) => (
                     <li
                       key={idx}
-                      className={`p-3 rounded-xl border transition-all ${
-                        idx === 0
-                          ? 'bg-[#F26A1B]/10 border-[#F26A1B]/30'
-                          : 'bg-white/[0.02] border-white/[0.06]'
-                      }`}
+                      className={idx === 0 ? 'text-[--text-primary] font-semibold' : 'text-[--text-secondary]'}
                     >
-                      <div className="flex flex-wrap items-center gap-1.5">
+                      <div className="flex flex-wrap items-center gap-1">
                         {p.path.map((step, sIdx) => (
                           <React.Fragment key={`${step}-${sIdx}`}>
                             <span
-                              className={`text-xs px-2.5 py-0.5 rounded-full border font-mono ${
+                              className={`text-xs px-2 py-0.5 rounded-full border ${
                                 idx === 0
-                                  ? 'border-[#F26A1B]/40 bg-[#F26A1B]/20 text-white font-medium'
-                                  : 'border-white/10 bg-white/[0.03] text-[#A09A96]'
+                                  ? 'border-blue-300 bg-blue-50 text-[--text-primary]'
+                                  : 'border-[--border-default] bg-[--bg-secondary] text-[--text-secondary]'
                               }`}
                             >
                               {nameOf(step)}
                             </span>
                             {sIdx < p.path.length - 1 && (
-                              <span className="text-[#6F6863] text-xs">→</span>
+                              <span className="text-[--text-tertiary] text-xs">→</span>
                             )}
                           </React.Fragment>
                         ))}
                       </div>
-                      <div className="mt-2 text-xs font-mono text-[#6F6863]">
+                      <div className="mt-0.5 text-xs font-normal text-[--text-tertiary] font-mono">
                         {Number.isFinite(p.probability) ? `p = ${(p.probability * 100).toFixed(2)}% · ` : ''}
                         {p.hop_count} hops
                       </div>
@@ -329,45 +323,43 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
 
         {tab === 'vulns' && (
           <div className="space-y-6">
-            <section className="glass-card p-4">
-              <h3 className="text-xs font-semibold text-[#6F6863] uppercase tracking-wider mb-3">CVEs</h3>
+            <section>
+              <h3 className="text-xs font-medium text-[--text-secondary] uppercase tracking-wide mb-2">CVEs</h3>
               {asset.cves.length === 0 ? (
-                <p className="text-[#6F6863] text-sm">
+                <p className="text-[--text-tertiary] text-sm">
                   {asset.default_credentials
                     ? 'No CVEs. Default administrative credentials are present.'
                     : 'No known CVEs for this product version.'}
                 </p>
               ) : (
-                <ul className="divide-y divide-white/[0.06]">
+                <ul className="divide-y divide-[--border-subtle] border-y border-[--border-subtle]">
                   {asset.cves.map((cve) => {
                     const isBest = cve === asset.best_cve || asset.cves.length === 1;
                     const factor = allFactors.find((f) => f.factor_id === `cve_${cve}`);
                     return (
-                      <li key={cve} className="py-2.5 first:pt-0 last:pb-0">
+                      <li key={cve} className="py-2">
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs text-white font-semibold">{cve}</span>
+                          <span className="font-mono text-xs text-[--text-primary]">{cve}</span>
                           {isBest && asset.cvss != null && (
                             <span
-                              className="text-[11px] font-mono font-semibold text-white rounded px-1.5 py-0.2"
+                              className="text-[11px] font-mono font-semibold text-white rounded px-1"
                               style={{ backgroundColor: cvssColor(asset.cvss) }}
                             >
                               {asset.cvss.toFixed(1)}
                             </span>
                           )}
                           {isBest && asset.cisa_kev && (
-                            <span className="text-xs bg-[#FF4D4F]/20 text-[#FF4D4F] border border-[#FF4D4F]/30 font-medium rounded px-1.5">
-                              KEV
-                            </span>
+                            <span className="text-xs bg-red-50 text-red-700 rounded px-1">KEV</span>
                           )}
                           {isBest && (
-                            <span className="ml-auto text-xs font-mono text-[#A09A96]">
+                            <span className="ml-auto text-xs text-[--text-secondary]">
                               EPSS {(asset.epss * 100).toFixed(1)}%
                             </span>
                           )}
                         </div>
-                        <p className="mt-1 text-xs text-[#6F6863] truncate">
+                        <p className="mt-0.5 text-xs text-[--text-secondary] truncate">
                           {factor && factor.risk_drop > 0
-                            ? `Mitigation lowers risk by ${factor.risk_drop.toFixed(1)} pts`
+                            ? `Removing it lowers risk by ${factor.risk_drop.toFixed(1)}`
                             : isBest
                             ? `${asset.vendor} ${asset.product} vulnerability`
                             : 'Secondary vulnerability on asset'}
@@ -380,23 +372,22 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
             </section>
 
             {techniques.length > 0 && (
-              <section className="glass-card p-4">
-                <h3 className="text-xs font-semibold text-[#6F6863] uppercase tracking-wider mb-3">
+              <section>
+                <h3 className="text-xs font-medium text-[--text-secondary] uppercase tracking-wide mb-2">
                   ATT&amp;CK for ICS Techniques
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-1">
                   {techniques.map((t) => (
-                    <li key={t} className="text-xs flex items-center justify-between gap-2 p-1.5 rounded-lg bg-white/[0.02]">
+                    <li key={t} className="text-xs flex gap-2">
                       <a
                         href={`https://attack.mitre.org/techniques/${t.replace('.', '/')}/`}
                         target="_blank"
                         rel="noreferrer"
-                        className="font-mono text-[#F26A1B] hover:text-[#FF7A2B] hover:underline flex items-center gap-1 font-medium"
+                        className="font-mono text-[--accent-primary] hover:text-[--accent-hover] hover:underline"
                       >
                         {t}
-                        <ArrowUpRight className="w-3 h-3" />
                       </a>
-                      <span className="text-[#A09A96] truncate max-w-[24ch]">{techniqueNames.get(t) ?? ''}</span>
+                      <span className="text-[--text-secondary]">{techniqueNames.get(t) ?? ''}</span>
                     </li>
                   ))}
                 </ul>
@@ -406,48 +397,45 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
         )}
 
         {tab === 'cascade' && (
-          <div className="glass-card p-5">
-            <h3 className="text-xs font-semibold text-[#6F6863] uppercase tracking-wider mb-4">
-              Physical Consequence Cascade
-            </h3>
+          <div>
             {cascade.length <= 1 ? (
-              <p className="text-[#6F6863] text-sm">
+              <p className="text-[--text-tertiary] text-sm">
                 This asset does not directly operate a municipal service node.
               </p>
             ) : (
-              <ol className="relative pl-2">
+              <ol className="relative">
                 {cascade.map((c, idx) => {
                   const isService = c.node.type === 'service';
                   const last = idx === cascade.length - 1;
                   return (
-                    <li key={c.id} className="relative pl-6 pb-5">
+                    <li key={c.id} className="relative pl-6 pb-4">
                       {!last && (
                         <span
-                          className="absolute left-[3px] top-3 bottom-0 w-0.5 bg-white/[0.1]"
+                          className="absolute left-[3px] top-3 bottom-0 w-0.5"
+                          style={{ backgroundColor: 'var(--border-default)' }}
                         />
                       )}
                       <span
-                        className="absolute left-0 top-1.5 w-2 h-2 rounded-full shadow-[0_0_8px_currentColor]"
+                        className="absolute left-0 top-1.5 w-2 h-2 rounded-full"
                         style={{
                           backgroundColor:
                             idx === 0 ? band.color : isService ? 'var(--accent-primary)' : 'var(--node-stroke)',
-                          color: idx === 0 ? band.color : isService ? 'var(--accent-primary)' : 'var(--node-stroke)',
                         }}
                       />
-                      <div className="text-sm text-white font-medium">
+                      <div className="text-sm text-[--text-primary]">
                         {idx === 0 ? `${truncate(asset.name, 42)} compromised` : `${c.node.label} lost`}
-                        <span className="ml-1.5 font-mono text-xs text-[#F26A1B]">
+                        <span className="ml-1 font-mono text-xs text-[--text-secondary]">
                           (t={c.t === 0 && idx === 0 ? '0' : `${c.t}h`})
                         </span>
                       </div>
                       {c.via && (
-                        <div className="text-xs text-[#6F6863] font-mono mt-0.5">
+                        <div className="text-xs text-[--text-tertiary] font-mono">
                           failure_delay: {c.via.delay}h ({c.via.type} edge)
                         </div>
                       )}
                       {isService && (
-                        <div className="text-xs text-[#A09A96] mt-0.5">
-                          {c.node.people_served.toLocaleString()} people affected · safety severity {c.node.safety_severity}/4
+                        <div className="text-xs text-[--text-secondary]">
+                          {c.node.people_served.toLocaleString()} people affected · safety {c.node.safety_severity}/4
                         </div>
                       )}
                     </li>
@@ -460,83 +448,69 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
 
         {tab === 'anomaly' && (
           <div className="space-y-4">
-            <div className="glass-card p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs px-2 py-0.5 rounded-full border border-white/10 bg-white/[0.04] text-[#A09A96] font-mono">
-                  Synthetic Telemetry
-                </span>
-                <span className="text-xs text-[#6F6863]">IsolationForest model</span>
-              </div>
-              <dl className="grid grid-cols-3 gap-3 pt-2">
-                <div>
-                  <dt className="text-xs text-[#6F6863]">Anomaly Score</dt>
-                  <dd className="font-mono text-xl font-bold text-white mt-1">
-                    {asset.anomaly_score.toFixed(2)}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-[#6F6863]">Threshold</dt>
-                  <dd className="font-mono text-xl text-[#A09A96] mt-1">0.50</dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-[#6F6863]">Alarm Status</dt>
-                  <dd className="text-xs font-semibold mt-2">
-                    {asset.anomaly_score >= 0.5 ? (
-                      <span className="text-[#FF4D4F] px-2 py-0.5 rounded-full bg-[#FF4D4F]/20 border border-[#FF4D4F]/30">
-                        Alarm Active
-                      </span>
-                    ) : (
-                      <span className="text-[#3DDC97] px-2 py-0.5 rounded-full bg-[#3DDC97]/20 border border-[#3DDC97]/30">
-                        Normal
-                      </span>
-                    )}
-                  </dd>
-                </div>
-              </dl>
+            <div className="flex items-center gap-2">
+              <span className="text-xs px-1.5 py-0.5 rounded border border-[--border-default] bg-[--bg-secondary] text-[--text-secondary]">
+                Synthetic data
+              </span>
+              <span className="text-xs text-[--text-tertiary]">IsolationForest network flow telemetry</span>
             </div>
-
-            {anomaly?.top_contributing_features && anomaly.top_contributing_features.length > 0 && (
-              <div className="glass-card p-4">
-                <h4 className="text-xs font-semibold text-[#6F6863] uppercase tracking-wider mb-2">
-                  Top Contributing Features
-                </h4>
-                <table className="w-full border-collapse text-xs">
-                  <thead>
-                    <tr className="text-[#6F6863] border-b border-white/[0.08]">
-                      <th className="text-left font-medium py-1.5">Feature</th>
-                      <th className="text-right font-medium py-1.5">Value</th>
-                      <th className="text-right font-medium py-1.5">Baseline</th>
-                    </tr>
-                  </thead>
-                  <tbody className="font-mono divide-y divide-white/[0.04]">
-                    {anomaly.top_contributing_features.map((f) => (
-                      <tr key={f.feature}>
-                        <td className="py-1.5 text-white">{f.feature}</td>
-                        <td className="py-1.5 text-right text-[#FF7A2B]">{f.value.toLocaleString()}</td>
-                        <td className="py-1.5 text-right text-[#6F6863]">
-                          {f.baseline_mean.toLocaleString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            <dl className="grid grid-cols-3 gap-3">
+              <div>
+                <dt className="text-xs text-[--text-secondary]">Anomaly Score</dt>
+                <dd className="font-mono text-lg font-semibold text-[--text-primary]">
+                  {asset.anomaly_score.toFixed(2)}
+                </dd>
               </div>
+              <div>
+                <dt className="text-xs text-[--text-secondary]">Threshold</dt>
+                <dd className="font-mono text-lg text-[--text-primary]">0.50</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-[--text-secondary]">Alarm Status</dt>
+                <dd className="text-sm font-medium mt-1">
+                  {asset.anomaly_score >= 0.5 ? (
+                    <span className="text-[--risk-critical]">Alarm active</span>
+                  ) : (
+                    <span className="text-[--risk-low]">Normal</span>
+                  )}
+                </dd>
+              </div>
+            </dl>
+            {anomaly?.top_contributing_features && anomaly.top_contributing_features.length > 0 && (
+              <table className="w-full border-collapse text-xs">
+                <thead>
+                  <tr className="text-[--text-secondary] border-b border-[--border-default]">
+                    <th className="text-left font-medium py-1">Feature</th>
+                    <th className="text-right font-medium py-1">Value</th>
+                    <th className="text-right font-medium py-1">Baseline</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {anomaly.top_contributing_features.map((f) => (
+                    <tr key={f.feature} className="border-b border-[--border-subtle]">
+                      <td className="py-1 font-mono">{f.feature}</td>
+                      <td className="py-1 text-right font-mono">{f.value.toLocaleString()}</td>
+                      <td className="py-1 text-right font-mono text-[--text-secondary]">
+                        {f.baseline_mean.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
           </div>
         )}
       </div>
 
-      {/* Action Footer */}
-      <div className="px-6 py-3.5 border-t border-white/[0.08] bg-[#120D0B] flex items-center justify-between text-xs">
+      <div className="px-5 py-2.5 border-t border-[--border-default] bg-white flex items-center justify-between text-xs">
         <button
           onClick={handleInject}
           disabled={injecting}
-          className="px-3.5 py-1.5 rounded-full font-medium bg-gradient-to-r from-[#F26A1B] to-[#FF7A2B] text-white shadow-orange-glow-sm hover:shadow-orange-glow disabled:opacity-50 transition-all flex items-center gap-1.5 group"
+          className="text-[--accent-primary] hover:text-[--accent-hover] disabled:text-[--text-tertiary] transition-colors duration-150"
         >
-          <span>{injecting ? 'Injecting anomaly…' : 'Simulate anomaly burst'}</span>
-          <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          {injecting ? 'Injecting anomaly…' : 'Simulate anomaly burst'}
         </button>
-        <span className="text-[#6F6863] font-mono">Esc to close</span>
+        <span className="text-[--text-tertiary]">Esc to close</span>
       </div>
     </aside>
   );

@@ -5,7 +5,6 @@ import { GraphView } from './components/GraphView';
 import { RemediationView } from './components/RemediationView';
 import { HowItWorksView } from './components/HowItWorksView';
 import { AssetDetailModal } from './components/AssetDetailModal';
-import { BackgroundBlobs } from './components/BackgroundBlobs';
 import {
   AssetRiskResponse,
   RiskOverviewResponse,
@@ -224,18 +223,13 @@ export default function App() {
   }, [handleToggleThreatDrop, handleResetSession]);
 
   return (
-    <div className="relative min-h-screen bg-[#0A0706] text-white flex flex-col font-sans">
-      {/* Background Ambient Blobs and Grain */}
-      <BackgroundBlobs currentTab={currentTab} />
-
-      {/* Top Thin Orange Progress Bar */}
+    <div className="min-h-screen bg-[--bg-primary] text-[--text-primary] flex flex-col font-sans">
+      {/* Thin 2px top viewport loading bar */}
       <div className="fixed top-0 left-0 right-0 h-[2px] z-50 overflow-hidden pointer-events-none">
         {loading && (
           <div
-            className="h-full w-2/5 progress-indeterminate shadow-[0_0_8px_#F26A1B]"
-            style={{
-              background: 'linear-gradient(90deg, #F26A1B 0%, #FF7A2B 100%)',
-            }}
+            className="h-full w-2/5 progress-indeterminate"
+            style={{ backgroundColor: 'var(--accent-primary)' }}
           />
         )}
       </div>
@@ -255,13 +249,13 @@ export default function App() {
       />
 
       {/* Main Content Workspace */}
-      <main className="relative z-10 flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-24 sm:pt-28 pb-12 space-y-6">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-5 space-y-5">
         {error && (
-          <div className="glass-card bg-red-950/20 border-red-500/30 text-red-200 px-4 py-3 text-sm flex items-center justify-between gap-3 shadow-[0_0_20px_rgba(255,77,79,0.15)]">
+          <div className="text-red-600 text-sm flex items-center gap-3">
             <span>{error}</span>
             <button
               onClick={() => loadData(false)}
-              className="px-3 py-1 rounded-full text-xs font-medium bg-red-500/20 hover:bg-red-500/30 text-white border border-red-500/40 transition-colors duration-150"
+              className="underline text-ink hover:text-accent transition-colors duration-150"
             >
               Retry
             </button>
@@ -325,31 +319,30 @@ export default function App() {
         )}
       </main>
 
-      {/* Compact Glass Shortcut Legend for Demo Mode */}
+      {/* Compact Shortcut Legend for Demo Mode */}
       {showShortcutLegend && !selectedAsset && (
         <aside
           role="region"
           aria-label="Keyboard Shortcuts"
-          className="glass-card fixed bottom-4 right-4 z-20 px-3.5 py-2.5 text-xs text-[#A09A96] shadow-xl"
+          className="fixed bottom-3 right-3 z-20 bg-white border border-[--border-default] rounded-lg px-3 py-2 text-xs text-ink-secondary"
         >
-          <div className="flex items-center justify-between gap-5 border-b border-white/[0.08] pb-1.5 mb-2">
-            <span className="font-semibold text-white tracking-wide flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F26A1B]" />
+          <div className="flex items-center justify-between gap-4 border-b border-[--border-subtle] pb-1 mb-1.5">
+            <span className="font-medium text-ink">
               Shortcuts {isFallbackMode() ? '(Fallback)' : ''}
             </span>
             <button
               onClick={() => setShowShortcutLegend(false)}
-              className="text-[#6F6863] hover:text-white transition-colors"
+              className="text-ink-tertiary hover:text-ink"
               title="Close (? to toggle)"
             >
               ×
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-x-5 gap-y-1 font-mono text-[11px]">
-            <span><span className="text-[#F26A1B]">1–4</span> Tabs</span>
-            <span><span className="text-[#F26A1B]">T</span> Threat drop</span>
-            <span><span className="text-[#F26A1B]">D</span> Reset</span>
-            <span><span className="text-[#F26A1B]">Esc</span> Close</span>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 font-mono text-[11px]">
+            <span>1–4 Tabs</span>
+            <span>T Threat drop</span>
+            <span>D Reset</span>
+            <span>Esc Close panel</span>
           </div>
         </aside>
       )}

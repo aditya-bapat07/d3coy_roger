@@ -11,235 +11,80 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* Cybrix Dark Background Surfaces */
-  --bg-primary: #0A0706;
-  --bg-secondary: #120D0B;
-  --bg-elevated: #18120F;
-  --bg-graph: #0A0706;
+  /* Background */
+  --bg-primary: #FAFBFC;
+  --bg-secondary: #F1F3F5;
+  --bg-elevated: #FFFFFF;
+  --bg-graph: #F8F9FA;
 
-  /* Cybrix Typography */
-  --text-primary: #FFFFFF;
-  --text-secondary: #A09A96;
-  --text-tertiary: #6F6863;
+  /* Text */
+  --text-primary: #1A1D21;
+  --text-secondary: #5E6C84;
+  --text-tertiary: #8993A4;
 
-  /* Cybrix Semantic Risk Palette */
-  --risk-critical: #FF4D4F;
-  --risk-high: #FF7A2B;
-  --risk-medium: #FFC24B;
-  --risk-low: #3DDC97;
-  --risk-minimal: #6F6863;
+  /* Risk palette */
+  --risk-critical: #D32029;
+  --risk-high: #E8590C;
+  --risk-medium: #E8A817;
+  --risk-low: #2B8A3E;
+  --risk-minimal: #868E96;
 
-  /* Cybrix Primary Accent & Glow */
-  --accent-primary: #F26A1B;
-  --accent-hover: #FF7A2B;
-  --accent-glow: rgba(242, 106, 27, 0.25);
-  --border-default: rgba(255, 255, 255, 0.08);
-  --border-subtle: rgba(255, 255, 255, 0.04);
-  --border-hover: rgba(242, 106, 27, 0.5);
-
-  /* Crown jewel */
-  --crown-jewel: #FFB340;
-
-  /* Floating Nav Tokens */
-  --nav-bg: rgba(255, 255, 255, 0.05);
-  --nav-bg-scrolled: rgba(255, 255, 255, 0.08);
-  --nav-border: rgba(255, 255, 255, 0.10);
-  --nav-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-  --nav-glow: 0 0 40px rgba(242, 106, 27, 0.08);
-  --nav-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  /* Accent */
+  --accent-primary: #1864AB;
+  --accent-hover: #1971C2;
+  --border-default: #DEE2E6;
+  --border-subtle: #E9ECEF;
 
   /* Graph */
-  --edge-exploit: #FF5A5F;
-  --edge-credential: #FFA24A;
-  --edge-controls: #5B9BFF;
-  --edge-dependency: #6B6560;
-  --edge-highlighted: #FF7A2B;
-  --node-stroke: rgba(255, 255, 255, 0.2);
-  --node-selected: #FF7A2B;
-
-  /* Glass tokens */
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-border-hover: rgba(242, 106, 27, 0.5);
-  --glass-glow-hover: 0 0 30px rgba(242, 106, 27, 0.15);
-}
-
-html {
-  scrollbar-gutter: stable;
+  --edge-exploit: #D32029;
+  --edge-credential: #E8590C;
+  --edge-controls: #1864AB;
+  --edge-dependency: #868E96;
+  --edge-highlighted: #1864AB;
+  --node-stroke: #495057;
+  --node-selected: #1864AB;
 }
 
 body {
   margin: 0;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  overflow-x: hidden;
 }
 
 code, pre, .font-mono {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* ==========================================================================
-   2. THINNER, MINIMAL SCROLLBAR (GLOBAL)
-   ========================================================================== */
+/* Thin, subtle scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  scrollbar-color: #CED4DA transparent;
 }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: #CED4DA; border-radius: 4px; border: 2px solid transparent; background-clip: content-box; }
+*::-webkit-scrollbar-thumb:hover { background-color: #ADB5BD; }
 
-*::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
-  transition: background-color 0.2s ease;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: rgba(242, 106, 27, 0.7);
-}
-
-*::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-button {
-  display: none;
-}
-
-@media (pointer: coarse) {
-  *::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-  }
-}
-
-/* ==========================================================================
-   1. FLOATING GLASSMORPHISM NAVBAR UTILITIES
-   ========================================================================== */
-.floating-nav {
-  background: var(--nav-bg);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid var(--nav-border);
-  box-shadow: var(--nav-highlight), var(--nav-shadow), var(--nav-glow);
-  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.floating-nav-scrolled {
-  background: var(--nav-bg-scrolled);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: var(--nav-highlight), 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 45px rgba(242, 106, 27, 0.12);
-}
-
-/* Fallback if backdrop-filter is unsupported */
-@supports not (backdrop-filter: blur(16px)) {
-  .floating-nav {
-    background: rgba(18, 13, 11, 0.92);
-  }
-  .floating-nav-scrolled {
-    background: rgba(18, 13, 11, 0.98);
-  }
-}
-
-/* Glass Card styling */
-.glass-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 18px;
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0.005) 100%);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
-}
-
-.glass-card-hover:hover {
-  border-color: var(--glass-border-hover);
-  box-shadow: var(--glass-glow-hover);
-}
-
-/* Circular glass icon button */
-.glass-btn-circle {
-  width: 34px;
-  height: 34px;
-  border-radius: 9999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--text-secondary);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: all 0.2s ease;
-}
-
-.glass-btn-circle:hover {
-  color: var(--text-primary);
-  border-color: rgba(242, 106, 27, 0.6);
-  box-shadow: 0 0 16px rgba(242, 106, 27, 0.3);
-  background: rgba(242, 106, 27, 0.08);
-}
-
-/* Glass pill button / badge */
-.glass-pill {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: all 0.2s ease;
-}
-
-.glass-pill:hover {
-  border-color: rgba(242, 106, 27, 0.45);
-  box-shadow: 0 0 16px rgba(242, 106, 27, 0.18);
-}
-
-/* Subtle background grain overlay */
-.bg-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
-}
-
-/* Minimal prose for dark surfaces */
+/* Minimal prose (the @tailwindcss/typography plugin is not installed; this keeps the build offline). */
 .prose { color: var(--text-primary); line-height: 1.65; max-width: 72ch; }
 .prose p { margin: 0.5em 0; }
-.prose strong { font-weight: 600; color: var(--text-primary); }
-.prose code { font-size: 0.85em; background: rgba(255, 255, 255, 0.06); padding: 0.1em 0.3em; border-radius: 3px; color: #FF7A2B; }
+.prose strong { font-weight: 600; }
+.prose code { font-size: 0.85em; background: var(--bg-secondary); padding: 0.1em 0.3em; border-radius: 3px; }
 
 /* Thin top progress bar */
-@keyframes cybrix-progress {
+@keyframes vidura-progress {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(250%); }
 }
-.progress-indeterminate { animation: cybrix-progress 1.1s linear infinite; }
+.progress-indeterminate { animation: vidura-progress 1.1s linear infinite; }
 
 /* Right detail panel slide-in */
-@keyframes cybrix-slide-in {
+@keyframes vidura-slide-in {
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
 }
-.panel-slide-in { animation: cybrix-slide-in 200ms cubic-bezier(0.16, 1, 0.3, 1); }
-
-/* Cytoscape flow animation for highlighted edges */
-@keyframes dash-flow {
-  from {
-    stroke-dashoffset: 24;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
+.panel-slide-in { animation: vidura-slide-in 180ms ease-out; }
