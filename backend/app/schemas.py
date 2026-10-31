@@ -76,6 +76,11 @@ class AssetRiskResponse(BaseModel):
     is_choke_point: bool = False
     criticality_note: str = ""
     scenario_assumption: bool = True
+    mld_loss: Optional[float] = 0.0
+    megawatts_affected: Optional[float] = 0.0
+    reserve_buffer_hours: Optional[float] = 0.0
+    cascade_time_to_criticality_hours: Optional[float] = 0.0
+    physical_impact_label: Optional[str] = ""
 
 
 class RiskOverviewResponse(BaseModel):
@@ -89,6 +94,9 @@ class RiskOverviewResponse(BaseModel):
     low_count: int
     average_risk: float
     max_risk: float
+    total_mld_at_risk: Optional[float] = 0.0
+    total_mw_at_risk: Optional[float] = 0.0
+    critical_reserve_hours_min: Optional[float] = 0.0
     assets: List[AssetRiskResponse]
 
 
@@ -180,6 +188,11 @@ class RemediationActionItem(BaseModel):
     risk_reduction: float
     selected: bool = False
     priority: int = 1
+    compensating_controls: Optional[Dict[str, Any]] = None
+    asymmetry_multiplier: Optional[str] = None
+    barrier_shift: Optional[str] = None
+    physical_impact_saved: Optional[str] = None
+    zero_downtime_safe: Optional[bool] = True
 
 
 class RemediationPlanRequest(BaseModel):
@@ -196,6 +209,10 @@ class RemediationPlanResponse(BaseModel):
     initial_aggregate_risk: float
     projected_aggregate_risk: float
     risk_reduction_pct: float
+    overall_asymmetry_ratio: Optional[str] = None
+    total_mld_protected: Optional[float] = None
+    total_mw_protected: Optional[float] = None
+    zero_downtime_actions_count: Optional[int] = None
     actions: List[RemediationActionItem]
 
 
@@ -431,5 +448,29 @@ class MetaResponse(BaseModel):
     assumptions_table: List[AssumptionTableRow]
     limitations: List[LimitationItem]
     kev_floor_evidence: KevFloorEvidenceSection
+
+
+class ComplianceSectionItem(BaseModel):
+    section_id: str
+    title: str
+    standard: str
+    status: Literal["COMPLIANT", "REMEDIATION_REQUIRED", "PENDING_VERIFICATION"]
+    target_security_level: str
+    evidence_summary: str
+    mapped_assets: List[str]
+    compensating_control_ref: str
+
+
+class CompliancePackageResponse(BaseModel):
+    package_id: str
+    city: str
+    generated_at: str
+    framework_coverage: List[str]
+    audit_status: str
+    total_controls_mapped: int
+    zero_downtime_coverage_pct: float
+    sections: List[ComplianceSectionItem]
+    sha256_audit_fingerprint: str
+
 
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import cytoscape, { Core, EventObject } from 'cytoscape';
-import { Maximize2, ZoomIn, ZoomOut, Layers } from 'lucide-react';
+import { Maximize2, ZoomIn, ZoomOut, Layers, Play, Pause, RotateCcw, Clock } from 'lucide-react';
 import {
   AttackGraphResponse,
   DependencyGraphResponse,
@@ -77,9 +77,79 @@ export const GraphView: React.FC<GraphViewProps> = ({
   const basePanRef = useRef<{ x: number; y: number } | null>(null);
   const [hover, setHover] = useState<HoverInfo | null>(null);
   const [showLegend, setShowLegend] = useState(true);
+  const [timelineActive, setTimelineActive] = useState(false);
+  const [timelineHour, setTimelineHour] = useState(0.0);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const assetMap = useMemo(() => new Map((overview?.assets ?? []).map((a) => [a.asset_id, a])), [overview]);
   const typeMap = useMemo(() => new Map((scenarioMeta?.assets ?? []).map((a) => [a.id, a])), [scenarioMeta]);
+
+  // Autoplay interval for Cascade Timeline Slider
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setTimelineHour((prev) => {
+        if (prev >= 6.0) {
+          setIsPlaying(false);
+          return 6.0;
+        }
+        return Math.round((prev + 0.5) * 10) / 10;
+      });
+    }, 850);
+    return () => clearInterval(interval);
+  }, [isPlaying]);
+
+  // Apply Timeline highlighting to Cytoscape graph
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (!cy || !timelineActive) return;
+
+    cy.batch(() => {
+      cy.elements().removeClass('timeline-breached timeline-pending faded');
+
+      cy.nodes('.asset').forEach((n) => {
+        const a = assetMap.get(n.id());
+        const timeToCrit = a?.cascade_time_to_criticality_hours ?? (
+          n.data('zone') === 'External' ? 0.0 :
+          n.data('zone') === 'Enterprise' ? 1.2 :
+          n.data('zone') === 'DMZ' ? 2.1 :
+          n.data('zone') === 'Operations' ? 3.4 : 4.2
+        );
+        if (timeToCrit <= timelineHour) {
+          n.addClass('timeline-breached');
+        } else {
+          n.addClass('timeline-pending');
+        }
+      });
+
+      cy.nodes('.service').forEach((n) => {
+        if (timelineHour >= 4.2) {
+          n.addClass('timeline-breached');
+        } else {
+          n.addClass('timeline-pending');
+        }
+      });
+
+      cy.edges().forEach((e) => {
+        const src = e.source();
+        const tgt = e.target();
+        if (src.hasClass('timeline-breached') && tgt.hasClass('timeline-breached')) {
+          e.addClass('timeline-breached');
+        } else {
+          e.addClass('timeline-pending');
+        }
+      });
+    });
+  }, [timelineActive, timelineHour, assetMap]);
+
+  const getStageDescription = (h: number) => {
+    if (h < 1.0) return 'T+0.0h: Perimeter Ingress · Untrusted external port scan probes vendor gateway';
+    if (h < 2.0) return 'T+1.2h: Enterprise Boundary Traversal · Vendor VPN & Corporate Workstation compromised';
+    if (h < 3.0) return 'T+2.1h: DMZ Pivot · Operations Jump Host & PI Historian breached';
+    if (h < 4.0) return 'T+3.4h: Operations Infiltration · L3 Water SCADA supervisory server accessed';
+    if (h < 5.0) return 'T+4.2h: Field Control Hijack · L1/L0 Chlorine Dosing PLC manipulated (Modbus 0x05/0x06)';
+    return 'T+5.0h+: Physical Civic Outage · 140 MLD Water Supply Curtailed • District Civil Hospital ICU at Risk';
+  };
 
   // Count downstream dependencies connected to currently selected asset
   const downstreamCount = useMemo(() => {
@@ -455,6 +525,34 @@ export const GraphView: React.FC<GraphViewProps> = ({
             'z-index': 15,
           } as any,
         },
+        {
+          selector: 'node.timeline-breached',
+          style: {
+            'border-color': '#FF4D4F',
+            'border-width': 3.5,
+            'shadow-blur': 24,
+            'shadow-color': '#FF4D4F',
+            'shadow-opacity': 1,
+            opacity: 1,
+            'z-index': 18,
+          } as any,
+        },
+        {
+          selector: 'node.timeline-pending',
+          style: {
+            opacity: 0.28,
+            'border-color': '#6F6863',
+          } as any,
+        },
+        {
+          selector: 'edge.timeline-breached',
+          style: {
+            'line-color': '#FF4D4F',
+            width: 3.5,
+            opacity: 1,
+            'z-index': 16,
+          } as any,
+        },
       ],
     });
 
@@ -716,6 +814,28 @@ export const GraphView: React.FC<GraphViewProps> = ({
         )}
         <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
           <button
+            type="button"
+            onClick={() => {
+              setTimelineActive((prev) => {
+                const next = !prev;
+                if (!next) {
+                  setIsPlaying(false);
+                  cyRef.current?.elements().removeClass('timeline-breached timeline-pending');
+                }
+                return next;
+              });
+            }}
+            className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all flex items-center gap-1.5 ${
+              timelineActive
+                ? 'bg-[#F26A1B] text-white shadow-[0_0_12px_rgba(242,106,27,0.5)] font-semibold'
+                : 'glass-pill text-[#A09A96] hover:text-white'
+            }`}
+            title="Toggle What Breaks First? Cascade Timeline"
+          >
+            <Clock className="w-3.5 h-3.5" />
+            <span>What Breaks First?</span>
+          </button>
+          <button
             onClick={() => setShowLegend((prev) => !prev)}
             title="Toggle legend"
             className="glass-btn-circle"
@@ -751,6 +871,66 @@ export const GraphView: React.FC<GraphViewProps> = ({
           </button>
         </div>
       </div>
+
+      {/* What Breaks First: Time-to-Criticality Interactive Cascade Scrub Bar */}
+      {timelineActive && (
+        <div className="glass-card p-4 bg-[#120D0B]/95 border border-[#F26A1B]/30 space-y-3 shadow-[0_0_25px_rgba(242,106,27,0.15)]">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setIsPlaying((p) => !p)}
+                className="w-8 h-8 rounded-full bg-[#F26A1B] hover:bg-[#FF7A2B] text-white flex items-center justify-center shadow-[0_0_12px_rgba(242,106,27,0.5)] transition-all cursor-pointer"
+                title={isPlaying ? 'Pause Cascade Playback' : 'Play Cascade Playback'}
+              >
+                {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsPlaying(false);
+                  setTimelineHour(0.0);
+                }}
+                className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 text-[#A09A96] hover:text-white flex items-center justify-center transition-all border border-white/10 cursor-pointer"
+                title="Reset Timeline to T+0h"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+
+              <div className="flex items-baseline gap-2">
+                <span className="font-mono text-base font-bold text-[#F26A1B]">
+                  T+{timelineHour.toFixed(1)}h
+                </span>
+                <span className="text-xs text-[#6F6863]">Cascade Elapsed Time</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono text-[#D4CDC7] bg-white/[0.04] border border-white/10 px-3 py-1 rounded-full">
+                {getStageDescription(timelineHour)}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="font-mono text-[11px] text-[#6F6863] shrink-0">T+0h (Entry)</span>
+            <input
+              type="range"
+              min="0"
+              max="6.0"
+              step="0.5"
+              value={timelineHour}
+              onChange={(e) => {
+                setIsPlaying(false);
+                setTimelineHour(Number(e.target.value));
+              }}
+              className="w-full accent-[#F26A1B] cursor-pointer"
+            />
+            <span className="font-mono text-[11px] text-[#FF4D4F] shrink-0 font-semibold">T+6.0h (Dry Taps)</span>
+          </div>
+        </div>
+      )}
 
       {/* Canvas container: Glass card with dark background, corner orange radial glow, and faint dotted pattern */}
       <div

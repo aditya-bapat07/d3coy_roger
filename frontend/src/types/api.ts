@@ -69,6 +69,11 @@ export interface AssetRiskResponse {
   is_choke_point: boolean;
   criticality_note: string;
   scenario_assumption: boolean;
+  mld_loss?: number;
+  megawatts_affected?: number;
+  reserve_buffer_hours?: number;
+  cascade_time_to_criticality_hours?: number;
+  physical_impact_label?: string;
 }
 
 export interface RiskOverviewResponse {
@@ -82,6 +87,9 @@ export interface RiskOverviewResponse {
   low_count: number;
   average_risk: number;
   max_risk: number;
+  total_mld_at_risk?: number;
+  total_mw_at_risk?: number;
+  critical_reserve_hours_min?: number;
   assets: AssetRiskResponse[];
 }
 
@@ -161,6 +169,15 @@ export interface ChokePointResponse {
   min_cut_edges: Record<string, any>[];
 }
 
+export interface CompensatingControls {
+  cisco_acl: string;
+  fortigate_cli: string;
+  iptables: string;
+  suricata_rule: string;
+  virtual_patch_guidance: string;
+  zero_downtime_safe: boolean;
+}
+
 export interface RemediationActionItem {
   id: string;
   asset_id: string;
@@ -173,6 +190,11 @@ export interface RemediationActionItem {
   risk_reduction: number;
   selected: boolean;
   priority: number;
+  compensating_controls?: CompensatingControls;
+  asymmetry_multiplier?: string;
+  barrier_shift?: string;
+  physical_impact_saved?: string;
+  zero_downtime_safe?: boolean;
 }
 
 export interface RemediationPlanRequest {
@@ -189,6 +211,10 @@ export interface RemediationPlanResponse {
   initial_aggregate_risk: number;
   projected_aggregate_risk: number;
   risk_reduction_pct: number;
+  overall_asymmetry_ratio?: string;
+  total_mld_protected?: number;
+  total_mw_protected?: number;
+  zero_downtime_actions_count?: number;
   actions: RemediationActionItem[];
 }
 
@@ -425,6 +451,33 @@ export interface MetaResponse {
   assumptions_table: AssumptionTableRow[];
   limitations: LimitationItem[];
   kev_floor_evidence: KevFloorEvidenceSection;
+}
+
+export interface ComplianceSectionItem {
+  section_id: string;
+  title: string;
+  standard: string;
+  status: 'COMPLIANT' | 'REMEDIATION_REQUIRED' | 'PENDING_VERIFICATION';
+  target_security_level: string;
+  evidence_summary: string;
+  mapped_assets: string[];
+  compensating_control_ref: string;
+}
+
+export interface CompliancePackageResponse {
+  package_id: string;
+  city: string;
+  generated_at: string;
+  framework_coverage: string[];
+  audit_status: string;
+  total_controls_mapped: number;
+  zero_downtime_coverage_pct: number;
+  sections: ComplianceSectionItem[];
+  sha256_audit_fingerprint: string;
+}
+
+export async function fetchCompliancePackage(apiBase = '/api', persona = 'nation_state'): Promise<CompliancePackageResponse> {
+  return apiFetchJson<CompliancePackageResponse>(`${apiBase}/compliance/audit-package?persona=${persona}`);
 }
 
 export async function fetchValidationReport(apiBase = '/api'): Promise<ValidationResponse> {

@@ -7,7 +7,7 @@ import {
 } from '../types/api';
 import { getRiskBand, purdueLabel } from '../tokens';
 import { ScenarioMeta, whyFragment } from '../display';
-import { Search, MapPin } from 'lucide-react';
+import { Search, MapPin, Droplets } from 'lucide-react';
 
 interface RiskTableViewProps {
   overview: RiskOverviewResponse | null;
@@ -138,6 +138,19 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
             </span>
           )}
 
+          {overview?.total_mld_at_risk !== undefined && overview.total_mld_at_risk > 0 && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-[#3DDC97]/10 border border-[#3DDC97]/30 text-[#3DDC97]">
+              <Droplets className="w-3 h-3 text-[#3DDC97]" />
+              <span>{overview.total_mld_at_risk} MLD Risk</span>
+            </span>
+          )}
+
+          {overview?.critical_reserve_hours_min !== undefined && overview.critical_reserve_hours_min > 0 && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono bg-[#F26A1B]/10 border border-[#F26A1B]/30 text-[#F26A1B]">
+              <span>⏱ {overview.critical_reserve_hours_min}h Buffer</span>
+            </span>
+          )}
+
           <p className="text-sm text-[#A09A96]">
             <span className="text-white font-semibold">{summary.n}</span> assets scored
             <span className="mx-2 text-[#6F6863]">·</span>
@@ -221,7 +234,7 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
                     }`}
                   >
                     <td className="px-5 py-3">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-medium text-white">{a.name}</span>
                         {eolSet.has(a.asset_id) && (
                           <span
@@ -229,6 +242,30 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
                             title="Vendor end-of-life"
                           >
                             ⚠ EOL
+                          </span>
+                        )}
+                        {a.mld_loss !== undefined && a.mld_loss > 0 && (
+                          <span
+                            className="text-[10px] font-mono text-[#3DDC97] bg-[#3DDC97]/15 border border-[#3DDC97]/30 rounded px-1.5 py-0.5 font-semibold"
+                            title="Physical water supply disruption in Million Litres per Day"
+                          >
+                            {a.mld_loss} MLD
+                          </span>
+                        )}
+                        {a.megawatts_affected !== undefined && a.megawatts_affected > 0 && (
+                          <span
+                            className="text-[10px] font-mono text-[#FF7A2B] bg-[#FF7A2B]/15 border border-[#FF7A2B]/30 rounded px-1.5 py-0.5 font-semibold"
+                            title="Electrical grid capacity curtailed"
+                          >
+                            {a.megawatts_affected} MW
+                          </span>
+                        )}
+                        {a.reserve_buffer_hours !== undefined && a.reserve_buffer_hours > 0 && (
+                          <span
+                            className="text-[10px] font-mono text-white/70 bg-white/5 border border-white/10 rounded px-1.5 py-0.5"
+                            title="Municipal reserve buffer time to dry taps"
+                          >
+                            ⏱ {a.reserve_buffer_hours}h buffer
                           </span>
                         )}
                       </div>

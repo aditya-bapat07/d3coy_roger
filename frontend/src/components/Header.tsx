@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileDown, RotateCcw, Shield, ChevronDown, Menu, X, MapPin } from 'lucide-react';
+import { FileDown, RotateCcw, Shield, ChevronDown, Menu, X, MapPin, ShieldCheck } from 'lucide-react';
 import { PersonaType } from '../types/api';
 
 type TabKey = 'risk' | 'graph' | 'remediation' | 'how';
@@ -12,6 +12,7 @@ interface HeaderProps {
   threatDropActive: boolean;
   onToggleThreatDrop: () => void;
   onExportPdf: () => void;
+  onExportCompliance?: () => void;
   onResetSession: () => void;
   loading: boolean;
   isDemoMode?: boolean;
@@ -43,6 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
   threatDropActive,
   onToggleThreatDrop,
   onExportPdf,
+  onExportCompliance,
   onResetSession,
   isDemoMode = false,
   onGoHome,
@@ -189,6 +191,18 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <FileDown className="w-4 h-4" />
           </button>
+
+          {/* Export Sovereign Regulatory Audit Package (NCIIPC / IEC 62443) */}
+          {onExportCompliance && (
+            <button
+              onClick={onExportCompliance}
+              title="Download Sovereign Regulatory Audit Evidence Binder (NCIIPC & IEC 62443-3-3)"
+              aria-label="Download Sovereign Regulatory Audit Binder"
+              className="glass-btn-circle text-[#3DDC97] hover:border-[#3DDC97]/50 hover:shadow-[0_0_12px_rgba(61,220,151,0.25)]"
+            >
+              <ShieldCheck className="w-4 h-4 text-[#3DDC97]" />
+            </button>
+          )}
 
           {/* Reset session circular glass button */}
           <button

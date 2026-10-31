@@ -8,7 +8,7 @@ import {
 import { getRiskBand, purdueLabel } from '../tokens';
 import { shortName, truncate } from '../display';
 import { apiFetchJson, isFallbackMode } from '../apiClient';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck, Clock } from 'lucide-react';
 
 interface AssetDetailModalProps {
   asset: AssetRiskResponse | null;
@@ -218,6 +218,49 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
             {confidence.rating !== 'High' && confidence.reasons[0] && (
               <p className="mt-1 text-xs text-[#6F6863] leading-relaxed">{confidence.reasons[0]}</p>
             )}
+          </div>
+        )}
+
+        {/* Physical Operational SLA Impact */}
+        {asset.physical_impact_label && (
+          <div className="mt-3.5 p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] text-xs space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#3DDC97]" />
+                Physical Operational SLA Impact
+              </span>
+              {asset.cascade_time_to_criticality_hours !== undefined && asset.cascade_time_to_criticality_hours > 0 && (
+                <span className="font-mono text-[10px] text-[#F26A1B] bg-[#F26A1B]/15 border border-[#F26A1B]/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  T+{asset.cascade_time_to_criticality_hours}h to Criticality
+                </span>
+              )}
+            </div>
+            <div className="text-white font-medium text-xs leading-relaxed">
+              {asset.physical_impact_label}
+            </div>
+            <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-[11px] text-[#A09A96] border-t border-white/[0.04]">
+              <div>
+                <span className="text-[#6F6863] block text-[10px]">Flow / Load</span>
+                <span className="text-white font-semibold">
+                  {asset.mld_loss && asset.mld_loss > 0
+                    ? `${asset.mld_loss} MLD`
+                    : asset.megawatts_affected && asset.megawatts_affected > 0
+                    ? `${asset.megawatts_affected} MW`
+                    : 'Telemetry'}
+                </span>
+              </div>
+              <div>
+                <span className="text-[#6F6863] block text-[10px]">Reserve Buffer</span>
+                <span className="text-white font-semibold">
+                  {asset.reserve_buffer_hours && asset.reserve_buffer_hours > 0 ? `${asset.reserve_buffer_hours} hrs` : 'Continuous'}
+                </span>
+              </div>
+              <div>
+                <span className="text-[#6F6863] block text-[10px]">Purdue Choke</span>
+                <span className="text-white font-semibold">{asset.is_choke_point ? 'Critical Pivot' : 'Normal'}</span>
+              </div>
+            </div>
           </div>
         )}
 

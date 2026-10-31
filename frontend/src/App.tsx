@@ -22,6 +22,7 @@ import {
   PersonaType,
   fetchMetaInfo,
   fetchValidationReport,
+  fetchCompliancePackage,
 } from './types/api';
 import { apiFetchJson, isFallbackMode, API_BASE } from './apiClient';
 import { ScenarioMeta } from './display';
@@ -201,6 +202,24 @@ export function Dashboard({ initialTab, initialPersona, onGoHome }: DashboardPro
     window.open(pdfUrl, '_blank');
   };
 
+  const handleExportCompliance = async () => {
+    try {
+      const data = await fetchCompliancePackage('/api', persona);
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Vidura_Sovereign_Compliance_Audit_${data.city}_${data.package_id}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('Failed to export compliance audit package', e);
+      alert('Failed to generate compliance audit package. Ensure the backend is reachable.');
+    }
+  };
+
   useEffect(() => {
     if (isFallbackMode()) return;
     apiFetchJson<{ active: string; cities: CityOption[] }>('/cities')
@@ -311,6 +330,7 @@ export function Dashboard({ initialTab, initialPersona, onGoHome }: DashboardPro
         threatDropActive={threatDropActive}
         onToggleThreatDrop={handleToggleThreatDrop}
         onExportPdf={handleExportPdf}
+        onExportCompliance={handleExportCompliance}
         onResetSession={handleResetSession}
         loading={loading}
         isDemoMode={isDemoMode}

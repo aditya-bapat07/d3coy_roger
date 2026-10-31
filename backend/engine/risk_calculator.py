@@ -506,6 +506,49 @@ class RiskCalculator:
                 best_path=l_info.get("path", []),
             )
 
+            # Compute Physical Consequence Metrics (SLA Units) & Time to Criticality
+            services_lost = [s.lower() for s in c_info["services_lost_names"]]
+            is_water = any("water" in s or "chlorine" in s for s in services_lost) or "water" in asset.id or "water" in asset.site.lower()
+            is_power = any("power" in s or "grid" in s or "substation" in s for s in services_lost) or "pwr" in asset.id or "power" in asset.id or "substation" in asset.site.lower()
+
+            mld_loss = 0.0
+            if is_water and c_info["max_people_affected"] > 0:
+                mld_loss = round(c_info["max_people_affected"] * 0.00058, 1)
+
+            mw_affected = 0.0
+            if is_power and c_info["max_people_affected"] > 0:
+                mw_affected = round(c_info["max_people_affected"] * 0.00085, 1)
+
+            reserve_buffer = 0.0
+            if c_info["max_safety_severity"] > 0:
+                if mld_loss > 0:
+                    reserve_buffer = round(max(0.5, 6.0 - (c_info["max_safety_severity"] * 0.45)), 1)
+                elif mw_affected > 0:
+                    reserve_buffer = round(max(0.2, 2.5 - (c_info["max_safety_severity"] * 0.3)), 1)
+                else:
+                    reserve_buffer = round(max(1.0, 8.0 - (c_info["max_safety_severity"] * 0.8)), 1)
+
+            hop_cnt = len(l_info.get("path", []))
+            if hop_cnt <= 1:
+                time_to_crit = 0.0
+            elif hop_cnt == 2:
+                time_to_crit = 1.2
+            elif hop_cnt == 3:
+                time_to_crit = 2.1
+            elif hop_cnt == 4:
+                time_to_crit = 3.4
+            else:
+                time_to_crit = round(3.4 + (hop_cnt - 4) * 0.8, 1)
+
+            if mld_loss > 0 and reserve_buffer > 0:
+                phys_label = f"{mld_loss} MLD Water Supply Loss • {reserve_buffer}h Reserve Buffer to Dry Taps"
+            elif mw_affected > 0:
+                phys_label = f"{mw_affected} MW Grid Disruption • {c_info['max_people_affected']:,} Citizens Blackout"
+            elif c_info["max_people_affected"] > 0:
+                phys_label = f"{c_info['max_people_affected']:,} Citizens Disrupted • {c_info['max_outage_hours']}h Outage"
+            else:
+                phys_label = "Telemetry & supervisory disruption (No direct civic outage)"
+
             asset_responses.append({
                 "asset_id": asset.id,
                 "name": asset.name,
@@ -542,6 +585,11 @@ class RiskCalculator:
                 "is_choke_point": asset.id in choke_ids,
                 "criticality_note": asset.criticality_note,
                 "scenario_assumption": True,
+                "mld_loss": mld_loss,
+                "megawatts_affected": mw_affected,
+                "reserve_buffer_hours": reserve_buffer,
+                "cascade_time_to_criticality_hours": time_to_crit,
+                "physical_impact_label": phys_label,
             })
 
         # Rank assets descending by risk_score, tie-breaking by consequence, likelihood, CVSS
@@ -558,6 +606,11 @@ class RiskCalculator:
         total_assets = len(asset_responses)
         avg_risk = round(total_risk / total_assets, 1) if total_assets > 0 else 0.0
 
+        total_mld = max([a.get("mld_loss", 0.0) for a in asset_responses] or [0.0])
+        total_mw = max([a.get("megawatts_affected", 0.0) for a in asset_responses] or [0.0])
+        positive_buffers = [a.get("reserve_buffer_hours", 0.0) for a in asset_responses if a.get("reserve_buffer_hours", 0.0) > 0]
+        min_reserve = min(positive_buffers) if positive_buffers else 0.0
+
         return {
             "scenario_name": self.scenario.scenario_metadata.city_name,
             "fictional_population": self.scenario.scenario_metadata.fictional_population,
@@ -569,5 +622,8 @@ class RiskCalculator:
             "low_count": low_count,
             "average_risk": avg_risk,
             "max_risk": round(max_risk, 1),
+            "total_mld_at_risk": total_mld,
+            "total_mw_at_risk": total_mw,
+            "critical_reserve_hours_min": min_reserve,
             "assets": asset_responses,
         }

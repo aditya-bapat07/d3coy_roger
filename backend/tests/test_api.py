@@ -165,6 +165,58 @@ def test_meta_endpoint():
     assert len(data["kev_floor_evidence"]["rows"]) == 6
 
 
+def test_compliance_audit_package_endpoint():
+    res = client.get("/api/compliance/audit-package")
+    assert res.status_code == 200
+    data = res.json()
+    assert "package_id" in data
+    assert "NCIIPC" in data["package_id"]
+    assert "framework_coverage" in data
+    assert len(data["sections"]) >= 5
+    assert data["audit_status"] == "OFFICIALLY_ATTESTED_EVIDENCE"
+    assert "sha256_audit_fingerprint" in data
+    # Verify section fields
+    sec = data["sections"][0]
+    assert "section_id" in sec
+    assert "target_security_level" in sec
+    assert "compensating_control_ref" in sec
+
+
+def test_physical_consequence_and_compensating_controls():
+    # 1. Test risk assets contain physical consequence metrics
+    res = client.get("/api/risk/assets")
+    assert res.status_code == 200
+    data = res.json()
+    assert "total_mld_at_risk" in data
+    assert data["total_mld_at_risk"] > 0
+    assert "critical_reserve_hours_min" in data
+    assert data["critical_reserve_hours_min"] > 0
+    # Check Chlorine PLC has physical consequence metrics
+    chlorine = next((a for a in data["assets"] if "chlorine" in a["asset_id"]), None)
+    assert chlorine is not None
+    assert chlorine["mld_loss"] > 100.0
+    assert chlorine["reserve_buffer_hours"] > 0
+    assert "MLD" in chlorine["physical_impact_label"]
+    assert chlorine["cascade_time_to_criticality_hours"] > 0
+
+    # 2. Test remediation plan contains compensating controls and asymmetry metrics
+    res_rem = client.post("/api/remediation/plan", json={"engineer_hours_budget": 20.0})
+    assert res_rem.status_code == 200
+    rem_data = res_rem.json()
+    assert "overall_asymmetry_ratio" in rem_data
+    assert "total_mld_protected" in rem_data
+    assert rem_data["total_mld_protected"] > 0
+    assert rem_data["zero_downtime_actions_count"] > 0
+    first_act = rem_data["actions"][0]
+    assert "compensating_controls" in first_act
+    assert "cisco_acl" in first_act["compensating_controls"]
+    assert "fortigate_cli" in first_act["compensating_controls"]
+    assert "iptables" in first_act["compensating_controls"]
+    assert "suricata_rule" in first_act["compensating_controls"]
+    assert first_act["asymmetry_multiplier"] is not None
+
+
+
 def test_validation_endpoint():
     res = client.get("/api/validation")
     assert res.status_code == 200
@@ -180,4 +232,56 @@ def test_validation_endpoint():
     assert data["anomaly_evaluations"]["hai_testbed_evaluation"]["label"] == "HAI 21.03 real testbed data"
     assert "kev_floor_evidence" in data
     assert len(data["kev_floor_evidence"]["rows"]) == 6
+
+
+def test_compliance_audit_package_endpoint():
+    res = client.get("/api/compliance/audit-package")
+    assert res.status_code == 200
+    data = res.json()
+    assert "package_id" in data
+    assert "NCIIPC" in data["package_id"]
+    assert "framework_coverage" in data
+    assert len(data["sections"]) >= 5
+    assert data["audit_status"] == "OFFICIALLY_ATTESTED_EVIDENCE"
+    assert "sha256_audit_fingerprint" in data
+    # Verify section fields
+    sec = data["sections"][0]
+    assert "section_id" in sec
+    assert "target_security_level" in sec
+    assert "compensating_control_ref" in sec
+
+
+def test_physical_consequence_and_compensating_controls():
+    # 1. Test risk assets contain physical consequence metrics
+    res = client.get("/api/risk/assets")
+    assert res.status_code == 200
+    data = res.json()
+    assert "total_mld_at_risk" in data
+    assert data["total_mld_at_risk"] > 0
+    assert "critical_reserve_hours_min" in data
+    assert data["critical_reserve_hours_min"] > 0
+    # Check Chlorine PLC has physical consequence metrics
+    chlorine = next((a for a in data["assets"] if "chlorine" in a["asset_id"]), None)
+    assert chlorine is not None
+    assert chlorine["mld_loss"] > 100.0
+    assert chlorine["reserve_buffer_hours"] > 0
+    assert "MLD" in chlorine["physical_impact_label"]
+    assert chlorine["cascade_time_to_criticality_hours"] > 0
+
+    # 2. Test remediation plan contains compensating controls and asymmetry metrics
+    res_rem = client.post("/api/remediation/plan", json={"engineer_hours_budget": 20.0})
+    assert res_rem.status_code == 200
+    rem_data = res_rem.json()
+    assert "overall_asymmetry_ratio" in rem_data
+    assert "total_mld_protected" in rem_data
+    assert rem_data["total_mld_protected"] > 0
+    assert rem_data["zero_downtime_actions_count"] > 0
+    first_act = rem_data["actions"][0]
+    assert "compensating_controls" in first_act
+    assert "cisco_acl" in first_act["compensating_controls"]
+    assert "fortigate_cli" in first_act["compensating_controls"]
+    assert "iptables" in first_act["compensating_controls"]
+    assert "suricata_rule" in first_act["compensating_controls"]
+    assert first_act["asymmetry_multiplier"] is not None
+
 
