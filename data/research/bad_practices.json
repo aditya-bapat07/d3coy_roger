@@ -1,0 +1,25 @@
+{
+ "source": "CISA Bad Practices catalog, github.com/cisagov/bad-practices README, commit fd26f25 (2026-08-05)",
+ "license": "CC0 1.0 (public domain)",
+ "note": "BP-1..3 are labels added by us for referencing; CISA numbers them 1-3 without IDs. text_exact is copied verbatim (line wraps removed).",
+ "practices": [
+  {
+   "id": "BP-1",
+   "short": "Unsupported or end-of-life software",
+   "trigger": "asset.end_of_life == true",
+   "text_exact": "Use of unsupported (or end-of-life) software in service of critical infrastructure and national critical functions is dangerous and significantly elevates risk to national security, national economic security, and national public health and safety. This dangerous practice is especially egregious in technologies accessible from the internet."
+  },
+  {
+   "id": "BP-2",
+   "short": "Known, fixed or default credentials",
+   "trigger": "asset.default_credentials == true",
+   "text_exact": "Use of known/fixed/default passwords and credentials in service of Critical Infrastructure and national critical functions is dangerous and significantly elevates risk to national security, national economic security, and national public health and safety. This dangerous practice is especially egregious in technologies accessible from the internet."
+  },
+  {
+   "id": "BP-3",
+   "short": "Single-factor authentication for remote or administrative access",
+   "trigger": "asset.remote_access == true and MFA not applied",
+   "text_exact": "The use of single-factor authentication for remote or administrative access to systems supporting the operation of Critical Infrastructure and national critical functions (NCF) is dangerous and significantly elevates risk to national security, national economic security, and national public health and safety. This dangerous practice is especially egregious in technologies accessible from the internet."
+  }
+ ]
+}

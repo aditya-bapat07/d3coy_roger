@@ -1,0 +1,2552 @@
+{
+ "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), ics-attack/ics-attack.json. \u00a9 The MITRE Corporation; reproduced under the ATT&CK licence (see licenses/MITRE_ATTACK_LICENSE.txt).",
+ "note": "Detection strategies -> analytics -> data components/log sources, per ICS technique. Use for the 'enhanced monitoring' fix: what to collect to detect each hop.",
+ "techniques": {
+  "T0881": {
+   "name": "Service Stop",
+   "detection_strategies": [
+    {
+     "id": "DET0765",
+     "name": "Detection of Service Stop",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content",
+      "Process Creation",
+      "Service Metadata"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "WinEventLog:System",
+      "auditd:SYSCALL",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0836": {
+   "name": "Modify Parameter",
+   "detection_strategies": [
+    {
+     "id": "DET0776",
+     "name": "Detection of Modify Parameter",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content",
+      "Process History/Live Data"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "opc:applog",
+      "operationaldb:ProcessHistory",
+      "scada:applog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0821": {
+   "name": "Modify Controller Tasking",
+   "detection_strategies": [
+    {
+     "id": "DET0741",
+     "name": "Detection of Modify Controller Tasking",
+     "data_components": [
+      "Device Alarm",
+      "Network Traffic Content",
+      "Software"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "assetinventory:ProgramDiff",
+      "device:VendorLog"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0887": {
+   "name": "Wireless Sniffing",
+   "detection_strategies": [
+    {
+     "id": "DET0743",
+     "name": "Detection of Wireless Sniffing",
+     "data_components": [
+      "Network Traffic Flow",
+      "Process Metadata"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "wireless:spectrum"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0829": {
+   "name": "Loss of View",
+   "detection_strategies": [
+    {
+     "id": "DET0763",
+     "name": "Detection of Loss of View",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T1691.001": {
+   "name": "Command Message",
+   "detection_strategies": [
+    {
+     "id": "DET0784",
+     "name": "Detection of Block Command Message",
+     "data_components": [
+      "Application Log Content",
+      "Network Connection Creation",
+      "Network Traffic Flow",
+      "Process Creation",
+      "Process History/Live Data"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Security",
+      "auditd:SYSCALL",
+      "operationaldb:ProcessHistory",
+      "scada:applog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0800": {
+   "name": "Activate Firmware Update Mode",
+   "detection_strategies": [
+    {
+     "id": "DET0802",
+     "name": "Detection of Activate Firmware Update Mode",
+     "data_components": [
+      "Application Log Content",
+      "Device Alarm",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "engineeringworkstation:ApplicationLog",
+      "netflow:ipfix",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0831": {
+   "name": "Manipulation of Control",
+   "detection_strategies": [
+    {
+     "id": "DET0747",
+     "name": "Detection of Manipulation of Control",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T0814": {
+   "name": "Denial of Service",
+   "detection_strategies": [
+    {
+     "id": "DET0723",
+     "name": "Detection of Denial of Service",
+     "data_components": [
+      "Application Log Content",
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process History/Live Data",
+      "Process Termination",
+      "Service Metadata"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "WinEventLog:System",
+      "auditd:SYSCALL",
+      "netflow:ipfix",
+      "networkdevice:snmp",
+      "operationaldb:ProcessHistory",
+      "scada:applog",
+      "syslog:daemon"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0894": {
+   "name": "System Binary Proxy Execution",
+   "detection_strategies": [
+    {
+     "id": "DET0793",
+     "name": "Detection of System Binary Proxy Execution",
+     "data_components": [
+      "Command Execution",
+      "Network Traffic Content",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0861": {
+   "name": "Point & Tag Identification",
+   "detection_strategies": [
+    {
+     "id": "DET0788",
+     "name": "Detection of Point & Tag Identification",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "netflow:ipfix",
+      "opc:applog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0816": {
+   "name": "Device Restart/Shutdown",
+   "detection_strategies": [
+    {
+     "id": "DET0801",
+     "name": "Detection of Device Restart/Shutdown",
+     "data_components": [
+      "Application Log Content",
+      "Device Alarm",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "auditd:SYSCALL",
+      "engineeringworkstation:ApplicationLog",
+      "networkdevice:snmp",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0863": {
+   "name": "User Execution",
+   "detection_strategies": [
+    {
+     "id": "DET0791",
+     "name": "Detection of User Execution",
+     "data_components": [
+      "Application Log Content",
+      "Network Connection Creation",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "otndr:BehaviorAlert"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0860": {
+   "name": "Wireless Compromise",
+   "detection_strategies": [
+    {
+     "id": "DET0726",
+     "name": "Detection of Wireless Compromise",
+     "data_components": [
+      "Logon Session Creation",
+      "Network Traffic Flow",
+      "Process Metadata"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "netflow:ipfix",
+      "wireless:radius"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0858": {
+   "name": "Change Operating Mode",
+   "detection_strategies": [
+    {
+     "id": "DET0755",
+     "name": "Detection of Change Operating Mode",
+     "data_components": [
+      "Application Log Content",
+      "Device Alarm",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "engineeringworkstation:ApplicationLog",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0878": {
+   "name": "Alarm Suppression",
+   "detection_strategies": [
+    {
+     "id": "DET0728",
+     "name": "Detection of Alarm Suppression",
+     "data_components": [
+      "Application Log Content",
+      "Device Alarm",
+      "File Creation",
+      "File Modification",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process History/Live Data",
+      "Process/Event Alarm"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "alarmserver:ApplicationLog",
+      "auditd:SYSCALL+PATH",
+      "networkdevice:syslog",
+      "operationaldb:AlarmEvent",
+      "operationaldb:ProcessHistory"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0868": {
+   "name": "Detect Operating Mode",
+   "detection_strategies": [
+    {
+     "id": "DET0768",
+     "name": "Detection of Detect Operating Mode",
+     "data_components": [
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0837": {
+   "name": "Loss of Protection",
+   "detection_strategies": [
+    {
+     "id": "DET0775",
+     "name": "Detection of Loss of Protection",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T0801": {
+   "name": "Monitor Process State",
+   "detection_strategies": [
+    {
+     "id": "DET0727",
+     "name": "Detection of Monitor Process State",
+     "data_components": [
+      "Application Log Content",
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "auditd:SYSCALL",
+      "netflow:ipfix",
+      "opc:applog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0888": {
+   "name": "Remote System Information Discovery",
+   "detection_strategies": [
+    {
+     "id": "DET0787",
+     "name": "Detection of Remote System Information Discovery",
+     "data_components": [
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "networkdevice:snmp"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0845": {
+   "name": "Program Upload",
+   "detection_strategies": [
+    {
+     "id": "DET0761",
+     "name": "Detection of Program Upload",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "engineeringworkstation:ApplicationLog"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0819": {
+   "name": "Exploit Public-Facing Application",
+   "detection_strategies": [
+    {
+     "id": "DET0740",
+     "name": "Detection of Exploit Public-Facing Application",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "netflow:ipfix",
+      "webserver:applog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1691": {
+   "name": "Block Operational Technology Message",
+   "detection_strategies": [
+    {
+     "id": "DET0903",
+     "name": "Detection of Block Operational Technology Message",
+     "data_components": [
+      "Network Traffic Flow",
+      "Process Creation",
+      "Process/Event Alarm"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Security",
+      "auditd:SYSCALL",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0811": {
+   "name": "Data from Information Repositories",
+   "detection_strategies": [
+    {
+     "id": "DET0754",
+     "name": "Detection of Data from Information Repositories",
+     "data_components": [
+      "Application Log Content",
+      "File Access",
+      "Logon Session Creation",
+      "Network Share Access",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Security",
+      "auditd:SYSCALL+PATH",
+      "fileserver:audit",
+      "historian:applog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0864": {
+   "name": "Transient Cyber Asset",
+   "detection_strategies": [
+    {
+     "id": "DET0744",
+     "name": "Detection of Transient Cyber Asset",
+     "data_components": [
+      "Application Log Content",
+      "Logon Session Creation",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "WinEventLog:Security",
+      "netflow:ipfix",
+      "syslog:auth"
+     ],
+     "platforms": [
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0873.001": {
+   "name": "Siemens Project File Format",
+   "detection_strategies": [
+    {
+     "id": "DET0906",
+     "name": "Detection of Siemens Project File Format Infection",
+     "data_components": [
+      "File Access",
+      "File Modification"
+     ],
+     "log_sources": [
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL+PATH"
+     ],
+     "platforms": [
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0835": {
+   "name": "Manipulate I/O Image",
+   "detection_strategies": [
+    {
+     "id": "DET0773",
+     "name": "Detection of Manipulate I/O Image",
+     "data_components": [
+      "Network Traffic Flow",
+      "Process History/Live Data"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "processsensor:RedundantComparison"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0842": {
+   "name": "Network Sniffing",
+   "detection_strategies": [
+    {
+     "id": "DET0800",
+     "name": "Detection of Network Sniffing",
+     "data_components": [
+      "Application Log Content",
+      "Command Execution",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0851": {
+   "name": "Rootkit",
+   "detection_strategies": [
+    {
+     "id": "DET0780",
+     "name": "Detection of Rootkit",
+     "data_components": [
+      "Application Log Content",
+      "Firmware Modification",
+      "Module Load"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "assetinventory:FirmwareHash",
+      "auditd:SYSCALL",
+      "edr:TelemetryCompare",
+      "networkdevice:snmp"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0802": {
+   "name": "Automated Collection",
+   "detection_strategies": [
+    {
+     "id": "DET0734",
+     "name": "Detection of Automated Collection",
+     "data_components": [
+      "Command Execution",
+      "File Creation",
+      "Network Traffic Content",
+      "Script Execution"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "historian:applog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1694": {
+   "name": "Insecure Credentials",
+   "detection_strategies": [
+    {
+     "id": "DET0905",
+     "name": "Detection of Insecure Credentials",
+     "data_components": [
+      "Logon Session Creation",
+      "Network Traffic Content",
+      "User Account Authentication"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Security",
+      "networkdevice:syslog",
+      "syslog:auth"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1692.001": {
+   "name": "Command Message",
+   "detection_strategies": [
+    {
+     "id": "DET0794",
+     "name": "Detection of Unauthorized Command Message",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content",
+      "Process History/Live Data",
+      "Process/Event Alarm"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "opc:applog",
+      "operationaldb:AlarmEvent",
+      "operationaldb:ProcessHistory"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0809": {
+   "name": "Data Destruction",
+   "detection_strategies": [
+    {
+     "id": "DET0758",
+     "name": "Detection of Data Destruction",
+     "data_components": [
+      "Command Execution",
+      "File Deletion",
+      "File Modification",
+      "Network Traffic Content",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "WinEventLog:System",
+      "auditd:SYSCALL",
+      "auditd:SYSCALL+PATH",
+      "gpo:deployment",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0832": {
+   "name": "Manipulation of View",
+   "detection_strategies": [
+    {
+     "id": "DET0785",
+     "name": "Detection of Manipulation of View",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T1692.002": {
+   "name": "Reporting Message",
+   "detection_strategies": [
+    {
+     "id": "DET0746",
+     "name": "Detection of Spoof Reporting Message",
+     "data_components": [
+      "Device Alarm",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process History/Live Data",
+      "Windows Registry Key Modification"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "NSM:Flow",
+      "opc:applog",
+      "operationaldb:ProcessHistory",
+      "processsensor:RedundantComparison"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0872": {
+   "name": "Indicator Removal on Host",
+   "detection_strategies": [
+    {
+     "id": "DET0750",
+     "name": "Detection of Indicator Removal on Host",
+     "data_components": [
+      "Application Log Content",
+      "Command Execution",
+      "File Deletion",
+      "File Modification",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon",
+      "WinEventLog:System",
+      "auditd:SYSCALL+PATH",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0877": {
+   "name": "I/O Image",
+   "detection_strategies": [
+    {
+     "id": "DET0774",
+     "name": "Detection of I/O Image",
+     "data_components": [
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T1695.001": {
+   "name": "Serial COM",
+   "detection_strategies": [
+    {
+     "id": "DET0797",
+     "name": "Detection of Block Serial COM",
+     "data_components": [
+      "Application Log Content",
+      "File Modification",
+      "Process/Event Alarm",
+      "Windows Registry Key Modification"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL+PATH",
+      "networkdevice:syslog",
+      "operationaldb:AlarmEvent",
+      "serialgw:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1694.001": {
+   "name": "Default Credentials",
+   "detection_strategies": [
+    {
+     "id": "DET0756",
+     "name": "Detection of Default Credentials",
+     "data_components": [
+      "Logon Session Creation",
+      "Network Traffic Content",
+      "User Account Authentication"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Security",
+      "networkdevice:syslog",
+      "syslog:auth"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0815": {
+   "name": "Denial of View",
+   "detection_strategies": [
+    {
+     "id": "DET0769",
+     "name": "Detection of Denial of View",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T0843.003": {
+   "name": "Program Append",
+   "detection_strategies": [
+    {
+     "id": "DET0914",
+     "name": "Detection of Program Append",
+     "data_components": [
+      "Asset Inventory",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "assetinventory:ProgramSize"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0871": {
+   "name": "Execution through API",
+   "detection_strategies": [
+    {
+     "id": "DET0742",
+     "name": "Detection of Execution through API",
+     "data_components": [
+      "Application Log Content",
+      "Module Load",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "OS API Execution"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "opcua:AuditEvent",
+      "zeek:ssl"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0846.001": {
+   "name": "Port Scan",
+   "detection_strategies": [
+    {
+     "id": "DET0907",
+     "name": "Detection of Port Scan",
+     "data_components": [
+      "Network Connection Creation",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "netflow:ipfix"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0862": {
+   "name": "Supply Chain Compromise",
+   "detection_strategies": [
+    {
+     "id": "DET0730",
+     "name": "Detection of Supply Chain Compromise",
+     "data_components": [
+      "Application Log Content",
+      "File Metadata",
+      "Firmware Modification"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "assetinventory:FirmwareHash",
+      "auditd:SYSCALL+PATH",
+      "fim:hashcompare",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0880": {
+   "name": "Loss of Safety",
+   "detection_strategies": [
+    {
+     "id": "DET0779",
+     "name": "Detection of Loss of Safety",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T1695.002": {
+   "name": "Ethernet",
+   "detection_strategies": [
+    {
+     "id": "DET0911",
+     "name": "Detection of Block Ethernet",
+     "data_components": [
+      "Application Log Content",
+      "Device Alarm",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:System",
+      "auditd:SYSCALL",
+      "networkdevice:syslog",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0828": {
+   "name": "Loss of Productivity and Revenue",
+   "detection_strategies": [
+    {
+     "id": "DET0757",
+     "name": "Detection of Loss of Productivity and Revenue",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T0865": {
+   "name": "Spearphishing Attachment",
+   "detection_strategies": [
+    {
+     "id": "DET0781",
+     "name": "Detection of Spearphishing Attachment",
+     "data_components": [
+      "Network Traffic Content",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0846.003": {
+   "name": "Multicast Discovery",
+   "detection_strategies": [
+    {
+     "id": "DET0909",
+     "name": "Detection of Multicast Discovery",
+     "data_components": [
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "networkdevice:snmp"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1693.001": {
+   "name": "System Firmware",
+   "detection_strategies": [
+    {
+     "id": "DET0731",
+     "name": "Detection of System Firmware",
+     "data_components": [
+      "Application Log Content",
+      "Device Alarm",
+      "Firmware Modification",
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "assetinventory:FirmwareHash",
+      "auditd:SYSCALL",
+      "engineeringworkstation:ApplicationLog",
+      "netflow:ipfix",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1694.002": {
+   "name": "Hardcoded Credentials",
+   "detection_strategies": [
+    {
+     "id": "DET0798",
+     "name": "Detection of Hardcoded Credentials",
+     "data_components": [
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T1695.003": {
+   "name": "Wi-Fi",
+   "detection_strategies": [
+    {
+     "id": "DET0912",
+     "name": "Detection of Block Wi-Fi",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Application",
+      "auditd:SYSCALL",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1693.002": {
+   "name": "Module Firmware",
+   "detection_strategies": [
+    {
+     "id": "DET0790",
+     "name": "Detection of Module Firmware",
+     "data_components": [
+      "Firmware Modification",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "assetinventory:FirmwareHash"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0843.001": {
+   "name": "Download All",
+   "detection_strategies": [
+    {
+     "id": "DET0913",
+     "name": "Detection of Program Download All",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "engineeringworkstation:ApplicationLog"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0895": {
+   "name": "Autorun Image",
+   "detection_strategies": [
+    {
+     "id": "DET0748",
+     "name": "Detection of Autorun Image",
+     "data_components": [
+      "Drive Creation",
+      "File Access",
+      "File Modification",
+      "Firmware Modification",
+      "Network Connection Creation"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Security",
+      "WinEventLog:System",
+      "assetinventory:FirmwareHash",
+      "auditd:SYSCALL+PATH"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0817": {
+   "name": "Drive-by Compromise",
+   "detection_strategies": [
+    {
+     "id": "DET0782",
+     "name": "Detection of Drive-by Compromise",
+     "data_components": [
+      "Application Log Content",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "webproxy:applog"
+     ],
+     "platforms": [
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1691.002": {
+   "name": "Reporting Message",
+   "detection_strategies": [
+    {
+     "id": "DET0789",
+     "name": "Detection of Block Reporting Message",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Flow",
+      "Process Creation",
+      "Process History/Live Data"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Security",
+      "auditd:SYSCALL",
+      "networkdevice:syslog",
+      "operationaldb:ProcessHistory"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1693": {
+   "name": "Modify Firmware",
+   "detection_strategies": [
+    {
+     "id": "DET0904",
+     "name": "Detection of Firmware Modification",
+     "data_components": [
+      "Device Alarm",
+      "Firmware Modification",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "assetinventory:FirmwareHash",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0879": {
+   "name": "Damage to Property",
+   "detection_strategies": [
+    {
+     "id": "DET0762",
+     "name": "Detection of Damage to Property",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T0866": {
+   "name": "Exploitation of Remote Services",
+   "detection_strategies": [
+    {
+     "id": "DET0767",
+     "name": "Detection of Exploitation of Remote Services",
+     "data_components": [
+      "Network Traffic Content",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "zeek:conn"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0822": {
+   "name": "External Remote Services",
+   "detection_strategies": [
+    {
+     "id": "DET0803",
+     "name": "Detection of External Remote Services",
+     "data_components": [
+      "Application Log Content",
+      "Logon Session Creation",
+      "Logon Session Metadata",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Security",
+      "netflow:ipfix",
+      "syslog:auth",
+      "vpn:applog",
+      "vpn:authlog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0806": {
+   "name": "Brute Force I/O",
+   "detection_strategies": [
+    {
+     "id": "DET0737",
+     "name": "Detection of Brute Force I/O",
+     "data_components": [
+      "Application Log Content",
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Process History/Live Data"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "auditd:SYSCALL",
+      "opc:applog",
+      "operationaldb:ProcessHistory",
+      "scada:applog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0830": {
+   "name": "Adversary-in-the-Middle",
+   "detection_strategies": [
+    {
+     "id": "DET0764",
+     "name": "Detection of Adversary-in-the-Middle",
+     "data_components": [
+      "Application Log Content",
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "netflow:ipfix",
+      "networkdevice:syslog",
+      "vendorapp:ApplicationLog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0820": {
+   "name": "Exploitation for Evasion",
+   "detection_strategies": [
+    {
+     "id": "DET0795",
+     "name": "Detection of Exploitation for Evasion",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0827": {
+   "name": "Loss of Control",
+   "detection_strategies": [
+    {
+     "id": "DET0778",
+     "name": "Detection of Loss of Control",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T0874": {
+   "name": "Hooking",
+   "detection_strategies": [
+    {
+     "id": "DET0722",
+     "name": "Detection of Hooking",
+     "data_components": [
+      "File Modification",
+      "Firmware Modification",
+      "Module Load",
+      "Network Traffic Content",
+      "Process Metadata"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "assetinventory:FirmwareHash",
+      "auditd:SYSCALL",
+      "auditd:SYSCALL+PATH",
+      "edr:ProcessIntegrity",
+      "otids:ProtocolDecoder"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0823": {
+   "name": "Graphical User Interface",
+   "detection_strategies": [
+    {
+     "id": "DET0772",
+     "name": "Detection of Graphical User Interface",
+     "data_components": [
+      "Application Log Content",
+      "Logon Session Creation",
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "networkdevice:syslog",
+      "syslog:auth"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0848": {
+   "name": "Rogue Master",
+   "detection_strategies": [
+    {
+     "id": "DET0792",
+     "name": "Detection of Rogue Master",
+     "data_components": [
+      "Asset Inventory",
+      "Device Alarm",
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "assetinventory:MasterAddress",
+      "auditd:SYSCALL",
+      "netflow:ipfix",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0834": {
+   "name": "Native API",
+   "detection_strategies": [
+    {
+     "id": "DET0753",
+     "name": "Detection of Native API",
+     "data_components": [
+      "Network Traffic Content",
+      "OS API Execution"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "auditd:SYSCALL",
+      "edr:Syscall",
+      "otids:ProtocolDecoder"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0826": {
+   "name": "Loss of Availability",
+   "detection_strategies": [
+    {
+     "id": "DET0729",
+     "name": "Detection of Loss of Availability",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T0882": {
+   "name": "Theft of Operational Information",
+   "detection_strategies": [
+    {
+     "id": "DET0732",
+     "name": "Detection of Theft of Operational Information",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T0849": {
+   "name": "Masquerading",
+   "detection_strategies": [
+    {
+     "id": "DET0725",
+     "name": "Detection of Masquerading",
+     "data_components": [
+      "File Metadata",
+      "Network Traffic Content",
+      "Process Metadata",
+      "Scheduled Job Creation",
+      "Service Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon",
+      "WinEventLog:System",
+      "auditd:SYSCALL",
+      "linux:pkgintegrity",
+      "otids:ProtocolDecoder"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0843": {
+   "name": "Program Download",
+   "detection_strategies": [
+    {
+     "id": "DET0752",
+     "name": "Detection of Program Download",
+     "data_components": [
+      "Application Log Content",
+      "Asset Inventory",
+      "Device Alarm",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "assetinventory:ProgramHash",
+      "engineeringworkstation:ApplicationLog",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0847": {
+   "name": "Replication Through Removable Media",
+   "detection_strategies": [
+    {
+     "id": "DET0733",
+     "name": "Detection of Replication Through Removable Media",
+     "data_components": [
+      "Application Log Content",
+      "Drive Creation",
+      "File Creation",
+      "Network Traffic Content",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "WinEventLog:System",
+      "auditd:SYSCALL",
+      "networkdevice:syslog",
+      "otids:ProtocolDecoder"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0846.002": {
+   "name": "Broadcast Discovery",
+   "detection_strategies": [
+    {
+     "id": "DET0908",
+     "name": "Detection of Broadcast Discovery",
+     "data_components": [
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "networkdevice:snmp"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0852": {
+   "name": "Screen Capture",
+   "detection_strategies": [
+    {
+     "id": "DET0751",
+     "name": "Detection of Screen Capture",
+     "data_components": [
+      "Command Execution",
+      "File Creation",
+      "Module Load",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0859": {
+   "name": "Valid Accounts",
+   "detection_strategies": [
+    {
+     "id": "DET0724",
+     "name": "Detection of Valid Accounts",
+     "data_components": [
+      "Application Log Content",
+      "Logon Session Creation",
+      "Logon Session Metadata",
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "User Account Authentication"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "networkdevice:aaa",
+      "networkdevice:syslog",
+      "syslog:auth"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0890": {
+   "name": "Exploitation for Privilege Escalation",
+   "detection_strategies": [
+    {
+     "id": "DET0738",
+     "name": "Detection of Exploitation for Privilege Escalation",
+     "data_components": [
+      "Application Log Content",
+      "Logon Session Metadata",
+      "Network Connection Creation",
+      "Process Metadata"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "device:VendorLog",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0846": {
+   "name": "Remote System Discovery",
+   "detection_strategies": [
+    {
+     "id": "DET0739",
+     "name": "Detection of Remote System Discovery",
+     "data_components": [
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "netflow:ipfix"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0884": {
+   "name": "Connection Proxy",
+   "detection_strategies": [
+    {
+     "id": "DET0759",
+     "name": "Detection of Connection Proxy",
+     "data_components": [
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation",
+      "Service Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "WinEventLog:System",
+      "auditd:SYSCALL",
+      "netflow:ipfix"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0843.002": {
+   "name": "Online Edit",
+   "detection_strategies": [
+    {
+     "id": "DET0915",
+     "name": "Detection of Online Edit",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "engineeringworkstation:ApplicationLog"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T0869": {
+   "name": "Standard Application Layer Protocol",
+   "detection_strategies": [
+    {
+     "id": "DET0799",
+     "name": "Detection of Standard Application Layer Protocol",
+     "data_components": [
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "dns:querylog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1692": {
+   "name": "Unauthorized Message",
+   "detection_strategies": [
+    {
+     "id": "DET0902",
+     "name": "Detection of Unauthorized Message",
+     "data_components": [
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "netflow:ipfix"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0886": {
+   "name": "Remote Services",
+   "detection_strategies": [
+    {
+     "id": "DET0804",
+     "name": "Detection of Remote Services",
+     "data_components": [
+      "Command Execution",
+      "Logon Session Creation",
+      "Network Connection Creation",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "netflow:ipfix",
+      "syslog:auth"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0813": {
+   "name": "Denial of Control",
+   "detection_strategies": [
+    {
+     "id": "DET0786",
+     "name": "Detection of Denial of Control",
+     "data_components": [],
+     "log_sources": [],
+     "platforms": [
+      "None"
+     ]
+    }
+   ]
+  },
+  "T0838": {
+   "name": "Modify Alarm Settings",
+   "detection_strategies": [
+    {
+     "id": "DET0777",
+     "name": "Detection of Modify Alarm Settings",
+     "data_components": [
+      "Application Log Content",
+      "Device Alarm",
+      "File Creation",
+      "File Modification",
+      "Network Traffic Content"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL+PATH",
+      "networkdevice:snmp",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0885": {
+   "name": "Commonly Used Port",
+   "detection_strategies": [
+    {
+     "id": "DET0736",
+     "name": "Detection of Commonly Used Port",
+     "data_components": [
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "netflow:ipfix",
+      "zeek:ssl"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0873": {
+   "name": "Project File Infection",
+   "detection_strategies": [
+    {
+     "id": "DET0766",
+     "name": "Detection of Project File Infection",
+     "data_components": [
+      "File Access",
+      "File Metadata"
+     ],
+     "log_sources": [
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL+PATH"
+     ],
+     "platforms": [
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0840": {
+   "name": "Network Connection Enumeration",
+   "detection_strategies": [
+    {
+     "id": "DET0770",
+     "name": "Detection of Network Connection Enumeration",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "networkdevice:snmp"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0867": {
+   "name": "Lateral Tool Transfer",
+   "detection_strategies": [
+    {
+     "id": "DET0745",
+     "name": "Detection of Lateral Tool Transfer",
+     "data_components": [
+      "File Creation",
+      "Network Share Access",
+      "Network Traffic Content",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL+PATH",
+      "otids:ProtocolDecoder"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0883": {
+   "name": "Internet Accessible Device",
+   "detection_strategies": [
+    {
+     "id": "DET0796",
+     "name": "Detection of Internet Accessible Device",
+     "data_components": [
+      "Logon Session Metadata",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Security",
+      "perimeter:firewall",
+      "syslog:auth"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0893": {
+   "name": "Data from Local System",
+   "detection_strategies": [
+    {
+     "id": "DET0749",
+     "name": "Detection of Data from Local System",
+     "data_components": [
+      "Command Execution",
+      "File Access",
+      "Network Traffic Content",
+      "Network Traffic Flow",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "netflow:ipfix"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0892": {
+   "name": "Change Credential",
+   "detection_strategies": [
+    {
+     "id": "DET0771",
+     "name": "Detection of Change Credential",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Content",
+      "Process Creation",
+      "User Account Authentication"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "WinEventLog:Security",
+      "WinEventLog:System",
+      "auditd:SYSCALL",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1695": {
+   "name": "Block Communications",
+   "detection_strategies": [
+    {
+     "id": "DET0910",
+     "name": "Detection of Block Communications",
+     "data_components": [
+      "Application Log Content",
+      "Network Traffic Flow",
+      "Process Creation",
+      "Process/Event Alarm"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "WinEventLog:Security",
+      "auditd:SYSCALL",
+      "networkdevice:syslog",
+      "operationaldb:AlarmEvent"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0889": {
+   "name": "Modify Program",
+   "detection_strategies": [
+    {
+     "id": "DET0783",
+     "name": "Detection of Modify Program",
+     "data_components": [
+      "Device Alarm",
+      "Network Traffic Content",
+      "Software"
+     ],
+     "log_sources": [
+      "NSM:Content",
+      "assetinventory:ProgramHash",
+      "device:VendorLog"
+     ],
+     "platforms": [
+      "Embedded"
+     ]
+    }
+   ]
+  },
+  "T1701.003": {
+   "name": "Unix Shell",
+   "detection_strategies": [
+    {
+     "id": "DET0931",
+     "name": "Behavioral Detection of Unix Shell Execution in ICS",
+     "data_components": [
+      "Command Execution",
+      "Logon Session Creation",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "auditd:SYSCALL",
+      "device:CLI",
+      "device:auth",
+      "linux:syslog",
+      "networkdevice:auth",
+      "networkdevice:syslog"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices"
+     ]
+    }
+   ]
+  },
+  "T1701.006": {
+   "name": "JavaScript",
+   "detection_strategies": [
+    {
+     "id": "DET0936",
+     "name": "Behavioral Detection of JavaScript Execution in ICS",
+     "data_components": [
+      "Module Load",
+      "Network Connection Creation",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "WinEventLog:Sysmon ",
+      "auditd:SYSCALL",
+      "linux:osquery"
+     ],
+     "platforms": [
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1701.005": {
+   "name": "Python",
+   "detection_strategies": [
+    {
+     "id": "DET0933",
+     "name": "Behavioral Detection of Python Execution in ICS",
+     "data_components": [
+      "Network Connection Creation",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "linux:osquery"
+     ],
+     "platforms": [
+      "Linux",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0869.002": {
+   "name": "Publish/Subscribe Protocols",
+   "detection_strategies": [
+    {
+     "id": "DET0935",
+     "name": "Behavioral Detection of Publish/Subscribe Protocol Misuse for Command and Control",
+     "data_components": [
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:Connections",
+      "NSM:Content",
+      "NSM:Flow",
+      "NetworkDevice:Syslog",
+      "WinEventLog:Sysmon",
+      "linux:osquery"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1701": {
+   "name": "Command and Scripting Interpreter",
+   "detection_strategies": [
+    {
+     "id": "DET0928",
+     "name": "Behavioral Detection of Command and Scripting Abuse in ICS",
+     "data_components": [
+      "Command Execution",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:Sysmon",
+      "auditd:SYSCALL",
+      "device:cli",
+      "networkdevice:cli"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1701.001": {
+   "name": "PowerShell",
+   "detection_strategies": [
+    {
+     "id": "DET0929",
+     "name": "Behavioral Detection of PowerShell Execution in ICS",
+     "data_components": [
+      "Command Execution",
+      "Module Load",
+      "Process Creation",
+      "Process Metadata"
+     ],
+     "log_sources": [
+      "WinEventLog:PowerShell",
+      "WinEventLog:Sysmon"
+     ],
+     "platforms": [
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1701.002": {
+   "name": "Windows Command Shell",
+   "detection_strategies": [
+    {
+     "id": "DET0930",
+     "name": "Behavioral Detection of Windows Command Shell Execution in ICS",
+     "data_components": [
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog:Security",
+      "WinEventLog:Sysmon"
+     ],
+     "platforms": [
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T1701.004": {
+   "name": "Visual Basic",
+   "detection_strategies": [
+    {
+     "id": "DET0932",
+     "name": "Behavioral Detection of Visual Basic Execution in ICS",
+     "data_components": [
+      "Module Load",
+      "Process Creation"
+     ],
+     "log_sources": [
+      "WinEventLog",
+      "WinEventLog:Sysmon "
+     ],
+     "platforms": [
+      "Windows"
+     ]
+    }
+   ]
+  },
+  "T0869.001": {
+   "name": "DNS",
+   "detection_strategies": [
+    {
+     "id": "DET0934",
+     "name": "Behavioral Detection of DNS Protocol Misuse for Command and Control",
+     "data_components": [
+      "Network Connection Creation",
+      "Network Traffic Content",
+      "Network Traffic Flow"
+     ],
+     "log_sources": [
+      "NSM:DNS",
+      "NSM:Flow",
+      "NSM:TLS/HTTP",
+      "NetworkDevice:IDS",
+      "WinEventLog:Sysmon",
+      "linux:osquery"
+     ],
+     "platforms": [
+      "Embedded",
+      "Linux",
+      "Network Devices",
+      "Windows"
+     ]
+    }
+   ]
+  }
+ }
+}

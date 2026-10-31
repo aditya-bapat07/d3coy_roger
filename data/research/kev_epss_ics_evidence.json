@@ -1,0 +1,109 @@
+{
+ "sources": {
+  "kev": "CISA KEV catalog v2026.10.29 (github.com/cisagov/kev-data, 1764 entries)",
+  "epss": "jgamblin/KEV_EPSS epss_kev_nvd.csv, commit bef6f7c (2026-10-30), Apache-2.0; EPSS from FIRST",
+  "csaf": "CISA CSAF OT index in this pack"
+ },
+ "definition": "ICS KEV = KEV CVE that also appears in a CISA ICS (CSAF OT) advisory.",
+ "all_kev": {
+  "kev_cves": 1764,
+  "with_epss": 1571,
+  "median": 0.5669,
+  "p25": 0.1109,
+  "p75": 0.9347,
+  "share_below_0_01": 0.024,
+  "share_below_0_1": 0.23,
+  "share_below_0_5": 0.469,
+  "ransomware_known": 361
+ },
+ "ics_kev": {
+  "kev_cves": 122,
+  "with_epss": 114,
+  "median": 0.6707,
+  "p25": 0.0897,
+  "p75": 0.9892,
+  "share_below_0_01": 0.018,
+  "share_below_0_1": 0.272,
+  "share_below_0_5": 0.43,
+  "ransomware_known": 25
+ },
+ "ics_kev_by_sector": {
+  "Water and Wastewater Systems": {
+   "kev_cves": 17,
+   "with_epss": 16,
+   "median": 0.0936,
+   "p25": 0.0719,
+   "p75": 0.8322,
+   "share_below_0_01": 0.0,
+   "share_below_0_1": 0.5,
+   "share_below_0_5": 0.625,
+   "ransomware_known": 0
+  },
+  "Energy": {
+   "kev_cves": 55,
+   "with_epss": 50,
+   "median": 0.4901,
+   "p25": 0.0719,
+   "p75": 0.9713,
+   "share_below_0_01": 0.02,
+   "share_below_0_1": 0.36,
+   "share_below_0_5": 0.5,
+   "ransomware_known": 9
+  },
+  "Healthcare and Public Health": {
+   "kev_cves": 24,
+   "with_epss": 22,
+   "median": 0.7984,
+   "p25": 0.0412,
+   "p75": 0.9713,
+   "share_below_0_01": 0.045,
+   "share_below_0_1": 0.273,
+   "share_below_0_5": 0.364,
+   "ransomware_known": 9
+  },
+  "Transportation Systems": {
+   "kev_cves": 20,
+   "with_epss": 17,
+   "median": 0.1842,
+   "p25": 0.0269,
+   "p75": 0.6075,
+   "share_below_0_01": 0.059,
+   "share_below_0_1": 0.471,
+   "share_below_0_5": 0.706,
+   "ransomware_known": 3
+  },
+  "Government Facilities": {
+   "kev_cves": 14,
+   "with_epss": 12,
+   "median": 0.0412,
+   "p25": 0.0157,
+   "p75": 0.3131,
+   "share_below_0_01": 0.083,
+   "share_below_0_1": 0.5,
+   "share_below_0_5": 0.75,
+   "ransomware_known": 1
+  },
+  "Emergency Services": {
+   "kev_cves": 2,
+   "with_epss": 2,
+   "median": 0.2726,
+   "p25": 0.2726,
+   "p75": 0.2726,
+   "share_below_0_01": 0.0,
+   "share_below_0_1": 0.0,
+   "share_below_0_5": 0.5,
+   "ransomware_known": 1
+  }
+ },
+ "vpn_gateway_kev": {
+  "kev_cves": 98,
+  "with_epss": 80,
+  "median": 0.6982,
+  "p25": 0.2256,
+  "p75": 0.9834,
+  "share_below_0_01": 0.013,
+  "share_below_0_1": 0.125,
+  "share_below_0_5": 0.475,
+  "ransomware_known": 45
+ }
+}

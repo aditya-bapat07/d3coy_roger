@@ -1,0 +1,106 @@
+sector,vendor,advisories_2021_onward
+Water and Wastewater Systems,Rockwell Automation,27
+Water and Wastewater Systems,Advantech,24
+Water and Wastewater Systems,Schneider Electric,19
+Water and Wastewater Systems,Siemens,16
+Water and Wastewater Systems,ABB,15
+Water and Wastewater Systems,GE,4
+Water and Wastewater Systems,"AVEVA Software, LLC",4
+Water and Wastewater Systems,Emerson,4
+Water and Wastewater Systems,mySCADA,4
+Water and Wastewater Systems,WECON,3
+Water and Wastewater Systems,"Xylem, Inc.",2
+Water and Wastewater Systems,mySCADA Technologies,2
+Water and Wastewater Systems,INEA,2
+Water and Wastewater Systems,Unitronics,2
+Water and Wastewater Systems,AutomationDirect,2
+Energy,Siemens,153
+Energy,Hitachi Energy,117
+Energy,Schneider Electric,110
+Energy,Johnson Controls,32
+Energy,ABB,26
+Energy,Advantech,24
+Energy,Delta Electronics,24
+Energy,Rockwell Automation,21
+Energy,Yokogawa,12
+Energy,Emerson,8
+Energy,Subnet Solutions Inc.,7
+Energy,Moxa,5
+Energy,Inductive Automation,5
+Energy,GE,4
+Energy,"AVEVA Software, LLC",4
+Healthcare and Public Health,Siemens,105
+Healthcare and Public Health,Philips,12
+Healthcare and Public Health,"Becton, Dickinson and Company (BD)",10
+Healthcare and Public Health,Santesoft,7
+Healthcare and Public Health,Schneider Electric,7
+Healthcare and Public Health,Baxter,5
+Healthcare and Public Health,MicroDicom,5
+Healthcare and Public Health,GE,4
+Healthcare and Public Health,Medtronic,4
+Healthcare and Public Health,Rockwell Automation,3
+Healthcare and Public Health,Orthanc,3
+Healthcare and Public Health,ABB,3
+Healthcare and Public Health,Delta Electronics,2
+Healthcare and Public Health,Emerson,2
+Healthcare and Public Health,Hillrom,2
+Transportation Systems,Siemens,116
+Transportation Systems,Johnson Controls,32
+Transportation Systems,Schneider Electric,24
+Transportation Systems,Rockwell Automation,12
+Transportation Systems,GE,4
+Transportation Systems,mySCADA,4
+Transportation Systems,National Instruments,4
+Transportation Systems,Moxa,3
+Transportation Systems,Lantronix,3
+Transportation Systems,ABB,3
+Transportation Systems,Emerson,2
+Transportation Systems,mySCADA Technologies,2
+Transportation Systems,INEA,2
+Transportation Systems,WAGO,2
+Transportation Systems,LCDS - Leão Consultoria e Desenvolvimento de Sistemas Ltda ME,2
+Government Facilities,Siemens,99
+Government Facilities,Johnson Controls,32
+Government Facilities,Schneider Electric,14
+Government Facilities,Rockwell Automation,7
+Government Facilities,Keysight Technologies,2
+Government Facilities,goTenna,2
+Government Facilities,National Instruments,2
+Government Facilities,GeutebrÃ¼ck,1
+Government Facilities,Dominion Voting Systems,1
+Government Facilities,MiCODUS,1
+Government Facilities,Emerson,1
+Government Facilities,Keysight,1
+Government Facilities,HID Global,1
+Government Facilities,Fujitsu Limited,1
+Government Facilities,Hikvision,1
+Emergency Services,Intrado,2
+Emergency Services,Digital Alert Systems,1
+Emergency Services,Sierra Wireless,1
+Emergency Services,Motorola Solutions,1
+Emergency Services,Rapid Response Monitoring,1
+Emergency Services,CyberData,1
+Emergency Services,SiRcom,1
+Emergency Services,Johnson Controls,1
+Emergency Services,U-Boot,1
+Emergency Services,Qualcomm,1
+Emergency Services,Synectix,1
+Emergency Services,Anritsu,1
+Emergency Services,PX4,1
+Emergency Services,CP Plus,1
+Emergency Services,Daktronics,1
+Communications,Siemens,6
+Communications,GE,4
+Communications,ABB,4
+Communications,Elcomplus LLC,3
+Communications,Baicells Technologies,3
+Communications,Delta Electronics,2
+Communications,ThroughTek,2
+Communications,Keysight Technologies,2
+Communications,Rockwell Automation,2
+Communications,Sielco,2
+Communications,goTenna,2
+Communications,National Instruments,2
+Communications,Schneider Electric,2
+Communications,Festo,2
+Communications,lwIP,2

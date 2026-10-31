@@ -20,8 +20,8 @@ Severity scale: 0 none · 1 inconvenience · 2 economic harm · 3 health risk ·
 | Water treatment plant, pumping (27 MLD) | Water | 200,000 | 3 | 24 | Plant DG set runs controls and SCADA only, not the main pumps | 27 MLD = 2 lakh people × 135 litres per person per day, the CPHEEO norm for cities with sewerage. 24 h covers a safe pump restart and water-quality checks before supply resumes. |
 | Chlorine dosing | Water | 200,000 | 4 | 72 | Online residual-chlorine alarm; manual sampling | Under-dosing risks a waterborne disease outbreak; over-dosing makes water unsafe to drink. 72 h covers flushing mains, cleaning storage tanks, lab tests and lifting a boil-water notice. |
 | Reservoir level monitoring | Water | 200,000 | 2 | 8 | Manual level readings by plant staff | False readings cause overflow or pumps running dry; costly and disruptive, but staff can switch to manual readings within a shift. |
-| Piped water supply, plant service area | Water | 200,000 | 3 | 24 | Service reservoirs + household overhead tanks and sumps | Most Indian cities supply water in scheduled slots and households store it, so the buffer is about half a day on average. Informal settlements with little storage are hit at the first missed slot, so the average understates their risk. |
-| District hospital (300 beds, 20 ICU) | Hospital | 500,000 | 4 | 12 | Diesel generator 24 h; overhead water tanks 12 h; UPS 30 min on critical loads | The whole city depends on it for emergency and inpatient care, with 300 inpatients at direct risk on site. ICU, ventilators and theatres make loss of power potentially fatal. |
+| Piped water supply, plant service area | Water | 200,000 | 3 | 24 | Service reservoirs + household overhead tanks and sumps | Piped water in Indian cities runs about four hours a day on average (IWA, The Source, 2021), so households store it, and the buffer is about half a day on average. A hydraulic check on an EPANET example network shows network storage alone lasts about 8 h, so household storage supplies the rest. Informal settlements with little storage are hit at the first missed slot, so the average understates their risk. |
+| District hospital (300 beds, 20 ICU) | Hospital | 500,000 | 4 | 12 | Diesel generator 24 h; overhead water tanks 12 h; UPS 30 min on critical loads | Navanagar's only public district hospital and main emergency centre, so the whole city is its emergency catchment (private hospitals exist but are not modelled), with 300 inpatients at direct risk on site. ICU, ventilators and theatres make loss of power potentially fatal. |
 | Hospital building management system | Hospital | 300 | 3 | 8 | Manual override of air-handling units | Controls theatre and ICU air handling; failure postpones surgeries and raises infection risk for inpatients. It degrades care but does not shut the hospital, so it has no edge to the hospital node. |
 | Medical-device IoT gateway | Hospital | 40 | 3 | 12 | Bedside device alarms + nurse rounds | 40 = ICU and high-dependency beds on central monitoring. Bedside devices keep working, so this is a health risk, not an immediate loss of life, and it does not shut the hospital. |
 | Backup generator controller | Hospital | 300 | 1 | 6 | Manual start by on-site electrician, about 30 min | Alone, nothing visible happens. Its real consequence is removing the hospital's 24 h power buffer (rule 3), which makes a grid outage potentially fatal. |
@@ -44,14 +44,14 @@ Severity scale: 0 none · 1 inconvenience · 2 economic harm · 3 health risk ·
 
 ## Worked check (what the rules produce)
 
-- **Substation alone (12 h outage):** north zone power, water pumping and traffic signals are out for 12 h. Household water is not cut, because the 12 h pumping outage does not exceed the 12 h storage buffer. The hospital is not hit, because 12 h is less than its 24 h generator buffer.
-- **Substation + generator controller:** the hospital buffer drops to 0, so the hospital loses power for the full 12 h. This is the highest-consequence combination in the city and the strongest attack story for the demo.
-- **Chlorine dosing:** unsafe water reaches 2 lakh people after 3 h and stays unsafe for 69 h.
+- **Substation alone (12 h outage):** north zone power, water pumping, traffic signals and the camera gateway are out for 12 h. Household water is not cut, because the 12 h pumping outage does not exceed the 12 h storage buffer. The hospital is not hit, because 12 h is less than its 24 h generator buffer.
+- **Substation + generator controller:** the hospital buffer drops to 0, so the hospital loses power for the full 12 h. This is the strongest attack story for the demo: neither compromise alone touches the hospital, but together they cut its power at once. (By the weights in assumptions.json, chlorine dosing still has the highest consequence of any single asset: 1.00 against 0.83 here.)
+- **Chlorine dosing:** unsafe water reaches 2 lakh people after 3 h and stays unsafe for 69 h (72 − 3). The hospital's 12 h of stored water then runs out, so it is hit from hour 15 (3 + 12) for 57 h (69 − 12). Two essential services fail: piped water and the hospital.
 
 ## Deliberately not modelled (say so if asked)
 
 - Restoring power by switching load to an adjacent substation, which would shorten outages; leaving it out keeps the numbers conservative.
 - Sewage pumping stations, which would overflow during long power cuts.
 - Telecom networks.
-- Contaminated mains water reaching the hospital.
+- Partial contamination: unsafe water is treated exactly like lost supply, so the hospital is hit once its 12 h of clean stored water runs out. Real contamination events vary in extent.
 - The link from traffic-signal failure to slower ambulance arrival at the hospital.

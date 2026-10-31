@@ -1,0 +1,63 @@
+{
+ "source_note": "Response-plan templates for Vidura step 7X. Placeholders in {braces} are filled by the engine from computed paths and cascades, never hand-written. Regulatory lines cite CERT-In Directions of 28 April 2022 under Section 70B of the IT Act, 2000 (report within 6 hours of noticing; keep logs 180 days within India).",
+ "common_steps": [
+  {
+   "order": 1,
+   "step": "Confirm the alert with the operator on site: is {asset} behaving abnormally (setpoints, alarms, unexpected commands)?"
+  },
+  {
+   "order": 2,
+   "step": "Cut the attacker's most likely way in: isolate {entry_point} (block the rule or disable the account/VPN profile), without breaking required flows: {required_flows_kept}."
+  },
+  {
+   "order": 3,
+   "step": "Preserve evidence: export logs from {asset}, {entry_point} and every host on the path ({path_hosts}); keep them for at least 180 days, within India."
+  },
+  {
+   "order": 4,
+   "step": "Report the incident to CERT-In within 6 hours of noticing it (CERT-In Directions, 28 April 2022). If the system is notified as a protected system under Section 70 of the IT Act, also follow NCIIPC's reporting requirements."
+  },
+  {
+   "order": 5,
+   "step": "Warn the services that depend on {asset} before their buffers run out: {dependent_services_with_hours}."
+  },
+  {
+   "order": 6,
+   "step": "Restore {asset} from a known-good configuration/program backup; change every credential used on the path; only then reconnect."
+  }
+ ],
+ "asset_class_steps": {
+  "water_pump_plc": [
+   "Switch pumps to local/manual control at the plant; station an operator at the pump panel.",
+   "Watch service-reservoir levels; the scenario buffer is about {buffer_hours} h before households lose supply.",
+   "Arrange water tankers for the hospital and for informal settlements first, as they have the least storage.",
+   "After pumping is restored following a long outage, flush and test before declaring the water safe: depressurised mains in intermittent systems can draw in contaminated water."
+  ],
+  "chlorine_dosing_plc": [
+   "Switch dosing to manual and start grab sampling of residual chlorine at the plant outlet and at the first tap points.",
+   "If dosing was wrong for any period, hold or divert treated water and prepare a boil-water advisory with the health department before it reaches taps (scenario travel time about {delay_hours} h).",
+   "Flush affected mains and test before lifting any advisory."
+  ],
+  "substation_rtu_or_relay": [
+   "Move breaker operation to local control in the substation; block remote commands from the SCADA server until it is verified.",
+   "Check protection relay settings against the approved settings file before re-energising feeders.",
+   "Prioritise restoration of the feeders supplying the water plant and the hospital."
+  ],
+  "hospital_generator_controller": [
+   "Test-start the backup generator manually now, before any grid event; confirm diesel stock for {generator_hours} h.",
+   "Put the generator controller in local mode and keep an electrician on site until it is verified."
+  ],
+  "hospital_bms_or_medical_iot": [
+   "Switch air handling for theatres and ICU to manual override; postpone non-emergency surgery if theatre pressure cannot be held.",
+   "For medical-device monitoring, move to bedside alarms and nurse rounds; do not reconnect the gateway until verified."
+  ],
+  "traffic_signal_controller": [
+   "Ask traffic police to take manual control of the affected junctions, starting with ambulance routes to the hospital.",
+   "Put controllers into fixed-time local mode, disconnected from the central server."
+  ],
+  "vendor_remote_access": [
+   "Disable the vendor VPN profile and any shared vendor accounts; tell the vendor to use escorted, time-limited access only after review.",
+   "Review every session from the vendor gateway in the logs for the last 30 days."
+  ]
+ }
+}

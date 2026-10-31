@@ -1,0 +1,724 @@
+{
+ "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+ "note": "Every technique ID below was looked up in MITRE ATT&CK for ICS (mitre/cti ics-attack.json); revoked/deprecated objects excluded. T0812 Default Credentials and T0855 Unauthorized Command Message are revoked; use T1694.001 and T1692.001.",
+ "hop_types": [
+  {
+   "hop_type": "internet_exploit",
+   "meaning": "Attacker exploits an internet-exposed asset (CVE with CVSS AV:N)",
+   "techniques": [
+    {
+     "id": "T0883",
+     "name": "Internet Accessible Device",
+     "tactics": [
+      "initial-access"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0883",
+     "mitigations": [
+      {
+       "id": "M0930",
+       "name": "Network Segmentation"
+      }
+     ]
+    },
+    {
+     "id": "T0819",
+     "name": "Exploit Public-Facing Application",
+     "tactics": [
+      "initial-access"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0819",
+     "mitigations": [
+      {
+       "id": "M0916",
+       "name": "Vulnerability Scanning"
+      },
+      {
+       "id": "M0926",
+       "name": "Privileged Account Management"
+      },
+      {
+       "id": "M0930",
+       "name": "Network Segmentation"
+      },
+      {
+       "id": "M0948",
+       "name": "Application Isolation and Sandboxing"
+      },
+      {
+       "id": "M0950",
+       "name": "Exploit Protection"
+      },
+      {
+       "id": "M0951",
+       "name": "Update Software"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "vendor_remote_access",
+   "meaning": "Attacker enters through the third-party vendor VPN / remote-access gateway",
+   "techniques": [
+    {
+     "id": "T0822",
+     "name": "External Remote Services",
+     "tactics": [
+      "initial-access"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0822",
+     "mitigations": [
+      {
+       "id": "M0918",
+       "name": "User Account Management"
+      },
+      {
+       "id": "M0927",
+       "name": "Password Policies"
+      },
+      {
+       "id": "M0930",
+       "name": "Network Segmentation"
+      },
+      {
+       "id": "M0932",
+       "name": "Multi-factor Authentication"
+      },
+      {
+       "id": "M0935",
+       "name": "Limit Access to Resource Over Network"
+      },
+      {
+       "id": "M0936",
+       "name": "Account Use Policies"
+      },
+      {
+       "id": "M0942",
+       "name": "Disable or Remove Feature or Program"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "default_credentials",
+   "meaning": "Attacker logs in with default or vendor credentials",
+   "techniques": [
+    {
+     "id": "T1694.001",
+     "name": "Default Credentials",
+     "tactics": [
+      "lateral-movement",
+      "persistence"
+     ],
+     "url": "https://attack.mitre.org/techniques/T1694/001",
+     "mitigations": [
+      {
+       "id": "M0801",
+       "name": "Access Management"
+      },
+      {
+       "id": "M0927",
+       "name": "Password Policies"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "valid_accounts",
+   "meaning": "Attacker uses legitimate stolen or insider credentials",
+   "techniques": [
+    {
+     "id": "T0859",
+     "name": "Valid Accounts",
+     "tactics": [
+      "lateral-movement",
+      "persistence"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0859",
+     "mitigations": [
+      {
+       "id": "M0801",
+       "name": "Access Management"
+      },
+      {
+       "id": "M0913",
+       "name": "Application Developer Guidance"
+      },
+      {
+       "id": "M0915",
+       "name": "Active Directory Configuration"
+      },
+      {
+       "id": "M0918",
+       "name": "User Account Management"
+      },
+      {
+       "id": "M0926",
+       "name": "Privileged Account Management"
+      },
+      {
+       "id": "M0927",
+       "name": "Password Policies"
+      },
+      {
+       "id": "M0932",
+       "name": "Multi-factor Authentication"
+      },
+      {
+       "id": "M0936",
+       "name": "Account Use Policies"
+      },
+      {
+       "id": "M0937",
+       "name": "Filter Network Traffic"
+      },
+      {
+       "id": "M0947",
+       "name": "Audit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "phishing_entry",
+   "meaning": "Nation-state or insider entry via a phished corporate workstation",
+   "techniques": [
+    {
+     "id": "T0865",
+     "name": "Spearphishing Attachment",
+     "tactics": [
+      "initial-access"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0865",
+     "mitigations": [
+      {
+       "id": "M0917",
+       "name": "User Training"
+      },
+      {
+       "id": "M0921",
+       "name": "Restrict Web-Based Content"
+      },
+      {
+       "id": "M0931",
+       "name": "Network Intrusion Prevention"
+      },
+      {
+       "id": "M0949",
+       "name": "Antivirus/Antimalware"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "remote_service_exploit",
+   "meaning": "Lateral hop by exploiting a network service on an internal host (CVE AV:N/AV:A)",
+   "techniques": [
+    {
+     "id": "T0866",
+     "name": "Exploitation of Remote Services",
+     "tactics": [
+      "initial-access",
+      "lateral-movement"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0866",
+     "mitigations": [
+      {
+       "id": "M0916",
+       "name": "Vulnerability Scanning"
+      },
+      {
+       "id": "M0919",
+       "name": "Threat Intelligence Program"
+      },
+      {
+       "id": "M0926",
+       "name": "Privileged Account Management"
+      },
+      {
+       "id": "M0930",
+       "name": "Network Segmentation"
+      },
+      {
+       "id": "M0942",
+       "name": "Disable or Remove Feature or Program"
+      },
+      {
+       "id": "M0948",
+       "name": "Application Isolation and Sandboxing"
+      },
+      {
+       "id": "M0950",
+       "name": "Exploit Protection"
+      },
+      {
+       "id": "M0951",
+       "name": "Update Software"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "remote_service_login",
+   "meaning": "Lateral hop over RDP/SSH/VNC or similar using credentials",
+   "techniques": [
+    {
+     "id": "T0886",
+     "name": "Remote Services",
+     "tactics": [
+      "initial-access",
+      "lateral-movement"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0886",
+     "mitigations": [
+      {
+       "id": "M0800",
+       "name": "Authorization Enforcement"
+      },
+      {
+       "id": "M0801",
+       "name": "Access Management"
+      },
+      {
+       "id": "M0804",
+       "name": "Human User Authentication"
+      },
+      {
+       "id": "M0807",
+       "name": "Network Allowlists"
+      },
+      {
+       "id": "M0813",
+       "name": "Software Process and Device Authentication"
+      },
+      {
+       "id": "M0918",
+       "name": "User Account Management"
+      },
+      {
+       "id": "M0927",
+       "name": "Password Policies"
+      },
+      {
+       "id": "M0930",
+       "name": "Network Segmentation"
+      },
+      {
+       "id": "M0937",
+       "name": "Filter Network Traffic"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "privilege_escalation",
+   "meaning": "Local exploit after landing on a host (CVE AV:L)",
+   "techniques": [
+    {
+     "id": "T0890",
+     "name": "Exploitation for Privilege Escalation",
+     "tactics": [
+      "privilege-escalation"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0890",
+     "mitigations": [
+      {
+       "id": "M0919",
+       "name": "Threat Intelligence Program"
+      },
+      {
+       "id": "M0948",
+       "name": "Application Isolation and Sandboxing"
+      },
+      {
+       "id": "M0950",
+       "name": "Exploit Protection"
+      },
+      {
+       "id": "M0951",
+       "name": "Update Software"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "controller_logic_change",
+   "meaning": "Final hop: engineering software pushes modified logic to a PLC/RTU",
+   "techniques": [
+    {
+     "id": "T0843",
+     "name": "Program Download",
+     "tactics": [
+      "lateral-movement"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0843",
+     "mitigations": [
+      {
+       "id": "M0800",
+       "name": "Authorization Enforcement"
+      },
+      {
+       "id": "M0801",
+       "name": "Access Management"
+      },
+      {
+       "id": "M0802",
+       "name": "Communication Authenticity"
+      },
+      {
+       "id": "M0804",
+       "name": "Human User Authentication"
+      },
+      {
+       "id": "M0807",
+       "name": "Network Allowlists"
+      },
+      {
+       "id": "M0813",
+       "name": "Software Process and Device Authentication"
+      },
+      {
+       "id": "M0930",
+       "name": "Network Segmentation"
+      },
+      {
+       "id": "M0937",
+       "name": "Filter Network Traffic"
+      },
+      {
+       "id": "M0945",
+       "name": "Code Signing"
+      },
+      {
+       "id": "M0947",
+       "name": "Audit"
+      }
+     ]
+    },
+    {
+     "id": "T0889",
+     "name": "Modify Program",
+     "tactics": [
+      "persistence"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0889",
+     "mitigations": [
+      {
+       "id": "M0800",
+       "name": "Authorization Enforcement"
+      },
+      {
+       "id": "M0804",
+       "name": "Human User Authentication"
+      },
+      {
+       "id": "M0945",
+       "name": "Code Signing"
+      },
+      {
+       "id": "M0947",
+       "name": "Audit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "controller_command",
+   "meaning": "Final hop: unauthorised control command or setpoint change to a PLC/RTU/IED",
+   "techniques": [
+    {
+     "id": "T1692.001",
+     "name": "Command Message",
+     "tactics": [
+      "evasion",
+      "impair-process-control"
+     ],
+     "url": "https://attack.mitre.org/techniques/T1692/001",
+     "mitigations": [
+      {
+       "id": "M0802",
+       "name": "Communication Authenticity"
+      },
+      {
+       "id": "M0807",
+       "name": "Network Allowlists"
+      },
+      {
+       "id": "M0813",
+       "name": "Software Process and Device Authentication"
+      },
+      {
+       "id": "M0818",
+       "name": "Validate Program Inputs"
+      },
+      {
+       "id": "M0930",
+       "name": "Network Segmentation"
+      },
+      {
+       "id": "M0937",
+       "name": "Filter Network Traffic"
+      }
+     ]
+    },
+    {
+     "id": "T0836",
+     "name": "Modify Parameter",
+     "tactics": [
+      "impair-process-control"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0836",
+     "mitigations": [
+      {
+       "id": "M0800",
+       "name": "Authorization Enforcement"
+      },
+      {
+       "id": "M0804",
+       "name": "Human User Authentication"
+      },
+      {
+       "id": "M0818",
+       "name": "Validate Program Inputs"
+      },
+      {
+       "id": "M0947",
+       "name": "Audit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "hop_type": "supply_chain",
+   "meaning": "Compromised vendor software or update (stretch scenario)",
+   "techniques": [
+    {
+     "id": "T0862",
+     "name": "Supply Chain Compromise",
+     "tactics": [
+      "initial-access"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0862",
+     "mitigations": [
+      {
+       "id": "M0817",
+       "name": "Supply Chain Management"
+      },
+      {
+       "id": "M0916",
+       "name": "Vulnerability Scanning"
+      },
+      {
+       "id": "M0945",
+       "name": "Code Signing"
+      },
+      {
+       "id": "M0947",
+       "name": "Audit"
+      },
+      {
+       "id": "M0951",
+       "name": "Update Software"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "impact_types": [
+  {
+   "impact_type": "manipulation_of_control",
+   "techniques": [
+    {
+     "id": "T0831",
+     "name": "Manipulation of Control",
+     "tactics": [
+      "impact"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0831",
+     "mitigations": [
+      {
+       "id": "M0802",
+       "name": "Communication Authenticity"
+      },
+      {
+       "id": "M0810",
+       "name": "Out-of-Band Communications Channel"
+      },
+      {
+       "id": "M0953",
+       "name": "Data Backup"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "impact_type": "loss_of_control",
+   "techniques": [
+    {
+     "id": "T0827",
+     "name": "Loss of Control",
+     "tactics": [
+      "impact"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0827",
+     "mitigations": [
+      {
+       "id": "M0810",
+       "name": "Out-of-Band Communications Channel"
+      },
+      {
+       "id": "M0811",
+       "name": "Redundancy of Service"
+      },
+      {
+       "id": "M0953",
+       "name": "Data Backup"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "impact_type": "denial_of_control",
+   "techniques": [
+    {
+     "id": "T0813",
+     "name": "Denial of Control",
+     "tactics": [
+      "impact"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0813",
+     "mitigations": [
+      {
+       "id": "M0810",
+       "name": "Out-of-Band Communications Channel"
+      },
+      {
+       "id": "M0811",
+       "name": "Redundancy of Service"
+      },
+      {
+       "id": "M0953",
+       "name": "Data Backup"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "impact_type": "loss_of_view",
+   "techniques": [
+    {
+     "id": "T0829",
+     "name": "Loss of View",
+     "tactics": [
+      "impact"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0829",
+     "mitigations": [
+      {
+       "id": "M0810",
+       "name": "Out-of-Band Communications Channel"
+      },
+      {
+       "id": "M0811",
+       "name": "Redundancy of Service"
+      },
+      {
+       "id": "M0953",
+       "name": "Data Backup"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "impact_type": "loss_of_availability",
+   "techniques": [
+    {
+     "id": "T0826",
+     "name": "Loss of Availability",
+     "tactics": [
+      "impact"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0826",
+     "mitigations": [
+      {
+       "id": "M0810",
+       "name": "Out-of-Band Communications Channel"
+      },
+      {
+       "id": "M0811",
+       "name": "Redundancy of Service"
+      },
+      {
+       "id": "M0953",
+       "name": "Data Backup"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "impact_type": "loss_of_safety",
+   "techniques": [
+    {
+     "id": "T0880",
+     "name": "Loss of Safety",
+     "tactics": [
+      "impact"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0880",
+     "mitigations": [
+      {
+       "id": "M0805",
+       "name": "Mechanical Protection Layers"
+      },
+      {
+       "id": "M0812",
+       "name": "Safety Instrumented Systems"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "impact_type": "damage_to_property",
+   "techniques": [
+    {
+     "id": "T0879",
+     "name": "Damage to Property",
+     "tactics": [
+      "impact"
+     ],
+     "url": "https://attack.mitre.org/techniques/T0879",
+     "mitigations": [
+      {
+       "id": "M0805",
+       "name": "Mechanical Protection Layers"
+      },
+      {
+       "id": "M0807",
+       "name": "Network Allowlists"
+      },
+      {
+       "id": "M0812",
+       "name": "Safety Instrumented Systems"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

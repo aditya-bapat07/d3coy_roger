@@ -1,8 +1,8 @@
 {
   "manifest_version": "1.0",
   "generated_at": "2026-10-30T17:46:57.010834+00:00",
-  "total_files": 7,
-  "total_records": 2038,
+  "total_files": 28,
+  "total_records": 2747,
   "files": {
     "cisa_kev_map.json": {
       "file": "cisa_kev_map.json",
@@ -10,7 +10,8 @@
       "source_url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
       "record_count": 1766,
       "fetched_at": "2026-10-30T17:37:21.710572+00:00",
-      "file_size_bytes": 1565485
+      "file_size_bytes": 1565485,
+      "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
     },
     "attack_ics_techniques.json": {
       "file": "attack_ics_techniques.json",
@@ -18,7 +19,8 @@
       "source_url": "https://raw.githubusercontent.com/mitre/cti/master/ics-attack/ics-attack.json",
       "record_count": 118,
       "fetched_at": "2026-10-30T17:37:43.035844+00:00",
-      "file_size_bytes": 92992
+      "file_size_bytes": 92992,
+      "source": "https://raw.githubusercontent.com/mitre/cti/master/ics-attack/ics-attack.json"
     },
     "selected_cves.json": {
       "file": "selected_cves.json",
@@ -26,7 +28,8 @@
       "source_url": "Derived from CISA KEV and NVD ICS equipment selections",
       "record_count": 39,
       "fetched_at": "2026-10-30T17:40:12.867050+00:00",
-      "file_size_bytes": 12029
+      "file_size_bytes": 12029,
+      "source": "Derived from CISA KEV and NVD ICS equipment selections"
     },
     "nvd_cve_details.json": {
       "file": "nvd_cve_details.json",
@@ -34,7 +37,8 @@
       "source_url": "https://services.nvd.nist.gov/rest/json/cves/2.0",
       "record_count": 38,
       "fetched_at": "2026-10-30T17:45:08.760523+00:00",
-      "file_size_bytes": 48593
+      "file_size_bytes": 48593,
+      "source": "https://services.nvd.nist.gov/rest/json/cves/2.0"
     },
     "epss_current.json": {
       "file": "epss_current.json",
@@ -42,7 +46,8 @@
       "source_url": "https://api.first.org/data/v1/epss",
       "record_count": 38,
       "fetched_at": "2026-10-30T17:46:08.251268+00:00",
-      "file_size_bytes": 7587
+      "file_size_bytes": 7587,
+      "source": "https://api.first.org/data/v1/epss"
     },
     "epss_history.json": {
       "file": "epss_history.json",
@@ -50,7 +55,8 @@
       "source_url": "https://api.first.org/data/v1/epss?scope=time-series",
       "record_count": 38,
       "fetched_at": "2026-10-30T17:46:08.251268+00:00",
-      "file_size_bytes": 117140
+      "file_size_bytes": 117140,
+      "source": "https://api.first.org/data/v1/epss?scope=time-series"
     },
     "threat_drop.json": {
       "file": "threat_drop.json",
@@ -58,7 +64,219 @@
       "source_url": "CISA KEV / NVD reserved ICS vulnerability",
       "record_count": 1,
       "fetched_at": "2026-10-30T17:46:57.007624+00:00",
-      "file_size_bytes": 1129
+      "file_size_bytes": 1129,
+      "source": "CISA KEV / NVD reserved ICS vulnerability"
+    },
+    "attack_ics_assets.json": {
+      "file": "data/research/attack_ics_assets.json",
+      "path": "data/research/attack_ics_assets.json",
+      "description": "MITRE ATT&CK for ICS targeted asset types per technique",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), ics-attack/ics-attack.json. \u00a9 The MITRE Corporation; reproduced under the ATT&CK licence (see licenses/MITRE_ATTACK_LICENSE.txt).",
+      "source_url": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), ics-attack/ics-attack.json. \u00a9 The MITRE Corporation; reproduced under the ATT&CK licence (see licenses/MITRE_ATTACK_LICENSE.txt).",
+      "record_count": 18,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 26928
+    },
+    "attack_ics_campaigns.json": {
+      "file": "data/research/attack_ics_campaigns.json",
+      "path": "data/research/attack_ics_campaigns.json",
+      "description": "MITRE ATT&CK for ICS historical campaigns and targeted assets",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+      "source_url": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+      "record_count": 10,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 8994
+    },
+    "attack_ics_detection.json": {
+      "file": "data/research/attack_ics_detection.json",
+      "path": "data/research/attack_ics_detection.json",
+      "description": "MITRE ATT&CK for ICS detection strategies and data sources",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), ics-attack/ics-attack.json. \u00a9 The MITRE Corporation; reproduced under the ATT&CK licence (see licenses/MITRE_ATTACK_LICENSE.txt).",
+      "source_url": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), ics-attack/ics-attack.json. \u00a9 The MITRE Corporation; reproduced under the ATT&CK licence (see licenses/MITRE_ATTACK_LICENSE.txt).",
+      "record_count": 3,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 52936
+    },
+    "attack_ics_hop_mapping.json": {
+      "file": "data/research/attack_ics_hop_mapping.json",
+      "path": "data/research/attack_ics_hop_mapping.json",
+      "description": "Hop-type to MITRE ATT&CK for ICS technique mapping",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+      "source_url": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+      "record_count": 18,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 14901
+    },
+    "attack_ics_mitigations.json": {
+      "file": "data/research/attack_ics_mitigations.json",
+      "path": "data/research/attack_ics_mitigations.json",
+      "description": "MITRE ATT&CK for ICS mitigation techniques",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+      "source_url": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+      "record_count": 104,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 46271
+    },
+    "bad_practices.json": {
+      "file": "data/research/bad_practices.json",
+      "path": "data/research/bad_practices.json",
+      "description": "CISA Bad Practices catalog for critical infrastructure",
+      "source": "CISA Bad Practices catalog, github.com/cisagov/bad-practices README, commit fd26f25 (2026-08-05)",
+      "source_url": "CISA Bad Practices catalog, github.com/cisagov/bad-practices README, commit fd26f25 (2026-08-05)",
+      "record_count": 3,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 1893
+    },
+    "csaf_ot_cve_index.json": {
+      "file": "data/research/csaf_ot_cve_index.json",
+      "path": "data/research/csaf_ot_cve_index.json",
+      "description": "CISA CSAF machine-readable security advisories index for OT/ICS",
+      "source": "CISA CSAF repository (github.com/cisagov/CSAF), OT advisories, commit 3c2594d (2026-10-29). TLP:WHITE, 'Disclosure is not limited'.",
+      "source_url": "CISA CSAF repository (github.com/cisagov/CSAF), OT advisories, commit 3c2594d (2026-10-29). TLP:WHITE, 'Disclosure is not limited'.",
+      "record_count": 5,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 13436667
+    },
+    "csaf_ot_cve_index.json.gz": {
+      "file": "data/research/csaf_ot_cve_index.json.gz",
+      "path": "data/research/csaf_ot_cve_index.json.gz",
+      "description": "Compressed CISA CSAF machine-readable security advisories index for OT/ICS",
+      "source": "CISA CSAF repository (github.com/cisagov/CSAF), OT advisories, commit 3c2594d (2026-10-29). TLP:WHITE, 'Disclosure is not limited'.",
+      "source_url": "CISA CSAF repository (github.com/cisagov/CSAF), OT advisories, commit 3c2594d (2026-10-29). TLP:WHITE, 'Disclosure is not limited'.",
+      "record_count": 5,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 972786
+    },
+    "csaf_sector_vendors_2021plus.csv": {
+      "file": "data/research/csaf_sector_vendors_2021plus.csv",
+      "path": "data/research/csaf_sector_vendors_2021plus.csv",
+      "description": "CSAF OT sector vendors and products published 2021+",
+      "source": "CISA CSAF advisories, github.com/cisagov/CSAF (commit 3c2594d, 2026-10-29), TLP:WHITE",
+      "source_url": "CISA CSAF advisories, github.com/cisagov/CSAF (commit 3c2594d, 2026-10-29), TLP:WHITE",
+      "record_count": 105,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 3899
+    },
+    "hai_p3_isolation_forest_baseline.json": {
+      "file": "data/research/hai_p3_isolation_forest_baseline.json",
+      "path": "data/research/hai_p3_isolation_forest_baseline.json",
+      "description": "HAI testbed process anomaly baseline using Isolation Forest",
+      "source": "HAI dataset, github.com/icsdataset/hai (HAI 21.03)",
+      "source_url": "HAI dataset, github.com/icsdataset/hai (HAI 21.03)",
+      "record_count": 7,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 2541
+    },
+    "kev_epss_ics_evidence.json": {
+      "file": "data/research/kev_epss_ics_evidence.json",
+      "path": "data/research/kev_epss_ics_evidence.json",
+      "description": "Cross-analysis evidence of CISA KEV catalog against EPSS distributions",
+      "source": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29); EPSS for KEV, github.com/jgamblin/KEV_EPSS (commit bef6f7c, 2026-10-30), Apache-2.0; EPSS by FIRST",
+      "source_url": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29); EPSS for KEV, github.com/jgamblin/KEV_EPSS (commit bef6f7c, 2026-10-30), Apache-2.0; EPSS by FIRST",
+      "record_count": 6,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 2476
+    },
+    "kev_ics_shortlist.csv": {
+      "file": "data/research/kev_ics_shortlist.csv",
+      "path": "data/research/kev_ics_shortlist.csv",
+      "description": "CISA KEV shortlist for industrial control systems (ICS)",
+      "source": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29)",
+      "source_url": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29)",
+      "record_count": 122,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 21396
+    },
+    "kev_vpn_gateway_shortlist.csv": {
+      "file": "data/research/kev_vpn_gateway_shortlist.csv",
+      "path": "data/research/kev_vpn_gateway_shortlist.csv",
+      "description": "CISA KEV shortlist for VPN and remote-access gateways",
+      "source": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29)",
+      "source_url": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29)",
+      "record_count": 98,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 15422
+    },
+    "response_templates.json": {
+      "file": "data/research/response_templates.json",
+      "path": "data/research/response_templates.json",
+      "description": "Incident response plan templates for ICS critical infrastructure",
+      "source": "CERT-In Directions of 28 April 2022 under Section 70B of the IT Act (summary: Internet Society, internetsociety.org/wp-content/uploads/2022/06/IIB-India-CERT-In-Directions-2022.pdf)",
+      "source_url": "CERT-In Directions of 28 April 2022 under Section 70B of the IT Act (summary: Internet Society, internetsociety.org/wp-content/uploads/2022/06/IIB-India-CERT-In-Directions-2022.pdf)",
+      "record_count": 6,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 3873
+    },
+    "wntr_pump_outage_net3.json": {
+      "file": "data/research/wntr_pump_outage_net3.json",
+      "path": "data/research/wntr_pump_outage_net3.json",
+      "description": "EPA WNTR hydraulic simulation of Net3 water network pump outage",
+      "source": "WNTR, github.com/USEPA/WNTR (v1.5.0), Revised BSD",
+      "source_url": "WNTR, github.com/USEPA/WNTR (v1.5.0), Revised BSD",
+      "record_count": 2,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 3859
+    },
+    "SSVC_MAPPING.md": {
+      "file": "data/ssvc/SSVC_MAPPING.md",
+      "path": "data/ssvc/SSVC_MAPPING.md",
+      "description": "Stakeholder-Specific Vulnerability Categorization (SSVC) mapping methodology",
+      "source": "CERT/CC SSVC, github.com/CERTCC/SSVC (commit bf3213b, 2026-10-22), data under MIT (SEI)-style licence",
+      "source_url": "CERT/CC SSVC, github.com/CERTCC/SSVC (commit bf3213b, 2026-10-22), data under MIT (SEI)-style licence",
+      "record_count": 35,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 4095
+    },
+    "deployer_patch_application_priority_1_0_0.csv": {
+      "file": "data/ssvc/deployer_patch_application_priority_1_0_0.csv",
+      "path": "data/ssvc/deployer_patch_application_priority_1_0_0.csv",
+      "description": "SSVC deployer patch application priority decision table",
+      "source": "CERT/CC SSVC, github.com/CERTCC/SSVC (commit bf3213b, 2026-10-22), data under MIT (SEI)-style licence",
+      "source_url": "CERT/CC SSVC, github.com/CERTCC/SSVC (commit bf3213b, 2026-10-22), data under MIT (SEI)-style licence",
+      "record_count": 72,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 2895
+    },
+    "human_impact_1_0_0.csv": {
+      "file": "data/ssvc/human_impact_1_0_0.csv",
+      "path": "data/ssvc/human_impact_1_0_0.csv",
+      "description": "SSVC human impact evaluation matrix",
+      "source": "CERT/CC SSVC, github.com/CERTCC/SSVC (commit bf3213b, 2026-10-22), data under MIT (SEI)-style licence",
+      "source_url": "CERT/CC SSVC, github.com/CERTCC/SSVC (commit bf3213b, 2026-10-22), data under MIT (SEI)-style licence",
+      "record_count": 16,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 622
+    },
+    "certin_mapping.json": {
+      "file": "data/certin_mapping.json",
+      "path": "data/certin_mapping.json",
+      "description": "CERT-In Cyber Security Guidelines for Smart City Infrastructure mapping",
+      "source": "CERT-In, Cyber Security Guidelines for Smart City Infrastructure, table of contents",
+      "source_url": "CERT-In, Cyber Security Guidelines for Smart City Infrastructure, table of contents",
+      "record_count": 5,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 1108
+    },
+    "consequence_numbers.md": {
+      "file": "docs/inputs/consequence_numbers.md",
+      "path": "docs/inputs/consequence_numbers.md",
+      "description": "Consequence metrics, population served, safety severity, and failure delay hours",
+      "source": "S Mohan and GR Abhijith, 'Intermittent water supply interventions for India's cities', The Source (IWA), February 2021, thesourcemagazine.org; CPHEEO manual",
+      "source_url": "S Mohan and GR Abhijith, 'Intermittent water supply interventions for India's cities', The Source (IWA), February 2021, thesourcemagazine.org; CPHEEO manual",
+      "record_count": 45,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 8328
+    },
+    "assumptions_justifications.md": {
+      "file": "docs/inputs/assumptions_justifications.md",
+      "path": "docs/inputs/assumptions_justifications.md",
+      "description": "Scenario parameter assumptions and justifications",
+      "source": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29); EPSS by FIRST; INL Consequence-driven Cyber-informed Engineering (CCE)",
+      "source_url": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29); EPSS by FIRST; INL Consequence-driven Cyber-informed Engineering (CCE)",
+      "record_count": 24,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 6174
     }
-  }
+  },
+  "updated_at": "2026-10-31T08:29:43.039619+00:00"
 }

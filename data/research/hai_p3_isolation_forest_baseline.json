@@ -1,0 +1,93 @@
+{
+ "dataset": "HAI 21.03 (github.com/icsdataset/hai), CC BY-SA 4.0 per README",
+ "train_file": "hai-21.03/train1.csv.gz",
+ "label": "attack_P3 (water-treatment process: pumping between reservoirs, Siemens S7-300 PLC)",
+ "tags": [
+  "P3_FIT01",
+  "P3_LCP01D",
+  "P3_LCV01D",
+  "P3_LH",
+  "P3_LIT01",
+  "P3_LL",
+  "P3_PIT01"
+ ],
+ "rows_train": 216001,
+ "protocol": "IsolationForest baseline on HAI 21.03 water-treatment (P3) tags.\nProtocol fixed before looking at test results:\n- train on train1 (normal operation only), features = 7 P3 tags + 1-step differences + 60 s rolling std, standardised on train\n- threshold = 99.5th percentile of TRAIN anomaly scores (no test tuning)\n- alarm = 30 s rolling mean of score above threshold\n- report point-wise precision/recall against attack_P3 and event-level recall (share of attack_P3 segments with >= 1 alarm)",
+ "threshold_from_train_p99_5": 0.58244,
+ "totals": {
+  "pointwise_precision": 0.768,
+  "pointwise_recall": 0.111,
+  "tp": 106,
+  "fp": 32,
+  "fn": 852,
+  "attack_P3_events": 8,
+  "events_detected": 3,
+  "event_recall": 0.375,
+  "false_alarm_episodes": 1,
+  "normal_hours": 111.4,
+  "false_alarm_episodes_per_24h": 0.22
+ },
+ "per_file": [
+  {
+   "file": "test1.csv.gz",
+   "rows": 43201,
+   "attack_P3_seconds": 0,
+   "events": 0,
+   "events_detected": 0,
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "false_alarm_episodes": 0,
+   "normal_hours": 12.0
+  },
+  {
+   "file": "test2.csv.gz",
+   "rows": 118801,
+   "attack_P3_seconds": 238,
+   "events": 2,
+   "events_detected": 1,
+   "tp": 34,
+   "fp": 32,
+   "fn": 204,
+   "false_alarm_episodes": 1,
+   "normal_hours": 32.9
+  },
+  {
+   "file": "test3.csv.gz",
+   "rows": 108001,
+   "attack_P3_seconds": 0,
+   "events": 0,
+   "events_detected": 0,
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "false_alarm_episodes": 0,
+   "normal_hours": 30.0
+  },
+  {
+   "file": "test4.csv.gz",
+   "rows": 39601,
+   "attack_P3_seconds": 360,
+   "events": 3,
+   "events_detected": 0,
+   "tp": 0,
+   "fp": 0,
+   "fn": 360,
+   "false_alarm_episodes": 0,
+   "normal_hours": 10.9
+  },
+  {
+   "file": "test5.csv.gz",
+   "rows": 92401,
+   "attack_P3_seconds": 360,
+   "events": 3,
+   "events_detected": 2,
+   "tp": 72,
+   "fp": 0,
+   "fn": 288,
+   "false_alarm_episodes": 0,
+   "normal_hours": 25.6
+  }
+ ],
+ "note": "Point-wise and event-level metrics, not eTaPR. HAI recommends eTaPR for comparison with published results; do not compare these numbers to HAICon leaderboards. Baseline only: one model, one threshold fixed from training data, no tuning on test files."
+}

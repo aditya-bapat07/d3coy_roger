@@ -1,0 +1,123 @@
+cve,sectors,vendor,product,kev_date_added,ransomware,epss,epss_percentile,cvss3,cisa_ics_advisory,advisory_title
+CVE-2008-4250,,Microsoft,Windows,2026-05-20,Unknown,0.98751,0.99926,9.8,ICSMA-17-215-01,ICSMA-17-215-01_Siemens Molecular Imaging Vulnerabilities
+CVE-2014-0160,,OpenSSL,OpenSSL,2022-05-04,Unknown,0.99999,0.99996,7.5,ICSA-14-105-02A,Innominate mGuard OpenSSL HeartBleed Vulnerability
+CVE-2014-0780,,InduSoft,Web Studio,2022-04-15,Unknown,0.74679,0.995,9.8,ICSA-14-107-02,InduSoft Web Studio Directory Traversal Vulnerability
+CVE-2014-6271,,GNU,Bourne-Again Shell (Bash),2022-01-28,Unknown,0.99999,0.99993,9.8,ICSA-14-269-01A,Bash Command Injection Vulnerability
+CVE-2015-1635,,Microsoft,HTTP.sys,2022-02-10,Unknown,0.99999,0.99997,9.8,ICSMA-17-215-02,ICSMA-17-215-02_Siemens Molecular Imaging Vulnerabilities
+CVE-2016-4523,,Trihedral,VTScada (formerly VTS),2022-04-15,Unknown,0.31167,0.98266,7.5,ICSA-16-159-01,Trihedral Engineering Limited VTScada Vulnerabilities
+CVE-2017-0143,Healthcare and Public Health,Microsoft,Windows,2021-11-03,Known,0.93307,0.99836,8.8,ICSMA-18-058-02,Philips Intellispace Portal ISP Vulnerabilities
+CVE-2017-0144,Healthcare and Public Health,Microsoft,SMBv1,2022-02-10,Known,0.9923,0.99936,8.8,ICSMA-18-058-02,Philips Intellispace Portal ISP Vulnerabilities
+CVE-2017-0145,Healthcare and Public Health,Microsoft,SMBv1,2022-02-10,Known,0.8985,0.9979,8.8,ICSMA-18-058-02,Philips Intellispace Portal ISP Vulnerabilities
+CVE-2017-0146,Healthcare and Public Health,Microsoft,Windows,2022-03-25,Known,0.89755,0.99788,8.8,ICSMA-18-058-02,Philips Intellispace Portal ISP Vulnerabilities
+CVE-2017-0147,Healthcare and Public Health,Microsoft,SMBv1 server,2022-05-24,Known,0.99693,0.99951,7.5,ICSMA-18-058-02,Philips Intellispace Portal ISP Vulnerabilities
+CVE-2017-0148,Healthcare and Public Health,Microsoft,SMBv1 server,2022-04-06,Known,0.99356,0.99939,8.1,ICSMA-18-058-02,Philips Intellispace Portal ISP Vulnerabilities
+CVE-2017-0199,Healthcare and Public Health,Microsoft,Office and WordPad,2021-11-03,Known,0.99497,0.99945,7.8,ICSMA-18-058-02,Philips Intellispace Portal ISP Vulnerabilities
+CVE-2017-11317,Energy,Telerik,User Interface (UI) for ASP.NET AJAX,2022-04-11,Unknown,0.84175,0.99694,9.8,ICSA-21-077-03,Hitachi ABB Power Grids eSOMS Telerik
+CVE-2017-11357,Energy,Telerik,User Interface (UI) for ASP.NET AJAX,2023-01-26,Known,0.77679,0.99564,9.8,ICSA-21-077-03,Hitachi ABB Power Grids eSOMS Telerik
+CVE-2017-17562,Communications; Critical Manufacturing; Energy; Healthcare and Public Health; Transportation Systems; Water and Wastewater Systems,Embedthis,GoAhead,2021-12-10,Unknown,0.97127,0.99893,8.1,ICSA-22-090-06,General Electric Renewable Energy MDS Radios
+CVE-2017-3881,,Cisco,IOS and IOS XE,2022-03-25,Unknown,0.9895,0.99929,9.8,ICSA-17-094-03,Rockwell Automation Allen-Bradley Stratix and Allen-Bradley ArmorStratix
+CVE-2017-5689,,Intel,"Active Management Technology (AMT), Small Business Technology (SBT), and Standard Manageability",2022-01-28,Unknown,0.92189,0.99821,9.8,ICSA-17-180-01A,"ICSA-17-180-01A_Siemens SIMATIC Industrial PCs, SINUMERIK Panel Control Unit, and SIMOTION P320 (Update A)"
+CVE-2017-6736,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,IOS and IOS XE Software,2022-03-03,Unknown,0.70354,0.99383,8.8,ICSA-17-208-04,Rockwell Automation Allen-Bradley Stratix and ArmorStratix
+CVE-2017-7269,,Microsoft,Internet Information Services (IIS),2021-11-03,Unknown,0.99823,0.99959,9.8,ICSMA-17-215-01,ICSMA-17-215-01_Siemens Molecular Imaging Vulnerabilities
+CVE-2017-7494,Commercial Facilities; Critical Manufacturing; Energy,Samba,Samba,2023-03-30,Known,0.99448,0.99942,9.8,ICSA-17-180-02,Schneider Electric U.motion Builder (Update A)
+CVE-2017-7921,,Hikvision,Multiple Products,2026-03-05,Unknown,0.99998,0.9999,9.8,ICSA-17-124-01,Hikvision Cameras
+CVE-2017-9248,Energy,Progress,ASP.NET AJAX and Sitefinity,2021-11-03,Unknown,0.75098,0.99507,9.8,ICSA-21-077-03,Hitachi ABB Power Grids eSOMS Telerik
+CVE-2018-0151,,Cisco,IOS and IOS XE Software,2022-03-03,Unknown,0.14197,0.96574,9.8,ICSA-18-107-03,ICSA-18-107-03_Rockwell Automation Stratix Services Router
+CVE-2018-0156,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,IOS Software and Cisco IOS XE Software,2022-03-03,Unknown,0.0936,0.95379,7.5,ICSA-18-107-04,Rockwell Automation Stratix and ArmorStratix Switches
+CVE-2018-0158,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,IOS Software and Cisco IOS XE Software,2022-03-03,Unknown,0.0719,0.94286,8.6,ICSA-18-107-03,ICSA-18-107-03_Rockwell Automation Stratix Services Router
+CVE-2018-0167,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,"IOS, XR, and XE Software",2022-03-03,Unknown,0.03354,0.88667,8.8,ICSA-18-107-03,ICSA-18-107-03_Rockwell Automation Stratix Services Router
+CVE-2018-0171,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,IOS and IOS XE,2021-11-03,Unknown,0.99479,0.99944,9.8,ICSA-18-107-04,Rockwell Automation Stratix and ArmorStratix Switches
+CVE-2018-0172,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,IOS and IOS XE Software,2022-03-03,Unknown,0.0782,0.94656,8.6,ICSA-18-107-04,Rockwell Automation Stratix and ArmorStratix Switches
+CVE-2018-0173,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,IOS and IOS XE Software,2022-03-03,Unknown,0.07608,0.94536,8.6,ICSA-18-107-04,Rockwell Automation Stratix and ArmorStratix Switches
+CVE-2018-0174,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,IOS XE Software,2022-03-03,Unknown,0.07608,0.94536,8.6,ICSA-18-107-04,Rockwell Automation Stratix and ArmorStratix Switches
+CVE-2018-0175,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,"IOS, XR, and XE Software",2022-03-03,Unknown,0.03478,0.89071,8.0,ICSA-18-107-03,ICSA-18-107-03_Rockwell Automation Stratix Services Router
+CVE-2018-0296,Critical Manufacturing; Energy; Water and Wastewater Systems,Cisco,Adaptive Security Appliance (ASA),2021-11-03,Unknown,0.99898,0.99966,7.5,ICSA-18-184-01,Rockwell Automation Allen-Bradley Stratix 5950
+CVE-2018-4063,Commercial Facilities; Communications; Emergency Services; Energy; Government Facilities; Transportation Systems; Water and Wastewater Systems,Sierra Wireless,AirLink ALEOS,2025-12-12,Unknown,0.2726,0.98054,8.8,ICSA-19-122-03,Sierra Wireless AirLink ALEOS (Update B)
+CVE-2019-0708,Healthcare and Public Health,Microsoft,Remote Desktop Services,2021-11-03,Known,0.99999,0.99999,9.8,ICSMA-20-049-01,Spacelabs Xhibit Telemetry Receiver (XTR)
+CVE-2019-11043,Commercial Facilities; Communications; Critical Manufacturing; Defense Industrial Base; Emergency Services; Energy; Transportation Systems,PHP,FastCGI Process Manager (FPM),2022-03-25,Known,0.99783,0.99955,8.7,ICSA-26-027-02,Festo Didactic SE MES PC
+CVE-2019-18935,Energy,Progress,Telerik UI for ASP.NET AJAX,2021-11-03,Known,0.99737,0.99953,9.8,ICSA-21-077-03,Hitachi ABB Power Grids eSOMS Telerik
+CVE-2019-18988,Multiple Sectors,TeamViewer,Desktop,2021-11-03,Unknown,0.04707,0.91792,7.0,ICSA-21-308-01,VISAM VBASE Editor
+CVE-2019-7256,Commercial Facilities,Nice,Linear eMerge E3-Series,2024-03-25,Unknown,0.97081,0.99892,9.8,ICSA-24-065-01,Nice Linear eMerge E3-Series
+CVE-2020-11023,Commercial Facilities; Critical Manufacturing; Energy; Multiple,JQuery,JQuery,2025-01-23,Unknown,0.84887,0.9971,6.9,ICSA-21-306-01,Sensormatic Electronics VideoEdge
+CVE-2020-11899,Critical Manufacturing; Energy; Healthcare and Public Health; Information Technology; Transportation Systems,Treck TCP/IP stack,IPv6,2022-03-03,Unknown,0.1842,0.97226,5.4,ICSA-20-168-01,Treck TCP/IP (Update I)
+CVE-2020-15999,Multiple,Google,Chrome FreeType,2021-11-03,Unknown,0.63894,0.9922,9.6,ICSA-23-264-05,Rockwell Automation Connected Components Workbench
+CVE-2020-16009,Multiple,Google,Chromium V8,2021-11-03,Unknown,0.48293,0.98861,8.8,ICSA-23-264-05,Rockwell Automation Connected Components Workbench
+CVE-2020-16013,Multiple,Google,Chromium V8,2021-11-03,Unknown,0.02756,0.86213,8.8,ICSA-23-264-05,Rockwell Automation Connected Components Workbench
+CVE-2020-16017,Multiple,Google,Chrome,2021-11-03,Unknown,0.0273,0.86046,9.6,ICSA-23-264-05,Rockwell Automation Connected Components Workbench
+CVE-2020-1938,Healthcare and Public Health,Apache,Tomcat,2022-03-03,Unknown,0.9927,0.99937,9.8,ICSMA-21-187-01,Philips Vue PACS (Update B)
+CVE-2020-2883,Energy,Oracle,WebLogic Server,2025-01-07,Unknown,0.94582,0.99854,9.8,ICSA-25-261-05,Remote Code Execution Vulnerability in Hitachi Energy Service Suite Product
+CVE-2021-0920,Critical Manufacturing,Android,Kernel,2022-05-23,Unknown,0.00867,0.58646,6.4,ICSA-24-074-07,Siemens SIMATIC
+CVE-2021-22681,Multiple,Rockwell,Multiple Products,2026-03-05,Unknown,0.6363,0.99213,9.8,ICSA-21-056-03,Rockwell Automation Logix Controllers (Update A)
+CVE-2021-3156,Critical Manufacturing; Energy,Sudo,Sudo,2022-04-06,Unknown,0.99962,0.99976,7.8,ICSA-21-119-03,Johnson Controls Exacq Technologies exacqVision
+CVE-2021-38406,Critical Manufacturing,Delta Electronics,DOPSoft 2,2022-08-25,Unknown,0.76428,0.99539,7.8,ICSA-21-252-02,Delta Electronics DOPSoft 2 (Update A)
+CVE-2021-4034,Energy; Multiple,Red Hat,Polkit,2022-06-27,Known,0.94921,0.9986,7.8,ICSA-22-167-16,Siemens SCALANCE LPE 4903 and SINUMERIK Edge
+CVE-2021-40438,Multiple,Apache,Apache,2021-12-01,Known,0.99999,0.99997,9.0,ICSA-22-167-06,Siemens Apache HTTP Server
+CVE-2021-44228,Critical Manufacturing,Apache,Log4j2,2021-12-10,Known,0.99999,1.0,10.0,ICSA-21-357-02,Johnson Controls exacq Enterprise Manager
+CVE-2022-0028,Communications; Critical Manufacturing; Transportation Systems,Palo Alto Networks,PAN-OS,2022-08-22,Unknown,0.0269,0.85837,8.6,ICSA-24-102-03,Siemens RUGGEDCOM APE1808
+CVE-2022-0492,Energy,Linux,Kernel,2026-06-02,Unknown,0.05528,0.92793,7.8,ICSA-22-270-02,Hitachi Energy APM Edge
+CVE-2022-0609,Multiple,Google,Chromium Animation,2022-02-15,Unknown,0.22442,0.97691,8.8,ICSA-23-264-05,Rockwell Automation Connected Components Workbench
+CVE-2022-0847,Multiple,Linux,Kernel,2022-04-25,Unknown,0.92795,0.99828,7.8,ICSA-22-167-09,Siemens SCALANCE LPE9403 Third-Party Vulnerabilities
+CVE-2022-1096,Multiple,Google,Chromium V8,2022-03-28,Unknown,0.24726,0.97891,8.8,ICSA-22-209-01,Rockwell Products Impacted by Chromium Type Confusion
+CVE-2022-22965,Energy,VMware,Spring Framework,2022-04-04,Unknown,0.99638,0.99949,9.8,ICSA-22-286-05,Hitachi Energy Lumada Asset Performance Management Prognostic Model Executor Service
+CVE-2022-2586,Multiple,Linux,Kernel,2024-06-26,Unknown,0.10202,0.95657,5.3,ICSA-23-166-11,Siemens SIMATIC S7-1500 TM MFP Linux Kernel
+CVE-2022-41328,Energy,Fortinet,FortiOS,2023-03-14,Unknown,0.10682,0.95796,6.7,ICSA-24-074-11,Siemens RUGGEDCOM APE1808 with Fortigate NGFW Devices
+CVE-2022-42475,Critical Manufacturing,Fortinet,FortiOS,2022-12-13,Known,0.99474,0.99943,9.8,ICSA-25-044-06,Siemens RUGGEDCOM APE1808
+CVE-2023-20198,Critical Manufacturing,Cisco,IOS XE Web UI,2023-10-16,Unknown,0.99613,0.99948,10.0,ICSA-23-297-01,Rockwell Automation Stratix 5800 and Stratix 5200 (UPDATE A)
+CVE-2023-20273,Critical Manufacturing,Cisco,Cisco IOS XE Web UI,2023-10-23,Unknown,0.92938,0.99831,7.2,ICSA-23-297-01,Rockwell Automation Stratix 5800 and Stratix 5200 (UPDATE A)
+CVE-2023-27997,Critical Manufacturing,Fortinet,FortiOS and FortiProxy SSL-VPN,2023-06-13,Known,0.85689,0.99725,9.8,ICSA-25-044-06,Siemens RUGGEDCOM APE1808
+CVE-2023-38180,Multiple,Microsoft,.NET Core and Visual Studio,2023-08-09,Unknown,0.14127,0.96564,7.5,ICSA-24-165-04,Siemens ST7 ScadaConnect
+CVE-2023-4346,Critical Facilities,KNX Association,KNX Protocol Connection Authorization Option 1,2026-07-15,Unknown,0.01363,0.71715,7.5,ICSA-23-236-01,KNX Protocol
+CVE-2023-44487,Commercial Facilities; Critical Manufacturing; Energy; Multiple,IETF,HTTP/2,2023-10-10,Unknown,0.99999,0.99998,7.5,ICSA-24-074-05,Siemens RUGGEDCOM APE1808
+CVE-2023-46604,Communications; Critical Manufacturing; Energy; Transportation Systems,Apache,ActiveMQ,2023-11-02,Known,0.99992,0.99986,10.0,ICSA-24-130-03,Delta Electronics InfraSuite Device Master
+CVE-2023-47565,Commercial Facilities,QNAP,VioStor NVR,2023-12-21,Unknown,0.73277,0.99458,8.0,ICSA-23-355-02,QNAP VioStor NVR
+CVE-2023-4863,Critical Manufacturing; Multiple,Google,Chromium WebP,2023-09-13,Unknown,0.99979,0.9998,8.8,ICSA-23-320-11,Siemens Mendix Studio Pro
+CVE-2023-4911,Energy; Multiple,GNU,GNU C Library,2023-11-21,Unknown,0.63769,0.99218,7.8,ICSA-23-166-10,Siemens SIMATIC S7-1500 TM MFP BIOS
+CVE-2023-49897,Commercial Facilities; Information Technology,FXC,"AE1021, AE1021PE",2023-12-21,Unknown,0.50447,0.9891,8.8,ICSA-23-355-01,FXC AE1021/AE1021PE
+CVE-2023-5217,Commercial Facilities; Critical Manufacturing; Energy,Google,Chromium libvpx,2023-10-02,Unknown,0.49013,0.98878,8.8,ICSA-25-203-04,Schneider Electric EcoStruxure Power Operation (Update A)
+CVE-2023-6448,Water and Wastewater Systems,Unitronics,Vision PLC and HMI,2023-12-11,Unknown,0.02089,0.81557,9.8,ICSA-23-348-15,Unitronics Vision and Samba Series (Update A)
+CVE-2024-0012,Energy,Palo Alto Networks,PAN-OS,2024-11-18,Known,0.99786,0.99956,9.8,ICSA-24-338-02,Siemens RUGGEDCOM APE1808
+CVE-2024-1086,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,Linux,Kernel,2024-05-30,Known,0.28058,0.98102,7.8,ICSA-25-226-15,Siemens SINEC OS
+CVE-2024-21762,Critical Manufacturing,Fortinet,FortiOS,2024-02-09,Known,0.84589,0.99702,9.8,ICSA-25-044-06,Siemens RUGGEDCOM APE1808
+CVE-2024-23113,Critical Manufacturing,Fortinet,Multiple Products,2024-10-09,Unknown,0.61725,0.99169,9.8,ICSA-24-074-05,Siemens RUGGEDCOM APE1808
+CVE-2024-3393,Energy,Palo Alto Networks,PAN-OS,2024-12-30,Unknown,0.2912,0.98162,7.5,ICSA-24-338-02,Siemens RUGGEDCOM APE1808
+CVE-2024-3400,Multiple,Palo Alto Networks,PAN-OS,2024-04-12,Known,0.99999,1.0,10.0,ICSA-24-116-03,Siemens RUGGEDCOM APE1808 devices configured with Palo Alto Networks Virtual NGFW
+CVE-2024-36971,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,Android,Kernel,2024-08-07,Unknown,0.02701,0.85898,7.8,ICSA-25-226-15,Siemens SINEC OS
+CVE-2024-50302,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,Linux,Kernel,2025-03-04,Unknown,0.00811,0.56841,5.5,ICSA-24-102-01,Siemens SIMATIC S7-1500 TM MFP
+CVE-2024-53104,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,Linux,Kernel,2025-02-05,Unknown,0.03395,0.88792,7.8,ICSA-25-226-07,Siemens Third-Party Components in SINEC OS
+CVE-2024-53150,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,Linux,Kernel,2025-04-09,Unknown,0.01354,0.71515,7.1,ICSA-25-226-07,Siemens Third-Party Components in SINEC OS
+CVE-2024-53197,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,Linux,Kernel,2025-04-09,Unknown,0.04117,0.90758,7.8,ICSA-25-226-07,Siemens Third-Party Components in SINEC OS
+CVE-2024-54085,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,AMI,MegaRAC SPx,2025-06-25,Unknown,0.60747,0.99146,9.8,ICSA-25-135-07,Siemens SIMATIC IPC RS-828A
+CVE-2024-8956,Commercial Facilities; Critical Manufacturing; Government Facilities; Healthcare and Public Health,PTZOptics,PT30X-SDI/NDI Cameras,2024-11-04,Unknown,0.58787,0.99103,9.1,ICSA-25-162-10,PTZOptics and Other Pan-Tilt-Zoom Cameras
+CVE-2024-8957,Commercial Facilities; Critical Manufacturing; Government Facilities; Healthcare and Public Health,PTZOptics,PT30X-SDI/NDI Cameras,2024-11-04,Unknown,0.7984,0.99609,7.2,ICSA-25-162-10,PTZOptics and Other Pan-Tilt-Zoom Cameras
+CVE-2024-9474,Energy,Palo Alto Networks,PAN-OS,2024-11-18,Known,0.93751,0.99843,7.2,ICSA-24-338-02,Siemens RUGGEDCOM APE1808
+CVE-2025-0108,Energy,Palo Alto Networks,PAN-OS,2025-02-18,Unknown,0.98141,0.99913,9.1,ICSA-24-338-02,Siemens RUGGEDCOM APE1808
+CVE-2025-0111,Energy,Palo Alto Networks,PAN-OS,2025-02-20,Unknown,0.01999,0.80694,6.5,ICSA-24-338-02,Siemens RUGGEDCOM APE1808
+CVE-2025-0411,Critical Manufacturing,7-Zip,7-Zip,2025-02-06,Unknown,0.67071,0.99296,7.0,ICSA-25-184-03,Mitsubishi Electric MELSOFT Update Manager (Update B)
+CVE-2025-0994,Communications; Energy; Government Facilities; Transportation Systems; Water and Wastewater Systems,Trimble,Cityworks,2025-02-07,Unknown,0.31309,0.98273,8.8,ICSA-25-037-04,Trimble Cityworks (Update A)
+CVE-2025-10585,Chemical; Commercial Facilities; Communications; Energy,Google,Chromium V8,2025-09-23,Unknown,0.08974,0.95247,9.8,ICSA-26-202-06,Siemens CADRA
+CVE-2025-1316,Commercial Facilities,Edimax,IC-7100 IP Camera,2025-03-19,Unknown,0.74482,0.99492,9.8,ICSA-25-063-08,Edimax IC-7100 IP Camera
+CVE-2025-13223,Chemical; Commercial Facilities; Communications; Energy,Google,Chromium V8,2025-11-19,Unknown,0.049,0.92071,8.8,ICSA-26-202-06,Siemens CADRA
+CVE-2025-14847,Chemical; Communications; Critical Manufacturing; Dams; Energy; Healthcare and Public Health; Information Technology; Water and Wastewater Systems,MongoDB,MongoDB and MongoDB Server,2025-12-29,Unknown,0.83218,0.99677,7.5,ICSA-26-218-01,ABB Ability Zenon
+CVE-2025-20352,Critical Manufacturing,Cisco,IOS and IOS XE,2025-09-29,Unknown,0.41502,0.98676,7.7,ICSA-25-282-02,Rockwell Automation Lifecycle Services with Cisco
+CVE-2025-22224,Critical Manufacturing,VMware,ESXi and Workstation,2025-03-04,Unknown,0.01561,0.75177,9.3,ICSA-25-077-02,Rockwell Automation Lifecycle Services with VMware
+CVE-2025-22225,Critical Manufacturing,VMware,ESXi,2025-03-04,Known,0.01016,0.63236,8.2,ICSA-25-077-02,Rockwell Automation Lifecycle Services with VMware
+CVE-2025-22226,Critical Manufacturing,VMware,"ESXi, Workstation, and Fusion",2025-03-04,Unknown,0.01633,0.76204,7.1,ICSA-25-077-02,Rockwell Automation Lifecycle Services with VMware
+CVE-2025-25249,Critical Manufacturing,Fortinet,Multiple Products,2026-09-09,Unknown,0.03742,0.89828,8.1,ICSA-25-135-01,Siemens RUGGEDCOM APE1808 Devices
+CVE-2025-2783,Critical Manufacturing,Google,Chromium Mojo,2025-03-27,Unknown,0.09238,0.95338,8.3,ICSA-26-043-03,Siemens COMOS
+CVE-2025-32433,Commercial Facilities; Critical Manufacturing; Energy; Transportation Systems; Water and Wastewater Systems,Erlang,Erlang/OTP,2025-06-09,Unknown,0.98924,0.99928,10.0,ICSA-25-140-07,"Schneider Electric Galaxy VS, Galaxy VL, Galaxy VXL (Update A)"
+CVE-2025-39682,Critical Manufacturing,Linux,Kernel,2026-09-18,Unknown,0.03252,0.8831,9.8,ICSA-26-134-10,Siemens SIMATIC
+CVE-2025-39964,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,Linux,Kernel,2026-09-18,Unknown,0.0157,0.75309,7.8,ICSA-26-209-04,Siemens SIMATIC S7-1500 CPU 1518(F)-4 PN/DP MFP
+CVE-2025-59287,Critical Manufacturing; Energy,Microsoft,Windows,2025-10-24,Unknown,0.9998,0.99981,9.8,ICSA-25-352-02,Schneider Electric EcoStruxure Foxboro DCS Advisor
+CVE-2025-59718,Critical Manufacturing,Fortinet,Multiple Products,2025-12-16,Unknown,0.68293,0.99329,9.8,ICSA-25-135-01,Siemens RUGGEDCOM APE1808 Devices
+CVE-2025-61624,Critical Manufacturing; Energy; Transportation Systems,Fortinet,Multiple Products,2026-10-16,Unknown,0.01343,0.7129,6.0,ICSA-26-071-02,Siemens RUGGEDCOM APE1808 Devices
+CVE-2025-6554,Critical Manufacturing,Google,Chromium V8,2025-07-02,Unknown,0.14142,0.96566,8.1,ICSA-25-289-10,Siemens HyperLynx and Industrial Edge App Publisher
+CVE-2025-67038,Communications; Critical Manufacturing; Information Technology,Lantronix,EDS5000,2026-06-23,Unknown,0.20286,0.97467,9.8,ICSA-26-069-02,Lantronix EDS3000PS and EDS5000 (Update B)
+CVE-2025-68686,Critical Manufacturing,Fortinet,FortiOS,2026-07-27,Unknown,0.29499,0.9818,5.9,ICSA-25-044-06,Siemens RUGGEDCOM APE1808
+CVE-2026-0257,Critical Manufacturing,Palo Alto Networks,PAN-OS,2026-05-29,Known,,,,ICSA-26-139-02,Siemens RUGGEDCOM APE1808 Devices
+CVE-2026-0300,Critical Manufacturing,Palo Alto Networks,PAN-OS,2026-05-06,Unknown,,,,ICSA-26-139-02,Siemens RUGGEDCOM APE1808 Devices
+CVE-2026-110936,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,Siemens,Software Center,2026-10-20,Unknown,,,,ICSA-26-295-03,Siemens Software Center
+CVE-2026-24858,Critical Manufacturing; Energy; Transportation Systems,Fortinet,Multiple Products,2026-01-27,Unknown,,,,ICSA-26-071-02,Siemens RUGGEDCOM APE1808 Devices
+CVE-2026-31431,Chemical; Commercial Facilities; Critical Manufacturing; Energy; Food and Agriculture; Water and Wastewater Systems,Linux,Kernel,2026-05-01,Unknown,,,,ICSA-24-102-01,Siemens SIMATIC S7-1500 TM MFP
+CVE-2026-34197,Energy,Apache,ActiveMQ,2026-04-16,Unknown,,,,ICSA-26-279-04,Hitachi Energy SOI
+CVE-2026-46300,Critical Manufacturing,Linux,Kernel,2026-10-28,Unknown,,,,ICSA-26-174-06,Impact of Linux Kernel vulnerabilities on B&R products
+CVE-2026-53362,Critical Manufacturing; Energy; Financial Services; Government Facilities; Healthcare and Public Health; Transportation Systems,Linux,Kernel,2026-08-27,Unknown,,,,ICSA-26-295-16,Siemens SIMATIC S7-1500 TM MFP

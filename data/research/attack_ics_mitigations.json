@@ -1,0 +1,2591 @@
+{
+ "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+ "techniques": [
+  {
+   "id": "T0800",
+   "name": "Activate Firmware Update Mode",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0801",
+   "name": "Monitor Process State",
+   "mitigations": [
+    {
+     "id": "M0816",
+     "name": "Mitigation Limited or Not Effective"
+    }
+   ]
+  },
+  {
+   "id": "T0802",
+   "name": "Automated Collection",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T0806",
+   "name": "Brute Force I/O",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0809",
+   "name": "Data Destruction",
+   "mitigations": [
+    {
+     "id": "M0922",
+     "name": "Restrict File and Directory Permissions"
+    },
+    {
+     "id": "M0926",
+     "name": "Privileged Account Management"
+    },
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0811",
+   "name": "Data from Information Repositories",
+   "mitigations": [
+    {
+     "id": "M0917",
+     "name": "User Training"
+    },
+    {
+     "id": "M0918",
+     "name": "User Account Management"
+    },
+    {
+     "id": "M0922",
+     "name": "Restrict File and Directory Permissions"
+    },
+    {
+     "id": "M0926",
+     "name": "Privileged Account Management"
+    },
+    {
+     "id": "M0941",
+     "name": "Encrypt Sensitive Information"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0813",
+   "name": "Denial of Control",
+   "mitigations": [
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0811",
+     "name": "Redundancy of Service"
+    },
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0814",
+   "name": "Denial of Service",
+   "mitigations": [
+    {
+     "id": "M0815",
+     "name": "Watchdog Timers"
+    }
+   ]
+  },
+  {
+   "id": "T0815",
+   "name": "Denial of View",
+   "mitigations": [
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0811",
+     "name": "Redundancy of Service"
+    },
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0816",
+   "name": "Device Restart/Shutdown",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    }
+   ]
+  },
+  {
+   "id": "T0817",
+   "name": "Drive-by Compromise",
+   "mitigations": [
+    {
+     "id": "M0921",
+     "name": "Restrict Web-Based Content"
+    },
+    {
+     "id": "M0948",
+     "name": "Application Isolation and Sandboxing"
+    },
+    {
+     "id": "M0950",
+     "name": "Exploit Protection"
+    },
+    {
+     "id": "M0951",
+     "name": "Update Software"
+    }
+   ]
+  },
+  {
+   "id": "T0819",
+   "name": "Exploit Public-Facing Application",
+   "mitigations": [
+    {
+     "id": "M0916",
+     "name": "Vulnerability Scanning"
+    },
+    {
+     "id": "M0926",
+     "name": "Privileged Account Management"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0948",
+     "name": "Application Isolation and Sandboxing"
+    },
+    {
+     "id": "M0950",
+     "name": "Exploit Protection"
+    },
+    {
+     "id": "M0951",
+     "name": "Update Software"
+    }
+   ]
+  },
+  {
+   "id": "T0820",
+   "name": "Exploitation for Evasion",
+   "mitigations": [
+    {
+     "id": "M0919",
+     "name": "Threat Intelligence Program"
+    },
+    {
+     "id": "M0948",
+     "name": "Application Isolation and Sandboxing"
+    },
+    {
+     "id": "M0950",
+     "name": "Exploit Protection"
+    },
+    {
+     "id": "M0951",
+     "name": "Update Software"
+    }
+   ]
+  },
+  {
+   "id": "T0821",
+   "name": "Modify Controller Tasking",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0822",
+   "name": "External Remote Services",
+   "mitigations": [
+    {
+     "id": "M0918",
+     "name": "User Account Management"
+    },
+    {
+     "id": "M0927",
+     "name": "Password Policies"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0932",
+     "name": "Multi-factor Authentication"
+    },
+    {
+     "id": "M0935",
+     "name": "Limit Access to Resource Over Network"
+    },
+    {
+     "id": "M0936",
+     "name": "Account Use Policies"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    }
+   ]
+  },
+  {
+   "id": "T0823",
+   "name": "Graphical User Interface",
+   "mitigations": [
+    {
+     "id": "M0816",
+     "name": "Mitigation Limited or Not Effective"
+    }
+   ]
+  },
+  {
+   "id": "T0826",
+   "name": "Loss of Availability",
+   "mitigations": [
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0811",
+     "name": "Redundancy of Service"
+    },
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0827",
+   "name": "Loss of Control",
+   "mitigations": [
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0811",
+     "name": "Redundancy of Service"
+    },
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0828",
+   "name": "Loss of Productivity and Revenue",
+   "mitigations": [
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0829",
+   "name": "Loss of View",
+   "mitigations": [
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0811",
+     "name": "Redundancy of Service"
+    },
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0830",
+   "name": "Adversary-in-the-Middle",
+   "mitigations": [
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0831",
+   "name": "Manipulation of Control",
+   "mitigations": [
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0832",
+   "name": "Manipulation of View",
+   "mitigations": [
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0834",
+   "name": "Native API",
+   "mitigations": [
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    }
+   ]
+  },
+  {
+   "id": "T0835",
+   "name": "Manipulate I/O Image",
+   "mitigations": [
+    {
+     "id": "M0816",
+     "name": "Mitigation Limited or Not Effective"
+    }
+   ]
+  },
+  {
+   "id": "T0836",
+   "name": "Modify Parameter",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0818",
+     "name": "Validate Program Inputs"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0837",
+   "name": "Loss of Protection",
+   "mitigations": []
+  },
+  {
+   "id": "T0838",
+   "name": "Modify Alarm Settings",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0918",
+     "name": "User Account Management"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T0840",
+   "name": "Network Connection Enumeration",
+   "mitigations": [
+    {
+     "id": "M0816",
+     "name": "Mitigation Limited or Not Effective"
+    }
+   ]
+  },
+  {
+   "id": "T0842",
+   "name": "Network Sniffing",
+   "mitigations": [
+    {
+     "id": "M0808",
+     "name": "Encrypt Network Traffic"
+    },
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    },
+    {
+     "id": "M0926",
+     "name": "Privileged Account Management"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0932",
+     "name": "Multi-factor Authentication"
+    }
+   ]
+  },
+  {
+   "id": "T0843",
+   "name": "Program Download",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0843.001",
+   "name": "Download All",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0843.002",
+   "name": "Online Edit",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0843.003",
+   "name": "Program Append",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0845",
+   "name": "Program Upload",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0846",
+   "name": "Remote System Discovery",
+   "mitigations": [
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    }
+   ]
+  },
+  {
+   "id": "T0846.001",
+   "name": "Port Scan",
+   "mitigations": [
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    }
+   ]
+  },
+  {
+   "id": "T0846.002",
+   "name": "Broadcast Discovery",
+   "mitigations": [
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T0846.003",
+   "name": "Multicast Discovery",
+   "mitigations": [
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T0847",
+   "name": "Replication Through Removable Media",
+   "mitigations": [
+    {
+     "id": "M0928",
+     "name": "Operating System Configuration"
+    },
+    {
+     "id": "M0934",
+     "name": "Limit Hardware Installation"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    }
+   ]
+  },
+  {
+   "id": "T0848",
+   "name": "Rogue Master",
+   "mitigations": [
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0849",
+   "name": "Masquerading",
+   "mitigations": [
+    {
+     "id": "M0922",
+     "name": "Restrict File and Directory Permissions"
+    },
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    }
+   ]
+  },
+  {
+   "id": "T0851",
+   "name": "Rootkit",
+   "mitigations": [
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0852",
+   "name": "Screen Capture",
+   "mitigations": [
+    {
+     "id": "M0816",
+     "name": "Mitigation Limited or Not Effective"
+    }
+   ]
+  },
+  {
+   "id": "T0858",
+   "name": "Change Operating Mode",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T0859",
+   "name": "Valid Accounts",
+   "mitigations": [
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0913",
+     "name": "Application Developer Guidance"
+    },
+    {
+     "id": "M0915",
+     "name": "Active Directory Configuration"
+    },
+    {
+     "id": "M0918",
+     "name": "User Account Management"
+    },
+    {
+     "id": "M0926",
+     "name": "Privileged Account Management"
+    },
+    {
+     "id": "M0927",
+     "name": "Password Policies"
+    },
+    {
+     "id": "M0932",
+     "name": "Multi-factor Authentication"
+    },
+    {
+     "id": "M0936",
+     "name": "Account Use Policies"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0860",
+   "name": "Wireless Compromise",
+   "mitigations": [
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0806",
+     "name": "Minimize Wireless Signal Propagation"
+    },
+    {
+     "id": "M0808",
+     "name": "Encrypt Network Traffic"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    }
+   ]
+  },
+  {
+   "id": "T0861",
+   "name": "Point & Tag Identification",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0862",
+   "name": "Supply Chain Compromise",
+   "mitigations": [
+    {
+     "id": "M0817",
+     "name": "Supply Chain Management"
+    },
+    {
+     "id": "M0916",
+     "name": "Vulnerability Scanning"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    },
+    {
+     "id": "M0951",
+     "name": "Update Software"
+    }
+   ]
+  },
+  {
+   "id": "T0863",
+   "name": "User Execution",
+   "mitigations": [
+    {
+     "id": "M0917",
+     "name": "User Training"
+    },
+    {
+     "id": "M0921",
+     "name": "Restrict Web-Based Content"
+    },
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    },
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0949",
+     "name": "Antivirus/Antimalware"
+    }
+   ]
+  },
+  {
+   "id": "T0864",
+   "name": "Transient Cyber Asset",
+   "mitigations": [
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0941",
+     "name": "Encrypt Sensitive Information"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    },
+    {
+     "id": "M0949",
+     "name": "Antivirus/Antimalware"
+    },
+    {
+     "id": "M0951",
+     "name": "Update Software"
+    }
+   ]
+  },
+  {
+   "id": "T0865",
+   "name": "Spearphishing Attachment",
+   "mitigations": [
+    {
+     "id": "M0917",
+     "name": "User Training"
+    },
+    {
+     "id": "M0921",
+     "name": "Restrict Web-Based Content"
+    },
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    },
+    {
+     "id": "M0949",
+     "name": "Antivirus/Antimalware"
+    }
+   ]
+  },
+  {
+   "id": "T0866",
+   "name": "Exploitation of Remote Services",
+   "mitigations": [
+    {
+     "id": "M0916",
+     "name": "Vulnerability Scanning"
+    },
+    {
+     "id": "M0919",
+     "name": "Threat Intelligence Program"
+    },
+    {
+     "id": "M0926",
+     "name": "Privileged Account Management"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    },
+    {
+     "id": "M0948",
+     "name": "Application Isolation and Sandboxing"
+    },
+    {
+     "id": "M0950",
+     "name": "Exploit Protection"
+    },
+    {
+     "id": "M0951",
+     "name": "Update Software"
+    }
+   ]
+  },
+  {
+   "id": "T0867",
+   "name": "Lateral Tool Transfer",
+   "mitigations": [
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    }
+   ]
+  },
+  {
+   "id": "T0868",
+   "name": "Detect Operating Mode",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0869",
+   "name": "Standard Application Layer Protocol",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    }
+   ]
+  },
+  {
+   "id": "T0869.001",
+   "name": "DNS",
+   "mitigations": [
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0869.002",
+   "name": "Publish/Subscribe Protocols",
+   "mitigations": [
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0871",
+   "name": "Execution through API",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    }
+   ]
+  },
+  {
+   "id": "T0872",
+   "name": "Indicator Removal on Host",
+   "mitigations": [
+    {
+     "id": "M0922",
+     "name": "Restrict File and Directory Permissions"
+    }
+   ]
+  },
+  {
+   "id": "T0873",
+   "name": "Project File Infection",
+   "mitigations": [
+    {
+     "id": "M0922",
+     "name": "Restrict File and Directory Permissions"
+    },
+    {
+     "id": "M0941",
+     "name": "Encrypt Sensitive Information"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0873.001",
+   "name": "Siemens Project File Format",
+   "mitigations": [
+    {
+     "id": "M0922",
+     "name": "Restrict File and Directory Permissions"
+    },
+    {
+     "id": "M0941",
+     "name": "Encrypt Sensitive Information"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0874",
+   "name": "Hooking",
+   "mitigations": [
+    {
+     "id": "M0944",
+     "name": "Restrict Library Loading"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0877",
+   "name": "I/O Image",
+   "mitigations": [
+    {
+     "id": "M0816",
+     "name": "Mitigation Limited or Not Effective"
+    }
+   ]
+  },
+  {
+   "id": "T0878",
+   "name": "Alarm Suppression",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T0879",
+   "name": "Damage to Property",
+   "mitigations": [
+    {
+     "id": "M0805",
+     "name": "Mechanical Protection Layers"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0812",
+     "name": "Safety Instrumented Systems"
+    }
+   ]
+  },
+  {
+   "id": "T0880",
+   "name": "Loss of Safety",
+   "mitigations": [
+    {
+     "id": "M0805",
+     "name": "Mechanical Protection Layers"
+    },
+    {
+     "id": "M0812",
+     "name": "Safety Instrumented Systems"
+    }
+   ]
+  },
+  {
+   "id": "T0881",
+   "name": "Service Stop",
+   "mitigations": [
+    {
+     "id": "M0918",
+     "name": "User Account Management"
+    },
+    {
+     "id": "M0922",
+     "name": "Restrict File and Directory Permissions"
+    },
+    {
+     "id": "M0924",
+     "name": "Restrict Registry Permissions"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T0882",
+   "name": "Theft of Operational Information",
+   "mitigations": [
+    {
+     "id": "M0803",
+     "name": "Data Loss Prevention"
+    },
+    {
+     "id": "M0809",
+     "name": "Operational Information Confidentiality"
+    },
+    {
+     "id": "M0922",
+     "name": "Restrict File and Directory Permissions"
+    },
+    {
+     "id": "M0941",
+     "name": "Encrypt Sensitive Information"
+    }
+   ]
+  },
+  {
+   "id": "T0883",
+   "name": "Internet Accessible Device",
+   "mitigations": [
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T0884",
+   "name": "Connection Proxy",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0920",
+     "name": "SSL/TLS Inspection"
+    },
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0885",
+   "name": "Commonly Used Port",
+   "mitigations": [
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0931",
+     "name": "Network Intrusion Prevention"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    }
+   ]
+  },
+  {
+   "id": "T0886",
+   "name": "Remote Services",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0918",
+     "name": "User Account Management"
+    },
+    {
+     "id": "M0927",
+     "name": "Password Policies"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0887",
+   "name": "Wireless Sniffing",
+   "mitigations": [
+    {
+     "id": "M0806",
+     "name": "Minimize Wireless Signal Propagation"
+    },
+    {
+     "id": "M0808",
+     "name": "Encrypt Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T0888",
+   "name": "Remote System Information Discovery",
+   "mitigations": [
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    }
+   ]
+  },
+  {
+   "id": "T0889",
+   "name": "Modify Program",
+   "mitigations": [
+    {
+     "id": "M0800",
+     "name": "Authorization Enforcement"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T0890",
+   "name": "Exploitation for Privilege Escalation",
+   "mitigations": [
+    {
+     "id": "M0919",
+     "name": "Threat Intelligence Program"
+    },
+    {
+     "id": "M0948",
+     "name": "Application Isolation and Sandboxing"
+    },
+    {
+     "id": "M0950",
+     "name": "Exploit Protection"
+    },
+    {
+     "id": "M0951",
+     "name": "Update Software"
+    }
+   ]
+  },
+  {
+   "id": "T0892",
+   "name": "Change Credential",
+   "mitigations": [
+    {
+     "id": "M0811",
+     "name": "Redundancy of Service"
+    },
+    {
+     "id": "M0927",
+     "name": "Password Policies"
+    },
+    {
+     "id": "M0953",
+     "name": "Data Backup"
+    }
+   ]
+  },
+  {
+   "id": "T0893",
+   "name": "Data from Local System",
+   "mitigations": [
+    {
+     "id": "M0803",
+     "name": "Data Loss Prevention"
+    },
+    {
+     "id": "M0917",
+     "name": "User Training"
+    },
+    {
+     "id": "M0922",
+     "name": "Restrict File and Directory Permissions"
+    },
+    {
+     "id": "M0941",
+     "name": "Encrypt Sensitive Information"
+    }
+   ]
+  },
+  {
+   "id": "T0894",
+   "name": "System Binary Proxy Execution",
+   "mitigations": [
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    }
+   ]
+  },
+  {
+   "id": "T0895",
+   "name": "Autorun Image",
+   "mitigations": [
+    {
+     "id": "M0928",
+     "name": "Operating System Configuration"
+    }
+   ]
+  },
+  {
+   "id": "T1691",
+   "name": "Block Operational Technology Message",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    }
+   ]
+  },
+  {
+   "id": "T1691.001",
+   "name": "Command Message",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    }
+   ]
+  },
+  {
+   "id": "T1691.002",
+   "name": "Reporting Message",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0814",
+     "name": "Static Network Configuration"
+    }
+   ]
+  },
+  {
+   "id": "T1692",
+   "name": "Unauthorized Message",
+   "mitigations": [
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T1692.001",
+   "name": "Command Message",
+   "mitigations": [
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0818",
+     "name": "Validate Program Inputs"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T1692.002",
+   "name": "Reporting Message",
+   "mitigations": [
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    }
+   ]
+  },
+  {
+   "id": "T1693",
+   "name": "Modify Firmware",
+   "mitigations": [
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0808",
+     "name": "Encrypt Network Traffic"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    },
+    {
+     "id": "M0941",
+     "name": "Encrypt Sensitive Information"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0946",
+     "name": "Boot Integrity"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T1693.001",
+   "name": "System Firmware",
+   "mitigations": [
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0808",
+     "name": "Encrypt Network Traffic"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    },
+    {
+     "id": "M0941",
+     "name": "Encrypt Sensitive Information"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0946",
+     "name": "Boot Integrity"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    },
+    {
+     "id": "M0951",
+     "name": "Update Software"
+    }
+   ]
+  },
+  {
+   "id": "T1693.002",
+   "name": "Module Firmware",
+   "mitigations": [
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0802",
+     "name": "Communication Authenticity"
+    },
+    {
+     "id": "M0804",
+     "name": "Human User Authentication"
+    },
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0808",
+     "name": "Encrypt Network Traffic"
+    },
+    {
+     "id": "M0813",
+     "name": "Software Process and Device Authentication"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    },
+    {
+     "id": "M0937",
+     "name": "Filter Network Traffic"
+    },
+    {
+     "id": "M0941",
+     "name": "Encrypt Sensitive Information"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0946",
+     "name": "Boot Integrity"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    }
+   ]
+  },
+  {
+   "id": "T1694",
+   "name": "Insecure Credentials",
+   "mitigations": [
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    }
+   ]
+  },
+  {
+   "id": "T1694.001",
+   "name": "Default Credentials",
+   "mitigations": [
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    },
+    {
+     "id": "M0927",
+     "name": "Password Policies"
+    }
+   ]
+  },
+  {
+   "id": "T1694.002",
+   "name": "Hardcoded Credentials",
+   "mitigations": [
+    {
+     "id": "M0801",
+     "name": "Access Management"
+    }
+   ]
+  },
+  {
+   "id": "T1695",
+   "name": "Block Communications",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T1695.001",
+   "name": "Serial COM",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T1695.002",
+   "name": "Ethernet",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T1695.003",
+   "name": "Wi-Fi",
+   "mitigations": [
+    {
+     "id": "M0807",
+     "name": "Network Allowlists"
+    },
+    {
+     "id": "M0810",
+     "name": "Out-of-Band Communications Channel"
+    },
+    {
+     "id": "M0930",
+     "name": "Network Segmentation"
+    }
+   ]
+  },
+  {
+   "id": "T1701",
+   "name": "Command and Scripting Interpreter",
+   "mitigations": [
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    },
+    {
+     "id": "M0948",
+     "name": "Application Isolation and Sandboxing"
+    }
+   ]
+  },
+  {
+   "id": "T1701.001",
+   "name": "PowerShell",
+   "mitigations": [
+    {
+     "id": "M0926",
+     "name": "Privileged Account Management"
+    },
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    },
+    {
+     "id": "M0945",
+     "name": "Code Signing"
+    },
+    {
+     "id": "M0950",
+     "name": "Exploit Protection"
+    }
+   ]
+  },
+  {
+   "id": "T1701.002",
+   "name": "Windows Command Shell",
+   "mitigations": [
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    }
+   ]
+  },
+  {
+   "id": "T1701.003",
+   "name": "Unix Shell",
+   "mitigations": [
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    }
+   ]
+  },
+  {
+   "id": "T1701.004",
+   "name": "Visual Basic",
+   "mitigations": [
+    {
+     "id": "M0921",
+     "name": "Restrict Web-Based Content"
+    },
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    },
+    {
+     "id": "M0949",
+     "name": "Antivirus/Antimalware"
+    },
+    {
+     "id": "M0950",
+     "name": "Exploit Protection"
+    }
+   ]
+  },
+  {
+   "id": "T1701.005",
+   "name": "Python",
+   "mitigations": [
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    },
+    {
+     "id": "M0947",
+     "name": "Audit"
+    },
+    {
+     "id": "M0950",
+     "name": "Exploit Protection"
+    },
+    {
+     "id": "M1061",
+     "name": "Limit Software/Package Installation"
+    }
+   ]
+  },
+  {
+   "id": "T1701.006",
+   "name": "JavaScript",
+   "mitigations": [
+    {
+     "id": "M0921",
+     "name": "Restrict Web-Based Content"
+    },
+    {
+     "id": "M0938",
+     "name": "Execution Prevention"
+    },
+    {
+     "id": "M0942",
+     "name": "Disable or Remove Feature or Program"
+    },
+    {
+     "id": "M0950",
+     "name": "Exploit Protection"
+    }
+   ]
+  }
+ ],
+ "mitigations": [
+  {
+   "id": "M0800",
+   "name": "Authorization Enforcement",
+   "url": "https://attack.mitre.org/mitigations/M0800"
+  },
+  {
+   "id": "M0801",
+   "name": "Access Management",
+   "url": "https://attack.mitre.org/mitigations/M0801"
+  },
+  {
+   "id": "M0802",
+   "name": "Communication Authenticity",
+   "url": "https://attack.mitre.org/mitigations/M0802"
+  },
+  {
+   "id": "M0803",
+   "name": "Data Loss Prevention",
+   "url": "https://attack.mitre.org/mitigations/M0803"
+  },
+  {
+   "id": "M0804",
+   "name": "Human User Authentication",
+   "url": "https://attack.mitre.org/mitigations/M0804"
+  },
+  {
+   "id": "M0805",
+   "name": "Mechanical Protection Layers",
+   "url": "https://attack.mitre.org/mitigations/M0805"
+  },
+  {
+   "id": "M0806",
+   "name": "Minimize Wireless Signal Propagation",
+   "url": "https://attack.mitre.org/mitigations/M0806"
+  },
+  {
+   "id": "M0807",
+   "name": "Network Allowlists",
+   "url": "https://attack.mitre.org/mitigations/M0807"
+  },
+  {
+   "id": "M0808",
+   "name": "Encrypt Network Traffic",
+   "url": "https://attack.mitre.org/mitigations/M0808"
+  },
+  {
+   "id": "M0809",
+   "name": "Operational Information Confidentiality",
+   "url": "https://attack.mitre.org/mitigations/M0809"
+  },
+  {
+   "id": "M0810",
+   "name": "Out-of-Band Communications Channel",
+   "url": "https://attack.mitre.org/mitigations/M0810"
+  },
+  {
+   "id": "M0811",
+   "name": "Redundancy of Service",
+   "url": "https://attack.mitre.org/mitigations/M0811"
+  },
+  {
+   "id": "M0812",
+   "name": "Safety Instrumented Systems",
+   "url": "https://attack.mitre.org/mitigations/M0812"
+  },
+  {
+   "id": "M0813",
+   "name": "Software Process and Device Authentication",
+   "url": "https://attack.mitre.org/mitigations/M0813"
+  },
+  {
+   "id": "M0814",
+   "name": "Static Network Configuration",
+   "url": "https://attack.mitre.org/mitigations/M0814"
+  },
+  {
+   "id": "M0815",
+   "name": "Watchdog Timers",
+   "url": "https://attack.mitre.org/mitigations/M0815"
+  },
+  {
+   "id": "M0816",
+   "name": "Mitigation Limited or Not Effective",
+   "url": "https://attack.mitre.org/mitigations/M0816"
+  },
+  {
+   "id": "M0817",
+   "name": "Supply Chain Management",
+   "url": "https://attack.mitre.org/mitigations/M0817"
+  },
+  {
+   "id": "M0818",
+   "name": "Validate Program Inputs",
+   "url": "https://attack.mitre.org/mitigations/M0818"
+  },
+  {
+   "id": "M0913",
+   "name": "Application Developer Guidance",
+   "url": "https://attack.mitre.org/mitigations/M0913"
+  },
+  {
+   "id": "M0915",
+   "name": "Active Directory Configuration",
+   "url": "https://attack.mitre.org/mitigations/M0915"
+  },
+  {
+   "id": "M0916",
+   "name": "Vulnerability Scanning",
+   "url": "https://attack.mitre.org/mitigations/M0916"
+  },
+  {
+   "id": "M0917",
+   "name": "User Training",
+   "url": "https://attack.mitre.org/mitigations/M0917"
+  },
+  {
+   "id": "M0918",
+   "name": "User Account Management",
+   "url": "https://attack.mitre.org/mitigations/M0918"
+  },
+  {
+   "id": "M0919",
+   "name": "Threat Intelligence Program",
+   "url": "https://attack.mitre.org/mitigations/M0919"
+  },
+  {
+   "id": "M0920",
+   "name": "SSL/TLS Inspection",
+   "url": "https://attack.mitre.org/mitigations/M0920"
+  },
+  {
+   "id": "M0921",
+   "name": "Restrict Web-Based Content",
+   "url": "https://attack.mitre.org/mitigations/M0921"
+  },
+  {
+   "id": "M0922",
+   "name": "Restrict File and Directory Permissions",
+   "url": "https://attack.mitre.org/mitigations/M0922"
+  },
+  {
+   "id": "M0924",
+   "name": "Restrict Registry Permissions",
+   "url": "https://attack.mitre.org/mitigations/M0924"
+  },
+  {
+   "id": "M0926",
+   "name": "Privileged Account Management",
+   "url": "https://attack.mitre.org/mitigations/M0926"
+  },
+  {
+   "id": "M0927",
+   "name": "Password Policies",
+   "url": "https://attack.mitre.org/mitigations/M0927"
+  },
+  {
+   "id": "M0928",
+   "name": "Operating System Configuration",
+   "url": "https://attack.mitre.org/mitigations/M0928"
+  },
+  {
+   "id": "M0930",
+   "name": "Network Segmentation",
+   "url": "https://attack.mitre.org/mitigations/M0930"
+  },
+  {
+   "id": "M0931",
+   "name": "Network Intrusion Prevention",
+   "url": "https://attack.mitre.org/mitigations/M0931"
+  },
+  {
+   "id": "M0932",
+   "name": "Multi-factor Authentication",
+   "url": "https://attack.mitre.org/mitigations/M0932"
+  },
+  {
+   "id": "M0934",
+   "name": "Limit Hardware Installation",
+   "url": "https://attack.mitre.org/mitigations/M0934"
+  },
+  {
+   "id": "M0935",
+   "name": "Limit Access to Resource Over Network",
+   "url": "https://attack.mitre.org/mitigations/M0935"
+  },
+  {
+   "id": "M0936",
+   "name": "Account Use Policies",
+   "url": "https://attack.mitre.org/mitigations/M0936"
+  },
+  {
+   "id": "M0937",
+   "name": "Filter Network Traffic",
+   "url": "https://attack.mitre.org/mitigations/M0937"
+  },
+  {
+   "id": "M0938",
+   "name": "Execution Prevention",
+   "url": "https://attack.mitre.org/mitigations/M0938"
+  },
+  {
+   "id": "M0941",
+   "name": "Encrypt Sensitive Information",
+   "url": "https://attack.mitre.org/mitigations/M0941"
+  },
+  {
+   "id": "M0942",
+   "name": "Disable or Remove Feature or Program",
+   "url": "https://attack.mitre.org/mitigations/M0942"
+  },
+  {
+   "id": "M0944",
+   "name": "Restrict Library Loading",
+   "url": "https://attack.mitre.org/mitigations/M0944"
+  },
+  {
+   "id": "M0945",
+   "name": "Code Signing",
+   "url": "https://attack.mitre.org/mitigations/M0945"
+  },
+  {
+   "id": "M0946",
+   "name": "Boot Integrity",
+   "url": "https://attack.mitre.org/mitigations/M0946"
+  },
+  {
+   "id": "M0947",
+   "name": "Audit",
+   "url": "https://attack.mitre.org/mitigations/M0947"
+  },
+  {
+   "id": "M0948",
+   "name": "Application Isolation and Sandboxing",
+   "url": "https://attack.mitre.org/mitigations/M0948"
+  },
+  {
+   "id": "M0949",
+   "name": "Antivirus/Antimalware",
+   "url": "https://attack.mitre.org/mitigations/M0949"
+  },
+  {
+   "id": "M0950",
+   "name": "Exploit Protection",
+   "url": "https://attack.mitre.org/mitigations/M0950"
+  },
+  {
+   "id": "M0951",
+   "name": "Update Software",
+   "url": "https://attack.mitre.org/mitigations/M0951"
+  },
+  {
+   "id": "M0953",
+   "name": "Data Backup",
+   "url": "https://attack.mitre.org/mitigations/M0953"
+  },
+  {
+   "id": "M0954",
+   "name": "Software Configuration",
+   "url": "https://attack.mitre.org/mitigations/M0954"
+  },
+  {
+   "id": "M1061",
+   "name": "Limit Software/Package Installation",
+   "url": "https://attack.mitre.org/mitigations/M1061"
+  }
+ ]
+}
