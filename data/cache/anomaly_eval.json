@@ -1,6 +1,6 @@
 {
   "evaluation_type": "Synthetic data, injected attacks",
-  "timestamp": "2026-10-31T08:56:10.526161+00:00",
+  "timestamp": "2026-10-31T12:45:02.045147+00:00",
   "model": "sklearn.ensemble.IsolationForest",
   "contamination": 0.03,
   "random_state": 42,

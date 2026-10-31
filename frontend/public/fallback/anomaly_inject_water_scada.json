@@ -24,7 +24,7 @@
   ],
   "example_flows": [
     {
-      "timestamp": "2026-10-31T12:00:26.889811+00:00",
+      "timestamp": "2026-10-31T12:39:42.615885+00:00",
       "src": "asset_water_scada",
       "dst": "asset_external_c2_node",
       "port": 4444,
@@ -35,5 +35,5 @@
       "hour_of_day": 3
     }
   ],
-  "timestamp": "2026-10-31T12:00:26.889817+00:00"
+  "timestamp": "2026-10-31T12:39:42.615889+00:00"
 }
