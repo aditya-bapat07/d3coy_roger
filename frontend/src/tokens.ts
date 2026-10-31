@@ -1,57 +1,45 @@
 /**
- * Vidura Design Tokens — Cybrix dark-orange theme.
- * Centralized design tokens: CSS custom properties are mirrored in index.css
- * and Tailwind config, and used directly here for Cytoscape styles.
+ * Vidura Design Tokens — analyst light theme.
+ * The same values are mirrored as CSS custom properties in index.css
+ * (for Tailwind classes) and used directly here (for Cytoscape styles).
  */
 
 export const TOKENS = {
-  // Background surfaces
-  bgPrimary: '#0A0706',
-  bgSecondary: '#120D0B',
-  bgElevated: '#18120F',
-  bgGraph: '#0D0907',
+  // Background
+  bgPrimary: '#FAFBFC',
+  bgSecondary: '#F1F3F5',
+  bgElevated: '#FFFFFF',
+  bgGraph: '#F8F9FA',
 
   // Text
-  textPrimary: '#FFFFFF',
-  textSecondary: '#A09A96',
-  textTertiary: '#6F6863',
+  textPrimary: '#1A1D21',
+  textSecondary: '#5E6C84',
+  textTertiary: '#8993A4',
 
-  // Risk palette (re-tuned for dark)
-  riskCritical: '#FF4D4F',
-  riskHigh: '#FF7A2B',
-  riskMedium: '#FFC24B',
-  riskLow: '#3DDC97',
-  riskMinimal: '#6F6863',
+  // Risk palette
+  riskCritical: '#D32029',
+  riskHigh: '#E8590C',
+  riskMedium: '#E8A817',
+  riskLow: '#2B8A3E',
+  riskMinimal: '#868E96',
 
-  // Accent & Borders
-  accentPrimary: '#F26A1B',
-  accentHover: '#FF7A2B',
-  accentGradient: 'linear-gradient(135deg, #F26A1B 0%, #FF7A2B 100%)',
-  borderDefault: 'rgba(255, 255, 255, 0.08)',
-  borderSubtle: 'rgba(255, 255, 255, 0.04)',
-  borderHover: 'rgba(242, 106, 27, 0.5)',
-
-  // Crown Jewel badge
-  crownJewel: '#FFB340',
-
-  // Floating Nav tokens
-  navBg: 'rgba(255, 255, 255, 0.05)',
-  navBgScrolled: 'rgba(255, 255, 255, 0.08)',
-  navBorder: 'rgba(255, 255, 255, 0.10)',
-  navShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
-  navGlow: '0 0 40px rgba(242, 106, 27, 0.08)',
+  // Accent
+  accentPrimary: '#1864AB',
+  accentHover: '#1971C2',
+  borderDefault: '#DEE2E6',
+  borderSubtle: '#E9ECEF',
 
   // Graph-specific
-  edgeExploit: '#FF5A5F',
-  edgeCredential: '#FFA24A',
-  edgeControls: '#5B9BFF', // Kept cool for contrast at ~70% opacity
-  edgeDependency: '#6B6560',
-  edgeHighlighted: '#FF7A2B',
-  nodeStroke: 'rgba(255, 255, 255, 0.2)',
-  nodeSelected: '#FF7A2B',
+  edgeExploit: '#D32029',
+  edgeCredential: '#E8590C',
+  edgeControls: '#1864AB',
+  edgeDependency: '#868E96',
+  edgeHighlighted: '#1864AB',
+  nodeStroke: '#495057',
+  nodeSelected: '#1864AB',
 
   // Typography
-  fontSans: "'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+  fontSans: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
   fontMono: "'JetBrains Mono', 'Fira Code', monospace",
 } as const;
 
