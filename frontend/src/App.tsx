@@ -7,6 +7,7 @@ import { HowItWorksView } from './components/HowItWorksView';
 import { AssetDetailModal } from './components/AssetDetailModal';
 import { BackgroundBlobs } from './components/BackgroundBlobs';
 import LandingPage from './landing/LandingPage';
+import { ViduraGlassReveal } from './components/ui/liquid-glass-logo-reveal';
 import {
   AssetRiskResponse,
   RiskOverviewResponse,
@@ -383,6 +384,24 @@ export default function App() {
     return !(q.get('demo') === '1' || q.get('tab') || q.get('app') === '1');
   });
 
+  const [showIntro, setShowIntro] = useState<boolean>(() => {
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('intro') === '1') return true;
+    if (q.get('demo') === '1' || q.get('tab') || q.get('app') === '1') return false;
+    if (q.get('skipIntro') === '1') return false;
+    // Always plays on website load and refresh (no persistent storage lockout)
+    return true;
+  });
+  const [introFading, setIntroFading] = useState<boolean>(false);
+
+  const dismissIntro = useCallback(() => {
+    setIntroFading(true);
+    setTimeout(() => {
+      setShowIntro(false);
+      setIntroFading(false);
+    }, 400);
+  }, []);
+
   const [activeTab, setActiveTab] = useState<Tab | undefined>(() => {
     const q = new URLSearchParams(window.location.search);
     const tabParam = q.get('tab') as Tab;
@@ -427,13 +446,85 @@ export default function App() {
 
   if (showLanding) {
     return (
-      <LandingPage
-        onLaunch={() => enterDashboard()}
-        onLaunchTab={(tab) => enterDashboard(tab)}
-        onThreatDemo={() => {
-          window.location.href = '/?demo=1';
-        }}
-      />
+      <div className="relative min-h-screen bg-[#0A0706]">
+        {/* The Landing Page is rendered underneath as the ground truth */}
+        <LandingPage
+          onLaunch={() => enterDashboard()}
+          onLaunchTab={(tab) => enterDashboard(tab)}
+          onThreatDemo={() => {
+            window.location.href = '/?demo=1';
+          }}
+        />
+
+        {/* Launching animation: seamless glass reveal integrated with the Cybrix background */}
+        {showIntro && (
+          <div
+            className={`fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#0A0706]/65 backdrop-blur-[5px] text-white transition-opacity duration-600 select-none cursor-pointer ${
+              introFading ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            }`}
+            onClick={dismissIntro}
+            role="button"
+            tabIndex={0}
+            aria-label="Skip intro animation"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') dismissIntro();
+            }}
+          >
+            {/* Ambient background glow layers matching Cybrix theme */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[720px] rounded-full bg-[#F26A1B]/12 blur-[150px]" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full bg-[#FF7A2B]/18 blur-[90px]" />
+            </div>
+
+            {/* Liquid Glass Reveal - Transparent Background, No App Icon Plate */}
+            <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+              <ViduraGlassReveal
+                className="w-full h-full"
+                look="dark"
+                iconPlate={false}
+                keepPlate={false}
+                transparent={true}
+                background="#0A0706"
+                plateColor="#0A0706"
+                logoColor="#F26A1B"
+                loop={false}
+                speed={1.15}
+                onComplete={() => {
+                  setTimeout(dismissIntro, 350);
+                }}
+              />
+            </div>
+
+            {/* Brand Title and Subtitle Floating Below Center */}
+            <div className="relative z-10 flex flex-col items-center gap-2.5 mt-[300px] sm:mt-[320px] text-center px-4 pointer-events-none">
+              <div className="flex items-center gap-2.5">
+                <span className="font-semibold text-2xl sm:text-3xl tracking-tight text-white font-mono">
+                  VIDURA
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider uppercase bg-[#F26A1B]/15 text-[#F26A1B] border border-[#F26A1B]/30 shadow-[0_0_12px_rgba(242,106,27,0.2)]">
+                  AI Posture
+                </span>
+              </div>
+              <p className="text-xs text-white/50 tracking-wider uppercase font-mono max-w-sm">
+                Graph-Driven Security Posture &amp; Remediation
+              </p>
+            </div>
+
+            {/* Skip Hint */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                dismissIntro();
+              }}
+              className="absolute bottom-6 sm:bottom-8 right-6 sm:right-8 z-20 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-[#F26A1B]/40 text-xs text-white/60 hover:text-white transition-all flex items-center gap-1.5 font-mono shadow-sm"
+            >
+              <span>Skip</span>
+              <span className="text-[#F26A1B]">→</span>
+            </button>
+          </div>
+        )}
+      </div>
     );
   }
 

@@ -88,7 +88,7 @@ export default function LandingNav({ onLaunch }: LandingNavProps) {
 
   return (
     <header
-      className={`fixed top-4 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-32px)] max-w-[1200px] transition-all duration-250 ease-out ${
+      className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-32px)] max-w-[1200px] transition-all duration-250 ease-out ${
         mobileMenuOpen ? 'rounded-3xl' : 'rounded-full'
       } ${isScrolled ? 'floating-nav-scrolled py-2' : 'floating-nav py-2.5 sm:py-3'}`}
     >
