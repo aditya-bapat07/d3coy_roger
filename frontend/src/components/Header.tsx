@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileDown, RotateCcw, Shield, ChevronDown, Menu, X } from 'lucide-react';
+import { FileDown, RotateCcw, Shield, ChevronDown, Menu, X, MapPin } from 'lucide-react';
 import { PersonaType } from '../types/api';
 
 type TabKey = 'risk' | 'graph' | 'remediation' | 'how';
@@ -15,6 +15,17 @@ interface HeaderProps {
   onResetSession: () => void;
   loading: boolean;
   isDemoMode?: boolean;
+  onGoHome?: () => void;
+  cities?: CityOption[];
+  activeCityId?: string;
+  onCityChange?: (cityId: string) => void;
+}
+
+export interface CityOption {
+  id: string;
+  name: string;
+  state: string;
+  population: number;
 }
 
 const TABS: { key: TabKey; label: string }[] = [
@@ -34,6 +45,10 @@ export const Header: React.FC<HeaderProps> = ({
   onExportPdf,
   onResetSession,
   isDemoMode = false,
+  onGoHome,
+  cities = [],
+  activeCityId,
+  onCityChange,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,16 +74,22 @@ export const Header: React.FC<HeaderProps> = ({
     >
       <div className="w-full px-4 sm:px-6 flex items-center justify-between gap-4">
         {/* Brand with Orange Shield */}
-        <div className="flex items-center gap-2.5 shrink-0 select-none">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F26A1B]/20 to-[#FF7A2B]/10 border border-[#F26A1B]/30 flex items-center justify-center shadow-[0_0_15px_rgba(242,106,27,0.25)]">
+        <div
+          onClick={onGoHome}
+          className={`flex items-center gap-2.5 shrink-0 select-none ${onGoHome ? 'cursor-pointer group' : ''}`}
+          title={onGoHome ? 'Return to Home' : undefined}
+        >
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F26A1B]/20 to-[#FF7A2B]/10 border border-[#F26A1B]/30 flex items-center justify-center shadow-[0_0_15px_rgba(242,106,27,0.25)] group-hover:border-[#F26A1B]/60 transition-colors">
             <Shield className="w-4 h-4 text-[#F26A1B]" />
           </div>
-          <span
-            className="font-semibold text-lg tracking-tight text-white"
-            style={{ letterSpacing: '-0.02em' }}
-          >
-            Vidura
-          </span>
+          <div className="flex items-center gap-2">
+            <span
+              className="font-semibold text-lg tracking-tight text-white group-hover:text-white/90"
+              style={{ letterSpacing: '-0.02em' }}
+            >
+              Vidura
+            </span>
+          </div>
         </div>
 
         {/* Center Navigation Tabs (Desktop) */}
@@ -120,23 +141,43 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
 
+          {/* City selector (top-10 metros base plan) */}
+          {cities.length > 0 && onCityChange && (
+            <div className="relative hidden md:flex items-center">
+              <MapPin className="w-3 h-3 text-[#F26A1B] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <select
+                value={activeCityId}
+                onChange={(e) => onCityChange(e.target.value)}
+                aria-label="Select city"
+                title="Select city scenario"
+                className="appearance-none text-xs text-white bg-[#120D0B]/90 border border-white/10 rounded-full pl-7 pr-7 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#F26A1B] focus:border-[#F26A1B] hover:border-white/20 transition-all cursor-pointer shadow-sm max-w-[155px]"
+              >
+                {cities.map((c) => (
+                  <option key={c.id} value={c.id} className="bg-[#120D0B] text-white">
+                    {c.name} · {(c.population / 1_000_000).toFixed(1)}M
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-[#A09A96] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+          )}
+
           {/* Persona selector as glass dropdown */}
           <div className="relative flex items-center">
-            <label className="flex items-center gap-1.5 text-xs text-[#6F6863]">
-              <span className="hidden xl:inline">Persona</span>
-              <div className="relative">
-                <select
-                  value={persona}
-                  onChange={(e) => onPersonaChange(e.target.value as PersonaType)}
-                  className="appearance-none text-xs text-white bg-[#120D0B]/90 border border-white/10 rounded-full pl-3 pr-7 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#F26A1B] focus:border-[#F26A1B] hover:border-white/20 transition-all cursor-pointer shadow-sm"
-                >
-                  <option value="nation_state" className="bg-[#120D0B] text-white">Nation-state APT</option>
-                  <option value="opportunistic" className="bg-[#120D0B] text-white">Opportunistic</option>
-                  <option value="insider" className="bg-[#120D0B] text-white">Insider</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-[#A09A96] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-            </label>
+            <div className="relative">
+              <select
+                value={persona}
+                onChange={(e) => onPersonaChange(e.target.value as PersonaType)}
+                aria-label="Select adversary persona"
+                title="Select adversary persona"
+                className="appearance-none text-xs text-white bg-[#120D0B]/90 border border-white/10 rounded-full pl-3 pr-7 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#F26A1B] focus:border-[#F26A1B] hover:border-white/20 transition-all cursor-pointer shadow-sm"
+              >
+                <option value="nation_state" className="bg-[#120D0B] text-white">Nation-state APT</option>
+                <option value="opportunistic" className="bg-[#120D0B] text-white">Opportunistic</option>
+                <option value="insider" className="bg-[#120D0B] text-white">Insider</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-[#A09A96] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
           </div>
 
           {/* Export PDF circular glass button */}

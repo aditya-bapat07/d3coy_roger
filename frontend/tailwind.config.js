@@ -7,6 +7,35 @@ export default {
   theme: {
     extend: {
       colors: {
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        border: 'hsl(var(--border) / 0.08)',
+        input: 'hsl(var(--input) / 0.12)',
+        ring: 'hsl(var(--ring))',
         canvas: {
           DEFAULT: 'var(--bg-primary)',
           secondary: 'var(--bg-secondary)',
@@ -28,40 +57,21 @@ export default {
         accent: {
           DEFAULT: 'var(--accent-primary)',
           hover: 'var(--accent-hover)',
-          glow: 'var(--accent-glow)',
+          foreground: 'hsl(var(--accent-foreground))',
         },
         line: {
           DEFAULT: 'var(--border-default)',
           subtle: 'var(--border-subtle)',
-          hover: 'var(--border-hover)',
         },
-        cybrix: {
-          bg: '#0A0706',
-          surface: '#120D0B',
-          elevated: '#18120F',
-          orange: '#F26A1B',
-          'orange-bright': '#FF7A2B',
-          gold: '#FFB340',
-          text: '#FFFFFF',
-          muted: '#A09A96',
-          subtle: '#6F6863',
-        },
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
         sans: ['Manrope', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-      },
-      boxShadow: {
-        'glass-hover': '0 0 30px rgba(242, 106, 27, 0.15)',
-        'orange-glow': '0 0 25px rgba(242, 106, 27, 0.35)',
-        'orange-glow-sm': '0 0 12px rgba(242, 106, 27, 0.25)',
-        'star-glow': '0 0 10px rgba(255, 179, 64, 0.6)',
-      },
-      borderRadius: {
-        'glass': '18px',
-      },
-      backdropBlur: {
-        'glass': '12px',
       },
     },
   },

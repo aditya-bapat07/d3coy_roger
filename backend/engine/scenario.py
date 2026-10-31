@@ -139,7 +139,8 @@ def load_scenario(validate_cves: bool = True) -> ScenarioModel:
     with open(SCENARIO_FILE, "r", encoding="utf-8") as f:
         raw_data = json.load(f)
 
-    scenario = ScenarioModel(**raw_data)
+    from backend.engine.cities import apply_city_profile
+    scenario = ScenarioModel(**apply_city_profile(raw_data))
 
     asset_ids = {a.id for a in scenario.assets}
     service_ids = {s.id for s in scenario.services}

@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Header } from './components/Header';
+import { Header, CityOption } from './components/Header';
 import { RiskTableView } from './components/RiskTableView';
 import { GraphView } from './components/GraphView';
 import { RemediationView } from './components/RemediationView';
 import { HowItWorksView } from './components/HowItWorksView';
 import { AssetDetailModal } from './components/AssetDetailModal';
 import { BackgroundBlobs } from './components/BackgroundBlobs';
+import LandingPage from './landing/LandingPage';
+import { ViduraGlassReveal } from './components/ui/liquid-glass-logo-reveal';
 import {
   AssetRiskResponse,
   RiskOverviewResponse,
@@ -24,17 +26,34 @@ import {
 import { apiFetchJson, isFallbackMode, API_BASE } from './apiClient';
 import { ScenarioMeta } from './display';
 
-export default function App() {
+type Tab = 'risk' | 'graph' | 'remediation' | 'how';
+
+interface DashboardProps {
+  initialTab?: Tab;
+  initialPersona?: PersonaType;
+  onGoHome?: () => void;
+}
+
+export function Dashboard({ initialTab, initialPersona, onGoHome }: DashboardProps) {
   const queryParams = useMemo(() => new URLSearchParams(window.location.search), []);
   const isDemoMode = queryParams.get('demo') === '1';
+  const initialThreat = queryParams.get('threat') === '1';
 
-  const initialTab =
-    (queryParams.get('tab') as 'risk' | 'graph' | 'remediation' | 'how') ||
+  const defaultTab =
+    initialTab ||
+    (queryParams.get('tab') as Tab) ||
     (isDemoMode ? 'graph' : 'risk');
 
-  const [currentTab, setCurrentTab] = useState<'risk' | 'graph' | 'remediation' | 'how'>(initialTab);
-  const [persona, setPersona] = useState<PersonaType>('nation_state');
-  const [threatDropActive, setThreatDropActive] = useState<boolean>(false);
+  const defaultPersona =
+    initialPersona ||
+    ((queryParams.get('persona') as PersonaType) &&
+    ['nation_state', 'opportunistic', 'insider'].includes(queryParams.get('persona') as string)
+      ? (queryParams.get('persona') as PersonaType)
+      : 'nation_state');
+
+  const [currentTab, setCurrentTab] = useState<Tab>(defaultTab);
+  const [persona, setPersona] = useState<PersonaType>(defaultPersona);
+  const [threatDropActive, setThreatDropActive] = useState<boolean>(initialThreat);
   const [engineerBudget, setEngineerBudget] = useState<number>(20);
   const [selectedAsset, setSelectedAsset] = useState<AssetRiskResponse | null>(null);
   const [showShortcutLegend, setShowShortcutLegend] = useState<boolean>(isDemoMode);
@@ -49,6 +68,8 @@ export default function App() {
   const [metaInfo, setMetaInfo] = useState<MetaResponse | null>(null);
   const [validationReport, setValidationReport] = useState<ValidationResponse | null>(null);
   const [scenarioMeta, setScenarioMeta] = useState<ScenarioMeta | null>(null);
+  const [cities, setCities] = useState<CityOption[]>([]);
+  const [activeCityId, setActiveCityId] = useState<string>('navanagar');
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -161,9 +182,50 @@ export default function App() {
     await loadData(false);
   }, [loadData]);
 
+  const handleTabChange = useCallback((tab: Tab) => {
+    setCurrentTab(tab);
+    const q = new URLSearchParams(window.location.search);
+    q.set('tab', tab);
+    window.history.replaceState(null, '', window.location.pathname + '?' + q.toString());
+  }, []);
+
   const handleExportPdf = () => {
-    window.open(`${API_BASE}/report/pdf?persona=${persona}`, '_blank');
+    if (isFallbackMode()) {
+      alert('Executive briefing PDF generation requires a running Vidura backend API (offline static snapshot mode active).');
+      return;
+    }
+    const cleanBase = API_BASE.replace(/\/api\/?$/, '');
+    const pdfUrl = cleanBase
+      ? `${cleanBase}/api/report/pdf?persona=${persona}`
+      : `/api/report/pdf?persona=${persona}`;
+    window.open(pdfUrl, '_blank');
   };
+
+  useEffect(() => {
+    if (isFallbackMode()) return;
+    apiFetchJson<{ active: string; cities: CityOption[] }>('/cities')
+      .then((res) => {
+        if (Array.isArray(res?.cities)) {
+          setCities(res.cities);
+          setActiveCityId(res.active);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleCityChange = useCallback(
+    async (cityId: string) => {
+      setActiveCityId(cityId);
+      setSelectedAsset(null);
+      await apiFetchJson('/city/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ city_id: cityId }),
+      }).catch(() => {});
+      await loadData(false);
+    },
+    [loadData]
+  );
 
   const handleSelectAssetId = (assetId: string) => {
     const match = overview?.assets.find((a) => a.asset_id === assetId);
@@ -210,10 +272,10 @@ export default function App() {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
         return;
       }
-      if (e.key === '1') setCurrentTab('risk');
-      else if (e.key === '2') setCurrentTab('graph');
-      else if (e.key === '3') setCurrentTab('remediation');
-      else if (e.key === '4') setCurrentTab('how');
+      if (e.key === '1') handleTabChange('risk');
+      else if (e.key === '2') handleTabChange('graph');
+      else if (e.key === '3') handleTabChange('remediation');
+      else if (e.key === '4') handleTabChange('how');
       else if (e.key === 't' || e.key === 'T') handleToggleThreatDrop();
       else if (e.key === 'd' || e.key === 'D') handleResetSession();
       else if (e.key === 'Escape') setSelectedAsset(null);
@@ -243,7 +305,7 @@ export default function App() {
       {/* Top Application Header */}
       <Header
         currentTab={currentTab}
-        onTabChange={setCurrentTab}
+        onTabChange={handleTabChange}
         persona={persona}
         onPersonaChange={setPersona}
         threatDropActive={threatDropActive}
@@ -252,6 +314,10 @@ export default function App() {
         onResetSession={handleResetSession}
         loading={loading}
         isDemoMode={isDemoMode}
+        onGoHome={onGoHome}
+        cities={cities}
+        activeCityId={activeCityId}
+        onCityChange={handleCityChange}
       />
 
       {/* Main Content Workspace */}
@@ -365,4 +431,170 @@ export default function App() {
       />
     </div>
   );
+}
+
+export default function App() {
+  const [showLanding, setShowLanding] = useState<boolean>(() => {
+    const q = new URLSearchParams(window.location.search);
+    return !(q.get('demo') === '1' || q.get('tab') || q.get('app') === '1');
+  });
+
+  const [showIntro, setShowIntro] = useState<boolean>(() => {
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('intro') === '1') return true;
+    if (q.get('demo') === '1' || q.get('tab') || q.get('app') === '1') return false;
+    if (q.get('skipIntro') === '1') return false;
+    // Always plays on website load and refresh (no persistent storage lockout)
+    return true;
+  });
+  const [introFading, setIntroFading] = useState<boolean>(false);
+
+  const dismissIntro = useCallback(() => {
+    setIntroFading(true);
+    setTimeout(() => {
+      setShowIntro(false);
+      setIntroFading(false);
+    }, 400);
+  }, []);
+
+  const [activeTab, setActiveTab] = useState<Tab | undefined>(() => {
+    const q = new URLSearchParams(window.location.search);
+    const tabParam = q.get('tab') as Tab;
+    return ['risk', 'graph', 'remediation', 'how'].includes(tabParam) ? tabParam : undefined;
+  });
+
+  const [activePersona, setActivePersona] = useState<PersonaType | undefined>(() => {
+    const q = new URLSearchParams(window.location.search);
+    const pParam = q.get('persona') as PersonaType;
+    return ['nation_state', 'opportunistic', 'insider'].includes(pParam) ? pParam : undefined;
+  });
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const q = new URLSearchParams(window.location.search);
+      const isLanding = !(q.get('demo') === '1' || q.get('tab') || q.get('app') === '1');
+      setShowLanding(isLanding);
+      const tabParam = q.get('tab') as Tab;
+      if (['risk', 'graph', 'remediation', 'how'].includes(tabParam)) {
+        setActiveTab(tabParam);
+      }
+      const pParam = q.get('persona') as PersonaType;
+      if (['nation_state', 'opportunistic', 'insider'].includes(pParam)) {
+        setActivePersona(pParam);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const enterDashboard = (tab?: Tab, targetPersona?: PersonaType) => {
+    if (tab) setActiveTab(tab);
+    if (targetPersona) setActivePersona(targetPersona);
+    setShowLanding(false);
+
+    const q = new URLSearchParams(window.location.search);
+    q.set('app', '1');
+    if (tab) q.set('tab', tab);
+    if (targetPersona) q.set('persona', targetPersona);
+    const newRelativePathQuery = window.location.pathname + '?' + q.toString();
+    window.history.pushState({ app: true, tab, persona: targetPersona }, '', newRelativePathQuery);
+  };
+
+  const handleGoHome = () => {
+    setShowLanding(true);
+    const q = new URLSearchParams(window.location.search);
+    q.delete('app');
+    q.delete('tab');
+    q.delete('demo');
+    const newQuery = q.toString();
+    const newUrl = window.location.pathname + (newQuery ? '?' + newQuery : '');
+    window.history.pushState({ app: false }, '', newUrl);
+  };
+
+  if (showLanding) {
+    return (
+      <div className="relative min-h-screen bg-[#0A0706]">
+        {/* The Landing Page is rendered underneath as the ground truth */}
+        <LandingPage
+          onLaunch={() => enterDashboard()}
+          onLaunchTab={(tab) => enterDashboard(tab)}
+          onLaunchPersona={(targetPersona) => enterDashboard(undefined, targetPersona)}
+          onThreatDemo={() => {
+            window.location.href = '/?demo=1&threat=1';
+          }}
+        />
+
+        {/* Launching animation: seamless glass reveal integrated with the Cybrix background */}
+        {showIntro && (
+          <div
+            className={`fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#0A0706]/65 backdrop-blur-[5px] text-white transition-opacity duration-600 select-none cursor-pointer ${
+              introFading ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            }`}
+            onClick={dismissIntro}
+            role="button"
+            tabIndex={0}
+            aria-label="Skip intro animation"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') dismissIntro();
+            }}
+          >
+            {/* Ambient background glow layers matching Cybrix theme */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[720px] rounded-full bg-[#F26A1B]/12 blur-[150px]" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full bg-[#FF7A2B]/18 blur-[90px]" />
+            </div>
+
+            {/* Liquid Glass Reveal - Transparent Background, No App Icon Plate */}
+            <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+              <ViduraGlassReveal
+                className="w-full h-full"
+                look="dark"
+                iconPlate={false}
+                keepPlate={false}
+                transparent={true}
+                background="#0A0706"
+                plateColor="#0A0706"
+                logoColor="#F26A1B"
+                loop={false}
+                speed={1.15}
+                onComplete={() => {
+                  setTimeout(dismissIntro, 350);
+                }}
+              />
+            </div>
+
+            {/* Brand Title and Subtitle Floating Below Center */}
+            <div className="relative z-10 flex flex-col items-center gap-2.5 mt-[300px] sm:mt-[320px] text-center px-4 pointer-events-none">
+              <div className="flex items-center gap-2.5">
+                <span className="font-semibold text-2xl sm:text-3xl tracking-tight text-white font-mono">
+                  VIDURA
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider uppercase bg-[#F26A1B]/15 text-[#F26A1B] border border-[#F26A1B]/30 shadow-[0_0_12px_rgba(242,106,27,0.2)]">
+                  AI Posture
+                </span>
+              </div>
+              <p className="text-xs text-white/50 tracking-wider uppercase font-mono max-w-sm">
+                Graph-Driven Security Posture &amp; Remediation
+              </p>
+            </div>
+
+            {/* Skip Hint */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                dismissIntro();
+              }}
+              className="absolute bottom-6 sm:bottom-8 right-6 sm:right-8 z-20 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-[#F26A1B]/40 text-xs text-white/60 hover:text-white transition-all flex items-center gap-1.5 font-mono shadow-sm"
+            >
+              <span>Skip</span>
+              <span className="text-[#F26A1B]">→</span>
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return <Dashboard initialTab={activeTab} initialPersona={activePersona} onGoHome={handleGoHome} />;
 }

@@ -12,7 +12,7 @@ export const isFallbackMode = (): boolean => {
   );
 };
 
-export const API_BASE = 'http://127.0.0.1:8000/api';
+export const API_BASE = (import.meta.env.VITE_API_BASE as string) || '/api';
 
 /**
  * Resolves API path and request options to the corresponding fallback JSON path.
@@ -104,17 +104,28 @@ function resolveFallbackPath(path: string, options?: RequestInit): string {
  * offline or in fallback mode.
  */
 export async function apiFetch(path: string, options?: RequestInit): Promise<Response> {
-  // Compute normalized full URL
-  let normalizedPath = path.replace(/^http:\/\/[^/]+/, '');
-  if (!normalizedPath.startsWith('/')) normalizedPath = '/' + normalizedPath;
-  if (!normalizedPath.startsWith('/api/')) {
-    normalizedPath = '/api' + normalizedPath;
-  }
-  const fullUrl = `http://127.0.0.1:8000${normalizedPath}`;
-
   if (isFallbackMode()) {
     const fallbackPath = resolveFallbackPath(path, options);
     return fetch(fallbackPath);
+  }
+
+  // Compute normalized full URL
+  let fullUrl: string;
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    fullUrl = path;
+  } else {
+    let cleanPath = path;
+    if (!cleanPath.startsWith('/')) cleanPath = '/' + cleanPath;
+    if (!cleanPath.startsWith('/api')) {
+      cleanPath = '/api' + cleanPath;
+    }
+    const envBase = (import.meta.env.VITE_API_BASE as string | undefined)?.replace(/\/+$/, '');
+    if (envBase) {
+      const subPath = cleanPath.startsWith('/api') ? cleanPath.substring(4) : cleanPath;
+      fullUrl = `${envBase}${subPath}`;
+    } else {
+      fullUrl = cleanPath;
+    }
   }
 
   try {

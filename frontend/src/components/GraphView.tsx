@@ -73,17 +73,38 @@ export const GraphView: React.FC<GraphViewProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
   const animFrameRef = useRef<number | null>(null);
+  const baseZoomRef = useRef<number | null>(null);
+  const basePanRef = useRef<{ x: number; y: number } | null>(null);
   const [hover, setHover] = useState<HoverInfo | null>(null);
   const [showLegend, setShowLegend] = useState(true);
 
   const assetMap = useMemo(() => new Map((overview?.assets ?? []).map((a) => [a.asset_id, a])), [overview]);
   const typeMap = useMemo(() => new Map((scenarioMeta?.assets ?? []).map((a) => [a.id, a])), [scenarioMeta]);
 
+  // Count downstream dependencies connected to currently selected asset
+  const downstreamCount = useMemo(() => {
+    if (!selectedAssetId || !dependencyGraph) return 0;
+    const directOutgoing = (dependencyGraph.edges ?? []).filter((e) => e.source === selectedAssetId);
+    const directIncoming = (dependencyGraph.edges ?? []).filter((e) => e.target === selectedAssetId);
+    return directOutgoing.length + directIncoming.length;
+  }, [selectedAssetId, dependencyGraph]);
+
   // Keep callbacks fresh without rebuilding the graph.
   const selectRef = useRef(onSelectAssetId);
   const clearRef = useRef(onClearSelection);
   selectRef.current = onSelectAssetId;
   clearRef.current = onClearSelection;
+
+  // Clear selection on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedAssetId) {
+        onClearSelection?.();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedAssetId, onClearSelection]);
 
   useEffect(() => {
     if (!containerRef.current || !attackGraph || attackGraph.nodes.length === 0) return;
@@ -368,43 +389,70 @@ export const GraphView: React.FC<GraphViewProps> = ({
             'line-dash-pattern': [5, 3],
           } as any,
         },
-        { selector: 'edge.faded', style: { opacity: 0.12 } },
-        { selector: 'node.faded', style: { opacity: 0.15 } },
+        { selector: 'edge.faded', style: { opacity: 0.18 } },
+        { selector: 'node.faded', style: { opacity: 0.55, 'background-opacity': 0.7, 'border-width': 1.5 } as any },
         {
-          selector: 'edge.hl',
+          selector: 'edge.hl-upstream',
           style: {
-            width: 2.8,
-            'line-color': TOKENS.accentHover,
-            'target-arrow-color': TOKENS.accentHover,
+            width: 3,
+            'line-color': '#F26A1B',
+            'target-arrow-color': '#F26A1B',
             'line-style': 'dashed',
             'line-dash-pattern': [6, 3],
             opacity: 1,
-            'shadow-blur': 12,
-            'shadow-color': TOKENS.accentPrimary,
-            'shadow-opacity': 0.8,
-            'z-index': 10,
+            'shadow-blur': 14,
+            'shadow-color': '#F26A1B',
+            'shadow-opacity': 0.85,
+            'z-index': 12,
           } as any,
         },
         {
-          selector: 'node.path',
+          selector: 'edge.hl-dependency',
           style: {
-            'border-color': TOKENS.accentHover,
+            width: 3,
+            'line-color': '#38BDF8',
+            'target-arrow-color': '#38BDF8',
+            'line-style': 'dashed',
+            'line-dash-pattern': [6, 3],
+            opacity: 1,
+            'shadow-blur': 14,
+            'shadow-color': '#0284C7',
+            'shadow-opacity': 0.85,
+            'z-index': 12,
+          } as any,
+        },
+        {
+          selector: 'node.path-upstream',
+          style: {
+            'border-color': '#F26A1B',
             'border-width': 2.5,
-            'shadow-blur': 12,
-            'shadow-color': TOKENS.accentHover,
-            'shadow-opacity': 0.7,
+            'shadow-blur': 14,
+            'shadow-color': '#F26A1B',
+            'shadow-opacity': 0.8,
+            opacity: 1,
+          } as any,
+        },
+        {
+          selector: 'node.node-dependent',
+          style: {
+            'border-color': '#38BDF8',
+            'border-width': 2.5,
+            'shadow-blur': 14,
+            'shadow-color': '#38BDF8',
+            'shadow-opacity': 0.85,
             opacity: 1,
           } as any,
         },
         {
           selector: 'node.selected-node',
           style: {
-            'border-color': TOKENS.nodeSelected,
-            'border-width': 3,
-            'shadow-blur': 16,
-            'shadow-color': TOKENS.nodeSelected,
-            'shadow-opacity': 0.95,
+            'border-color': '#FF7A2B',
+            'border-width': 3.5,
+            'shadow-blur': 20,
+            'shadow-color': '#FF7A2B',
+            'shadow-opacity': 1,
             opacity: 1,
+            'z-index': 15,
           } as any,
         },
       ],
@@ -449,9 +497,49 @@ export const GraphView: React.FC<GraphViewProps> = ({
     cy.on('viewport', () => setHover(null));
 
     cy.fit(undefined, 24);
+    const fitZoom = cy.zoom();
+    const fitPan = { ...cy.pan() };
+    baseZoomRef.current = fitZoom;
+    basePanRef.current = fitPan;
+
+    // Lock minimum zoom to original fit ratio so user cannot zoom out past it
+    cy.minZoom(fitZoom);
+    cy.maxZoom(2.5);
+
+    // Lock map in place at base ratio
+    cy.userPanningEnabled(false);
+
+    // Zoom event: if at or near base ratio, lock in center; if zoomed in, allow panning
+    cy.on('zoom', () => {
+      const baseZoom = baseZoomRef.current;
+      if (!baseZoom) return;
+      if (cy.zoom() <= baseZoom * 1.01) {
+        if (basePanRef.current) cy.pan(basePanRef.current);
+        cy.userPanningEnabled(false);
+      } else {
+        cy.userPanningEnabled(true);
+      }
+    });
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (!cyRef.current) return;
+      cyRef.current.resize();
+      cyRef.current.fit(undefined, 24);
+      const newFitZoom = cyRef.current.zoom();
+      baseZoomRef.current = newFitZoom;
+      basePanRef.current = { ...cyRef.current.pan() };
+      cyRef.current.minZoom(newFitZoom);
+      cyRef.current.userPanningEnabled(false);
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
     cyRef.current = cy;
 
     return () => {
+      resizeObserver.disconnect();
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       cy.destroy();
       if (cyRef.current === cy) cyRef.current = null;
@@ -469,25 +557,78 @@ export const GraphView: React.FC<GraphViewProps> = ({
     }
 
     cy.batch(() => {
-      cy.elements().removeClass('hl faded path selected-node');
+      cy.elements().removeClass(
+        'hl-upstream hl-dependency hl faded path-upstream path node-dependent selected-node'
+      );
       if (!selectedAssetId) return;
 
       const node = cy.getElementById(selectedAssetId);
       if (node.empty()) return;
 
       node.addClass('selected-node');
+
+      // 1. Upstream attack path (how attacker reaches this asset)
       const path = assetMap.get(selectedAssetId)?.path_from_entry ?? [];
-      const hlEdges = cy.collection();
+      const upstreamEdges = cy.collection();
+      const upstreamNodes = cy.collection();
       for (let i = 0; i < path.length - 1; i++) {
-        hlEdges.merge(cy.edges(`[source = "${path[i]}"][target = "${path[i + 1]}"]`));
-        cy.getElementById(path[i]).addClass('path');
+        const edge = cy.edges(`[source = "${path[i]}"][target = "${path[i + 1]}"]`);
+        upstreamEdges.merge(edge);
+        const pNode = cy.getElementById(path[i]);
+        if (pNode.id() !== selectedAssetId) {
+          upstreamNodes.merge(pNode);
+        }
       }
-      cy.edges().not(hlEdges).addClass('faded');
-      hlEdges.addClass('hl');
-      const pathIds = new Set([...path, selectedAssetId]);
-      cy.nodes('.asset, .service')
-        .filter((n) => !pathIds.has(n.id()))
-        .addClass('faded');
+      upstreamNodes.addClass('path-upstream');
+      upstreamEdges.addClass('hl-upstream');
+
+      // 2. Downstream dependencies & controls (cascading outward to other assets & municipal services)
+      const downstreamEdges = cy.collection();
+      const downstreamNodes = cy.collection();
+      const visited = new Set<string>([selectedAssetId]);
+      const queue = [selectedAssetId];
+
+      while (queue.length > 0) {
+        const currId = queue.shift()!;
+        const outgoing = cy.edges(`[source = "${currId}"]`);
+        outgoing.forEach((edge) => {
+          const targetNode = edge.target();
+          const targetId = targetNode.id();
+          downstreamEdges.merge(edge);
+          if (!visited.has(targetId)) {
+            visited.add(targetId);
+            downstreamNodes.merge(targetNode);
+            // If target is an intermediate asset, continue traversing cascade
+            if (targetNode.hasClass('asset')) {
+              queue.push(targetId);
+            }
+          }
+        });
+      }
+
+      // Also check incoming dependency/control edges directly connected to this node
+      const incomingDep = cy.edges(`[target = "${selectedAssetId}"]`).filter((e) => {
+        const k = e.data('kind');
+        return k === 'controls' || k === 'dependency';
+      });
+      incomingDep.forEach((edge) => {
+        downstreamEdges.merge(edge);
+        const src = edge.source();
+        if (!visited.has(src.id())) {
+          visited.add(src.id());
+          downstreamNodes.merge(src);
+        }
+      });
+
+      downstreamNodes.addClass('node-dependent');
+      downstreamEdges.addClass('hl-dependency');
+
+      // 3. Keep background network visible and readable at 0.55 opacity (NOT pitch black)
+      const activeNodes = cy.collection().merge(node).merge(upstreamNodes).merge(downstreamNodes);
+      const activeEdges = cy.collection().merge(upstreamEdges).merge(downstreamEdges);
+
+      cy.nodes('.asset, .service').not(activeNodes).addClass('faded');
+      cy.edges().not(activeEdges).addClass('faded');
     });
 
     // Animate flowing dash offset on highlighted edges
@@ -497,7 +638,8 @@ export const GraphView: React.FC<GraphViewProps> = ({
       const step = (time: number) => {
         if (time - lastTime > 40) {
           offset = (offset - 1.5) % 24;
-          cy.edges('.hl').style('line-dash-offset', offset);
+          cy.edges('.hl-upstream').style('line-dash-offset', offset);
+          cy.edges('.hl-dependency').style('line-dash-offset', -offset);
           lastTime = time;
         }
         animFrameRef.current = requestAnimationFrame(step);
@@ -513,7 +655,26 @@ export const GraphView: React.FC<GraphViewProps> = ({
   const zoomBy = (f: number) => {
     const cy = cyRef.current;
     if (!cy) return;
-    cy.zoom({ level: cy.zoom() * f, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } });
+    const baseZoom = baseZoomRef.current ?? cy.minZoom();
+    const currentZoom = cy.zoom();
+    const targetZoom = currentZoom * f;
+
+    // If zooming out to or past original ratio, snap to fit and lock position
+    if (f < 1 && targetZoom <= baseZoom * 1.02) {
+      cy.fit(undefined, 24);
+      if (basePanRef.current) cy.pan(basePanRef.current);
+      cy.userPanningEnabled(false);
+      return;
+    }
+
+    const newZoom = Math.min(2.5, Math.max(baseZoom, targetZoom));
+    cy.zoom({ level: newZoom, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } });
+    if (newZoom <= baseZoom * 1.01) {
+      if (basePanRef.current) cy.pan(basePanRef.current);
+      cy.userPanningEnabled(false);
+    } else {
+      cy.userPanningEnabled(true);
+    }
   };
 
   const chokes = (chokePoints?.choke_points ?? []).slice(0, 3);
@@ -522,9 +683,37 @@ export const GraphView: React.FC<GraphViewProps> = ({
     <div className="space-y-4">
       {/* Description header & Circular glass zoom toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <p className="text-xs sm:text-sm text-[#A09A96]">
-          Attack reachability (Purdue levels, top to bottom) and municipal services operated. Click an asset to trace its attack path.
-        </p>
+        {selectedAssetId ? (
+          <div className="flex items-center gap-2 flex-wrap text-xs">
+            <span className="text-white font-semibold flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#F26A1B] animate-pulse" />
+              Tracing: {assetMap.get(selectedAssetId)?.name ?? selectedAssetId}
+            </span>
+            <span className="text-[#A09A96]">·</span>
+            <span className="text-[#FF7A2B] font-mono">
+              Upstream path:{' '}
+              {(assetMap.get(selectedAssetId)?.path_from_entry ?? []).length > 0
+                ? `${(assetMap.get(selectedAssetId)?.path_from_entry ?? []).length - 1} hops`
+                : 'No attack path'}
+            </span>
+            <span className="text-[#A09A96]">·</span>
+            <span className="text-[#38BDF8] font-mono">
+              Dependencies: {downstreamCount} connected {downstreamCount === 1 ? 'target' : 'targets'}
+            </span>
+            {onClearSelection && (
+              <button
+                onClick={onClearSelection}
+                className="ml-2 text-[11px] font-mono text-[#F26A1B] hover:text-white underline transition-colors"
+              >
+                Clear trace (Esc)
+              </button>
+            )}
+          </div>
+        ) : (
+          <p className="text-xs sm:text-sm text-[#A09A96]">
+            Attack reachability (Purdue levels, top to bottom) and municipal services operated. Click an asset to trace its attack path and dependencies.
+          </p>
+        )}
         <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
           <button
             onClick={() => setShowLegend((prev) => !prev)}
@@ -542,14 +731,20 @@ export const GraphView: React.FC<GraphViewProps> = ({
           </button>
           <button
             onClick={() => zoomBy(1 / 1.2)}
-            title="Zoom out"
+            title="Zoom out (to original ratio)"
             className="glass-btn-circle"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
           <button
-            onClick={() => cyRef.current?.fit(undefined, 24)}
-            title="Fit to view"
+            onClick={() => {
+              const cy = cyRef.current;
+              if (!cy) return;
+              cy.fit(undefined, 24);
+              if (basePanRef.current) cy.pan(basePanRef.current);
+              cy.userPanningEnabled(false);
+            }}
+            title="Lock map at original ratio"
             className="glass-btn-circle"
           >
             <Maximize2 className="w-4 h-4" />
@@ -616,6 +811,21 @@ export const GraphView: React.FC<GraphViewProps> = ({
                 <span className="inline-block w-3.5 border-t border-dashed border-white/40" /> Misconfig
               </span>
             </div>
+            {selectedAssetId && (
+              <div className="flex items-center gap-3 text-[11px] pt-1.5 border-t border-white/[0.06] flex-wrap">
+                <span className="flex items-center gap-1.5 text-[#F26A1B] font-semibold">
+                  <span className="inline-block w-3 h-0.5 rounded-full bg-[#F26A1B]" />
+                  Attack Path
+                </span>
+                <span className="flex items-center gap-1.5 text-[#38BDF8] font-semibold">
+                  <span className="inline-block w-3 h-0.5 rounded-full bg-[#38BDF8]" />
+                  Dependencies
+                </span>
+                <span className="text-[#A09A96]">
+                  (Context preserved at 55%)
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>
