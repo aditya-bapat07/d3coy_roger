@@ -48,15 +48,25 @@ export const RISK_SCALE = {
   },
 } as const;
 
-export const PURDUE_ZONE_COLORS = {
-  INTERNET: '#6B7280',
+export const PURDUE_ZONE_COLORS: Record<string, string> = {
+  INTERNET: '#64748B',
   L4: '#3B82F6',
   'L3.5': '#8B5CF6',
   L3: '#06B6D4',
   L2: '#F59E0B',
   L1: '#EC4899',
   L0: '#10B981',
-} as const;
+};
+
+export const SITE_COLORS: Record<string, { color: string; bg: string; border: string }> = {
+  power: { color: '#FBBF24', bg: '#451A03', border: '#B45309' },
+  water: { color: '#38BDF8', bg: '#082F49', border: '#0284C7' },
+  hospital: { color: '#F87171', bg: '#450A0A', border: '#B91C1C' },
+  city: { color: '#C084FC', bg: '#3B0764', border: '#7E22CE' },
+  corporate: { color: '#60A5FA', bg: '#172554', border: '#1D4ED8' },
+  vendor: { color: '#F472B6', bg: '#500724', border: '#BE185D' },
+  external: { color: '#94A3B8', bg: '#0F172A', border: '#334155' },
+};
 
 /**
  * Returns the exact color code for a risk score between 0 and 100.
@@ -77,4 +87,3 @@ export function getRiskLevel(score: number) {
   if (score <= 75) return RISK_SCALE.high;
   return RISK_SCALE.critical;
 }
-
