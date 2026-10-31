@@ -36,6 +36,22 @@ class AssetModel(BaseModel):
     criticality_note: str = ""
     anomaly_score: float = 0.0
     controls_service_id: Optional[str] = None
+    end_of_life: bool = False
+    os: Optional[str] = None
+    end_of_support_date: Optional[str] = None
+    scenario_assumption: Optional[bool] = None
+
+
+class RequiredFlowModel(BaseModel):
+    model_config = {"populate_by_name": True}
+
+    id: str
+    from_asset: str = Field(alias="from")
+    to_asset: str = Field(alias="to")
+    protocol: str
+    port: str
+    reason: str
+    scenario_assumption: bool = True
 
 
 class ServiceModel(BaseModel):
@@ -97,6 +113,7 @@ class ScenarioModel(BaseModel):
     services: List[ServiceModel]
     network_rules: List[NetworkRuleModel]
     dependencies: List[DependencyModel]
+    required_flows: List[RequiredFlowModel] = Field(default_factory=list)
 
 
 def load_assumptions() -> dict:
@@ -177,8 +194,19 @@ def load_scenario(validate_cves: bool = True) -> ScenarioModel:
                 f"Validation Error in Rule 3: affected_edge '{target[0]} -> {target[1]}' is not in dependencies!"
             )
 
-    logger.info("Successfully loaded and validated Navanagar scenario: %d assets, %d services, %d network rules, %d dependencies.",
-                len(scenario.assets), len(scenario.services), len(scenario.network_rules), len(scenario.dependencies))
+    # 5. Validate Required Flows
+    for rf in scenario.required_flows:
+        if rf.from_asset not in asset_ids:
+            raise ValueError(
+                f"Validation Error in Required Flow '{rf.id}': from '{rf.from_asset}' does not exist!"
+            )
+        if rf.to_asset not in asset_ids:
+            raise ValueError(
+                f"Validation Error in Required Flow '{rf.id}': to '{rf.to_asset}' does not exist!"
+            )
+
+    logger.info("Successfully loaded and validated Navanagar scenario: %d assets, %d services, %d network rules, %d dependencies, %d required flows.",
+                len(scenario.assets), len(scenario.services), len(scenario.network_rules), len(scenario.dependencies), len(scenario.required_flows))
     return scenario
 
 

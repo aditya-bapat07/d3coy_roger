@@ -9,15 +9,15 @@
     "kev_floor": {
       "value": 0.5,
       "scenario_assumption": true,
-      "justification": "KEV listing means exploitation has been confirmed in the wild, so a reachable KEV CVE should never rank as unlikely, even when its EPSS is low (common for ICS CVEs). 0.5 treats it as at least a coin flip once the attacker can reach it.",
-      "source": "CISA KEV catalog (BOD 22-01): a CVE is only added with evidence of active exploitation. The 0.5 value itself is a design choice."
+      "justification": "KEV listing means exploitation has been confirmed in the wild, so a reachable KEV CVE should never rank as unlikely because of a low EPSS. This matters most for water: of the KEV-listed CVEs that also have a CISA ICS advisory in the water sector, half have EPSS below 0.1 (median 0.09, 16 CVEs, a small sample). Across all ICS KEV entries EPSS is not lower than KEV overall (median 0.67 vs 0.57), so the floor is a water-sector correction, not a general ICS one. 0.5 treats a reachable KEV CVE as at least a coin flip.",
+      "source": "CISA KEV catalog (BOD 22-01): a CVE is only added with evidence of active exploitation. EPSS figures: CISA KEV v2026.10.29 joined with the jgamblin/KEV_EPSS mirror (30 Oct 2026). The 0.5 value itself is a design choice."
     },
     "credential_weakness_probabilities": {
       "default_credentials": {
         "value": 0.9,
         "scenario_assumption": true,
         "justification": "Default passwords are public and tried automatically by scanners and botnets; failure mostly comes from the device being changed or unreachable, not from difficulty.",
-        "source": "Joint advisory AA23-335A (Dec 2023): IRGC-affiliated actors compromised internet-exposed Unitronics PLCs, including at US water facilities, likely by exploiting poor password security such as default passwords. Supports 'this happens in practice', not the 0.9 number."
+        "source": "Joint advisory AA23-335A (Dec 2023): IRGC-affiliated actors compromised internet-exposed Unitronics PLCs, including at US water facilities, likely by exploiting poor password security such as default passwords. Supports \"this happens in practice\", not the 0.9 number."
       },
       "exposed_remote_access_no_mfa": {
         "value": 0.3,
@@ -26,10 +26,20 @@
         "source": "Design choice"
       }
     },
+    "likelihood_scale": {
+      "value": "Fixed log scale: L_n = (log10(max(L, 10⁻⁶)) + 6) ÷ 6",
+      "formula": "L_n = (log10(max(L, 1e-6)) + 6) / 6",
+      "min_likelihood_floor": 1e-06,
+      "log_offset": 6.0,
+      "log_divisor": 6.0,
+      "scenario_assumption": true,
+      "justification": "EPSS values differ by orders of magnitude, so a log scale keeps differences visible. The bounds are fixed, not taken from the current assets, so changing one asset never moves another asset's score.",
+      "source": "Design choice"
+    },
     "anomaly_boost_alpha": {
       "value": 0.3,
       "scenario_assumption": true,
-      "justification": "An anomaly is a signal, not proof of compromise. A score of 1.0 closes 30% of the remaining gap to certainty (p' = p + (1 - p) * 0.3 * score), so the ML raises priority without overriding the vulnerability evidence.",
+      "justification": "An anomaly is a signal, not proof of compromise. A score of 1.0 closes 30% of the remaining gap to certainty (p' = p + (1 - p) × 0.3 × score), so the ML raises priority without overriding the vulnerability evidence.",
       "source": "Design choice"
     },
     "mfa_reduction_factor": {
@@ -50,7 +60,8 @@
       "severity_divisor": 4.0,
       "people_divisor": 500000.0,
       "outage_hours_divisor": 72.0,
-      "formula": "Severity / 4; people affected / 500,000 (city population); outage hours / 72 (longest outage in the scenario)",
+      "cap_at_one": true,
+      "formula": "Severity ÷ 4; people affected ÷ 500,000 (city population); outage hours ÷ 72 (longest outage in the scenario); each capped at 1",
       "scenario_assumption": true,
       "justification": "Puts each component on 0–1 before weighting. People affected is the largest people_served among services lost, not the sum (see consequence_numbers.md, rule 4), so overlapping populations are not double-counted.",
       "source": "Design choice"
@@ -59,17 +70,22 @@
       "opportunistic": {
         "id": "opportunistic",
         "name": "Opportunistic Cybercriminal",
-        "entry_points": ["asset_internet"],
+        "entry_points": [
+          "asset_internet"
+        ],
         "max_hops": 3,
-        "cve_filter": "Only uses edges whose best CVE is KEV-listed or has EPSS >= 0.1",
+        "cve_filter": "Only uses edges whose best CVE is KEV-listed or has EPSS >= 0.1, or that are a default-credential weakness",
         "scenario_assumption": true,
-        "justification": "Mass-scanning attackers go for exposed, known-exploited weaknesses and do not chain long paths into OT.",
-        "source": "Design choice"
+        "justification": "Mass-scanning attackers go for exposed, known-exploited weaknesses and default passwords, and do not chain long paths into OT.",
+        "source": "Design choice, consistent with MITRE ATT&CK for ICS campaigns C0031 (Unitronics, 2023) and C0066 (U.S. water utilities, 2026), both listing T0883 Internet Accessible Device and T1694.001 Default Credentials"
       },
       "nation_state": {
         "id": "nation_state",
         "name": "State-Sponsored APT",
-        "entry_points": ["asset_internet", "asset_vendor_vpn"],
+        "entry_points": [
+          "asset_internet",
+          "asset_vendor_vpn"
+        ],
         "max_hops": 8,
         "cve_filter": "All edges",
         "scenario_assumption": true,
@@ -79,7 +95,9 @@
       "insider": {
         "id": "insider",
         "name": "Disgruntled / Compromised Insider",
-        "entry_points": ["asset_corp_ws1"],
+        "entry_points": [
+          "asset_corp_ws1"
+        ],
         "max_hops": 6,
         "cve_filter": "All edges",
         "internal_credentials_probability": 1.0,

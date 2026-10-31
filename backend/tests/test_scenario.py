@@ -12,7 +12,18 @@ def test_scenario_loads_cleanly():
     assert len(scenario.assets) >= 25
     assert len(scenario.services) == 12
     assert len(scenario.network_rules) >= 15
-    assert len(scenario.dependencies) == 9, "Dependencies must contain exactly the 9 edges in the Dependencies table"
+
+    service_ids = {s.id for s in scenario.services}
+    asset_ids = {a.id for a in scenario.assets}
+
+    svc_to_svc = [d for d in scenario.dependencies if d.from_node in service_ids and d.to_node in service_ids]
+    asset_to_svc = [d for d in scenario.dependencies if d.from_node in asset_ids and d.to_node in service_ids]
+
+    assert len(svc_to_svc) == 9, "Service-to-service dependencies must contain exactly the 9 edges in the Dependencies table"
+    assert len(asset_to_svc) >= 7, "Must keep OT asset -> service 'controls' edges"
+    for d in asset_to_svc:
+        assert d.type == "controls"
+        assert d.failure_delay_hours == 0.0
 
 
 def test_rule_3_generator_override():
@@ -32,6 +43,28 @@ def test_no_isolated_hospital_edges():
     for dep in scenario.dependencies:
         assert dep.from_node not in ["service_hospital_bms", "service_medical_iot", "service_backup_gen_ctrl"], \
             f"Unexpected edge from {dep.from_node} to {dep.to_node}"
+        if dep.to_node == "service_district_hospital":
+            assert dep.from_node not in ["asset_hosp_bms", "asset_hosp_iot_gw", "asset_hosp_gen_ctrl"], \
+                f"Unexpected edge from {dep.from_node} to hospital"
+
+
+def test_required_flows_and_end_of_life():
+    scenario = load_scenario(validate_cves=True)
+    assert len(scenario.required_flows) == 8
+    rf_ids = [rf.id for rf in scenario.required_flows]
+    assert rf_ids == [f"RF-{i}" for i in range(1, 9)]
+    for rf in scenario.required_flows:
+        assert rf.scenario_assumption is True
+        assert rf.from_asset != "asset_vendor_vpn" and rf.to_asset != "asset_vendor_vpn"
+
+    eol_assets = {a.id: a for a in scenario.assets if a.end_of_life}
+    assert set(eol_assets.keys()) == {"asset_water_hmi", "asset_dmz_historian"}
+    assert eol_assets["asset_water_hmi"].os == "Windows 7"
+    assert eol_assets["asset_water_hmi"].end_of_support_date == "2020-01-14"
+    assert eol_assets["asset_water_hmi"].scenario_assumption is True
+    assert eol_assets["asset_dmz_historian"].os == "Windows Server 2012 R2"
+    assert eol_assets["asset_dmz_historian"].end_of_support_date == "2023-10-10"
+    assert eol_assets["asset_dmz_historian"].scenario_assumption is True
 
 
 def test_every_cve_in_scenario_exists_in_cache():
@@ -81,6 +114,7 @@ def test_assumptions_content():
     assert "kev_floor" in params
     assert params["kev_floor"]["value"] == 0.5
     assert "credential_weakness_probabilities" in params
+    assert "likelihood_scale" in params
     assert "anomaly_boost_alpha" in params
     assert "consequence_weights" in params
     assert "consequence_normalisation" in params
@@ -88,6 +122,7 @@ def test_assumptions_content():
     assert norm["severity_divisor"] == 4.0
     assert norm["people_divisor"] == 500000.0
     assert norm["outage_hours_divisor"] == 72.0
+    assert norm["cap_at_one"] is True
     assert "personas" in params
 
 
