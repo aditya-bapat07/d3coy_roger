@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import cytoscape, { Core, EventObject } from 'cytoscape';
-import { Maximize2, ZoomIn, ZoomOut } from 'lucide-react';
+import { Maximize2, ZoomIn, ZoomOut, Layers } from 'lucide-react';
 import {
   AttackGraphResponse,
   DependencyGraphResponse,
@@ -31,6 +31,7 @@ interface HoverInfo {
 }
 
 const BANDS = ['INTERNET', 'L4', 'L3.5', 'L3', 'L2', 'L1', 'L0', 'SERVICES'];
+const OT_BANDS = new Set(['L3', 'L2', 'L1', 'L0']);
 const SITE_ORDER = ['external', 'vendor', 'corporate', 'dmz', 'power', 'water', 'hospital', 'city'];
 const X_SPACING = 104;
 const BAND_HEIGHT = 92;
@@ -71,7 +72,9 @@ export const GraphView: React.FC<GraphViewProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
+  const animFrameRef = useRef<number | null>(null);
   const [hover, setHover] = useState<HoverInfo | null>(null);
+  const [showLegend, setShowLegend] = useState(true);
 
   const assetMap = useMemo(() => new Map((overview?.assets ?? []).map((a) => [a.asset_id, a])), [overview]);
   const typeMap = useMemo(() => new Map((scenarioMeta?.assets ?? []).map((a) => [a.id, a])), [scenarioMeta]);
@@ -103,6 +106,8 @@ export const GraphView: React.FC<GraphViewProps> = ({
       const { shape, w, h } = shapeForType(meta?.type);
       const crown = risk ? isCrownJewel(risk) : false;
       const scale = crown ? 1.2 : 1;
+      const strokeColor = shape === 'ellipse' ? TOKENS.nodeStroke : getRiskColor(n.risk_score);
+
       layoutNodes.push({
         id: n.id,
         band: BANDS.includes(n.purdue_level) ? n.purdue_level : 'L3',
@@ -115,7 +120,7 @@ export const GraphView: React.FC<GraphViewProps> = ({
           shape,
           w: w * scale,
           h: h * scale,
-          stroke: shape === 'ellipse' ? TOKENS.nodeStroke : getRiskColor(n.risk_score),
+          stroke: strokeColor,
           risk: n.risk_score,
           zone: purdueLabel(n.purdue_level),
           crown,
@@ -136,9 +141,9 @@ export const GraphView: React.FC<GraphViewProps> = ({
             fullName: n.label,
             kind: 'service',
             shape: 'rectangle',
-            w: 56,
+            w: 58,
             h: 24,
-            stroke: TOKENS.nodeStroke,
+            stroke: TOKENS.accentPrimary,
             people: n.people_served,
             zone: 'City service',
             crown: false,
@@ -158,27 +163,30 @@ export const GraphView: React.FC<GraphViewProps> = ({
     const activeBands = BANDS.filter((b) => bandNodes.get(b)!.length > 0);
     const maxCount = Math.max(...activeBands.map((b) => bandNodes.get(b)!.length));
     const contentWidth = (maxCount - 1) * X_SPACING;
-    const zoneWidth = contentWidth + 150;
+    const zoneWidth = contentWidth + 160;
 
     const elements: cytoscape.ElementDefinition[] = [];
 
     activeBands.forEach((band, bandIdx) => {
       const y = bandIdx * BAND_HEIGHT;
       const list = bandNodes.get(band)!;
-      const label = purdueLabel(band);
+      const label = purdueLabel(band).toUpperCase();
+      const isOT = OT_BANDS.has(band);
 
-      // Zone background rectangle (inert)
+      // Zone background lane (inert)
       elements.push({
         group: 'nodes',
         data: {
           id: `zone_${band}`,
           label,
-          labelDx: -zoneWidth / 2 + label.length * 3.1 + 12,
+          labelDx: -zoneWidth / 2 + label.length * 3.4 + 14,
           zw: zoneWidth,
           zh: BAND_HEIGHT - 10,
+          zoneBg: isOT ? '#18110D' : '#100D0B',
+          zoneBorder: isOT ? 'rgba(242, 106, 27, 0.12)' : 'rgba(255, 255, 255, 0.06)',
         },
         position: { x: 0, y: y + 6 },
-        classes: 'zone',
+        classes: `zone ${isOT ? 'zone-ot' : 'zone-it'}`,
         selectable: false,
         grabbable: false,
       });
@@ -260,29 +268,38 @@ export const GraphView: React.FC<GraphViewProps> = ({
             shape: 'data(shape)' as any,
             width: 'data(w)',
             height: 'data(h)',
-            'background-color': '#FFFFFF',
-            'border-width': 2,
+            'background-color': '#140E0C',
+            'background-opacity': 0.85,
+            'border-width': 1.5,
             'border-color': 'data(stroke)',
             label: 'data(label)',
             'font-family': 'Inter, sans-serif',
             'font-size': 11,
-            color: TOKENS.textPrimary,
+            color: '#CFC8C3',
             'text-valign': 'bottom',
             'text-halign': 'center',
-            'text-margin-y': 4,
-            'text-background-color': TOKENS.bgGraph,
-            'text-background-opacity': 0.85,
-            'text-background-padding': '1px',
-          },
+            'text-margin-y': 5,
+            'text-outline-color': '#0A0706',
+            'text-outline-width': 2,
+            'text-outline-opacity': 0.9,
+            'shadow-blur': 8,
+            'shadow-color': 'data(stroke)' as any,
+            'shadow-opacity': 0.4,
+            'shadow-offset-x': 0,
+            'shadow-offset-y': 0,
+            'transition-property': 'border-color, border-width, shadow-opacity, opacity',
+            'transition-duration': 0.15,
+          } as any,
         },
         {
           selector: 'node.service',
           style: {
             'background-fill': 'linear-gradient',
             'background-gradient-direction': 'to-right',
-            'background-gradient-stop-colors': `${TOKENS.accentPrimary} ${TOKENS.accentPrimary} #FFFFFF #FFFFFF`,
-            'background-gradient-stop-positions': '0% 9% 9% 100%',
+            'background-gradient-stop-colors': `${TOKENS.accentPrimary} ${TOKENS.accentPrimary} #140E0C #140E0C`,
+            'background-gradient-stop-positions': '0% 12% 12% 100%',
             'border-width': 1,
+            'border-color': 'rgba(255, 255, 255, 0.15)',
           } as any,
         },
         {
@@ -291,17 +308,18 @@ export const GraphView: React.FC<GraphViewProps> = ({
             shape: 'round-rectangle',
             width: 'data(zw)',
             height: 'data(zh)',
-            'background-color': TOKENS.bgSecondary,
-            'background-opacity': 0.55,
+            'background-color': 'data(zoneBg)' as any,
+            'background-opacity': 0.65,
             'border-width': 1,
-            'border-color': TOKENS.borderSubtle,
+            'border-color': 'data(zoneBorder)' as any,
             label: 'data(label)',
-            'font-size': 10,
-            color: TOKENS.textTertiary,
+            'font-size': 9,
+            'font-weight': 600 as any,
+            color: '#6F6863',
             'text-valign': 'top',
             'text-halign': 'center',
             'text-margin-x': 'data(labelDx)' as any,
-            'text-margin-y': 15,
+            'text-margin-y': 14,
             'text-background-opacity': 0,
             events: 'no',
             'z-index': 0,
@@ -316,11 +334,14 @@ export const GraphView: React.FC<GraphViewProps> = ({
             'background-opacity': 0,
             'border-width': 0,
             label: 'data(label)',
-            color: TOKENS.riskCritical,
-            'font-size': 12,
+            color: TOKENS.crownJewel,
+            'font-size': 13,
             'text-valign': 'center',
             'text-margin-y': 0,
             'text-background-opacity': 0,
+            'shadow-blur': 10,
+            'shadow-color': TOKENS.crownJewel,
+            'shadow-opacity': 0.8,
             events: 'no',
             'z-index': 20,
           } as any,
@@ -328,33 +349,63 @@ export const GraphView: React.FC<GraphViewProps> = ({
         {
           selector: 'edge',
           style: {
-            width: 1.5,
+            width: 1.2,
             'line-color': 'data(color)',
             'target-arrow-color': 'data(color)',
             'target-arrow-shape': 'triangle',
             'arrow-scale': 0.7,
             'curve-style': 'bezier',
-            opacity: 0.7,
+            opacity: 0.45,
             'z-index': 5,
+            'transition-property': 'opacity, width, line-color',
+            'transition-duration': 0.2,
           },
         },
-        { selector: 'edge.misconfig', style: { 'line-style': 'dashed', 'line-dash-pattern': [5, 3] } as any },
-        { selector: 'edge.faded', style: { opacity: 0.15 } },
-        { selector: 'node.faded', style: { opacity: 0.45 } },
+        {
+          selector: 'edge.misconfig',
+          style: {
+            'line-style': 'dashed',
+            'line-dash-pattern': [5, 3],
+          } as any,
+        },
+        { selector: 'edge.faded', style: { opacity: 0.12 } },
+        { selector: 'node.faded', style: { opacity: 0.15 } },
         {
           selector: 'edge.hl',
           style: {
-            width: 2.5,
-            'line-color': TOKENS.edgeHighlighted,
-            'target-arrow-color': TOKENS.edgeHighlighted,
+            width: 2.8,
+            'line-color': TOKENS.accentHover,
+            'target-arrow-color': TOKENS.accentHover,
+            'line-style': 'dashed',
+            'line-dash-pattern': [6, 3],
             opacity: 1,
+            'shadow-blur': 12,
+            'shadow-color': TOKENS.accentPrimary,
+            'shadow-opacity': 0.8,
             'z-index': 10,
-          },
+          } as any,
         },
-        { selector: 'node.path', style: { 'font-weight': 600 as any, opacity: 1 } },
+        {
+          selector: 'node.path',
+          style: {
+            'border-color': TOKENS.accentHover,
+            'border-width': 2.5,
+            'shadow-blur': 12,
+            'shadow-color': TOKENS.accentHover,
+            'shadow-opacity': 0.7,
+            opacity: 1,
+          } as any,
+        },
         {
           selector: 'node.selected-node',
-          style: { 'border-color': TOKENS.nodeSelected, 'border-width': 3, 'font-weight': 600 as any, opacity: 1 },
+          style: {
+            'border-color': TOKENS.nodeSelected,
+            'border-width': 3,
+            'shadow-blur': 16,
+            'shadow-color': TOKENS.nodeSelected,
+            'shadow-opacity': 0.95,
+            opacity: 1,
+          } as any,
         },
       ],
     });
@@ -401,20 +452,29 @@ export const GraphView: React.FC<GraphViewProps> = ({
     cyRef.current = cy;
 
     return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       cy.destroy();
       if (cyRef.current === cy) cyRef.current = null;
     };
   }, [attackGraph, dependencyGraph, assetMap, typeMap]);
 
-  // Apply focus highlighting whenever the selection changes.
+  // Apply focus highlighting and animated flowing dash whenever the selection changes.
   useEffect(() => {
     const cy = cyRef.current;
     if (!cy) return;
+
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+
     cy.batch(() => {
       cy.elements().removeClass('hl faded path selected-node');
       if (!selectedAssetId) return;
+
       const node = cy.getElementById(selectedAssetId);
       if (node.empty()) return;
+
       node.addClass('selected-node');
       const path = assetMap.get(selectedAssetId)?.path_from_entry ?? [];
       const hlEdges = cy.collection();
@@ -429,6 +489,25 @@ export const GraphView: React.FC<GraphViewProps> = ({
         .filter((n) => !pathIds.has(n.id()))
         .addClass('faded');
     });
+
+    // Animate flowing dash offset on highlighted edges
+    if (selectedAssetId) {
+      let offset = 0;
+      let lastTime = performance.now();
+      const step = (time: number) => {
+        if (time - lastTime > 40) {
+          offset = (offset - 1.5) % 24;
+          cy.edges('.hl').style('line-dash-offset', offset);
+          lastTime = time;
+        }
+        animFrameRef.current = requestAnimationFrame(step);
+      };
+      animFrameRef.current = requestAnimationFrame(step);
+    }
+
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
   }, [selectedAssetId, assetMap, attackGraph, dependencyGraph]);
 
   const zoomBy = (f: number) => {
@@ -440,83 +519,130 @@ export const GraphView: React.FC<GraphViewProps> = ({
   const chokes = (chokePoints?.choke_points ?? []).slice(0, 3);
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-ink-secondary">
-          Attack reachability (Purdue levels, top to bottom) and the city services each OT asset operates. Click an asset
-          to trace its most likely attack path.
+    <div className="space-y-4">
+      {/* Description header & Circular glass zoom toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <p className="text-xs sm:text-sm text-[#A09A96]">
+          Attack reachability (Purdue levels, top to bottom) and municipal services operated. Click an asset to trace its attack path.
         </p>
-        <div className="flex items-center gap-1">
-          <button onClick={() => zoomBy(1.2)} title="Zoom in" className="p-1.5 rounded text-ink-secondary hover:text-ink hover:bg-canvas-secondary transition-colors duration-150">
+        <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+          <button
+            onClick={() => setShowLegend((prev) => !prev)}
+            title="Toggle legend"
+            className="glass-btn-circle"
+          >
+            <Layers className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => zoomBy(1.2)}
+            title="Zoom in"
+            className="glass-btn-circle"
+          >
             <ZoomIn className="w-4 h-4" />
           </button>
-          <button onClick={() => zoomBy(1 / 1.2)} title="Zoom out" className="p-1.5 rounded text-ink-secondary hover:text-ink hover:bg-canvas-secondary transition-colors duration-150">
+          <button
+            onClick={() => zoomBy(1 / 1.2)}
+            title="Zoom out"
+            className="glass-btn-circle"
+          >
             <ZoomOut className="w-4 h-4" />
           </button>
-          <button onClick={() => cyRef.current?.fit(undefined, 24)} title="Fit to view" className="p-1.5 rounded text-ink-secondary hover:text-ink hover:bg-canvas-secondary transition-colors duration-150">
+          <button
+            onClick={() => cyRef.current?.fit(undefined, 24)}
+            title="Fit to view"
+            className="glass-btn-circle"
+          >
             <Maximize2 className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      <div className="relative bg-canvas-graph border border-line rounded-lg overflow-hidden" style={{ height: 'calc(100vh - 190px)', minHeight: 480 }}>
+      {/* Canvas container: Glass card with dark background, corner orange radial glow, and faint dotted pattern */}
+      <div
+        className="glass-card relative overflow-hidden bg-[#0A0706]"
+        style={{
+          height: 'calc(100vh - 250px)',
+          minHeight: 480,
+          backgroundImage:
+            'radial-gradient(circle at top right, rgba(242, 106, 27, 0.08) 0%, transparent 50%), radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px)',
+          backgroundSize: '100% 100%, 24px 24px',
+        }}
+      >
         <div ref={containerRef} className="absolute inset-0" />
 
-        {!attackGraph && <div className="absolute inset-0 flex items-center justify-center text-sm text-ink-tertiary">Loading graph…</div>}
+        {!attackGraph && (
+          <div className="absolute inset-0 flex items-center justify-center text-sm text-[#6F6863]">
+            Loading attack &amp; dependency graph…
+          </div>
+        )}
 
+        {/* Dynamic Hover Tooltip */}
         {hover && (
           <div
-            className="pointer-events-none absolute z-20 px-2 py-1 rounded border border-line bg-canvas-elevated text-xs text-ink whitespace-nowrap"
-            style={{ left: hover.x + 12, top: hover.y + 12 }}
+            className="pointer-events-none absolute z-30 px-3 py-1.5 rounded-xl border border-white/10 bg-[#120D0B]/95 text-xs text-white shadow-2xl backdrop-blur-md whitespace-nowrap"
+            style={{ left: hover.x + 14, top: hover.y + 14 }}
           >
             {hover.text}
           </div>
         )}
 
-        <div className="absolute bottom-3 left-3 z-10 rounded border border-line bg-white/85 px-3 py-2 text-xs text-ink-secondary space-y-1.5">
-          <div className="flex items-center gap-3">
-            {(Object.keys(EDGE_COLORS) as EdgeKind[]).map((k) => (
-              <span key={k} className="flex items-center gap-1">
-                <span className="inline-block w-4 h-0.5" style={{ backgroundColor: EDGE_COLORS[k] }} />
-                {EDGE_LABELS[k]}
+        {/* Legend: Compact glass panel at top-right (leaves bottom-left City services fully visible!) */}
+        {showLegend && (
+          <div className="glass-card absolute top-3 right-3 z-20 px-3.5 py-2.5 bg-[#120D0B]/90 backdrop-blur-xl border border-white/10 text-xs text-[#A09A96] space-y-2 shadow-2xl transition-all">
+            <div className="flex items-center gap-3 text-[11px]">
+              {(Object.keys(EDGE_COLORS) as EdgeKind[]).map((k) => (
+                <span key={k} className="flex items-center gap-1.5 font-medium">
+                  <span className="inline-block w-3.5 h-0.5 rounded-full" style={{ backgroundColor: EDGE_COLORS[k] }} />
+                  {EDGE_LABELS[k]}
+                </span>
+              ))}
+            </div>
+            <div className="flex items-center gap-3 text-[11px] pt-1 border-t border-white/[0.06]">
+              {[
+                ['Critical', TOKENS.riskCritical],
+                ['High', TOKENS.riskHigh],
+                ['Medium', TOKENS.riskMedium],
+                ['Low', TOKENS.riskLow],
+              ].map(([l, c]) => (
+                <span key={l} className="flex items-center gap-1 font-medium">
+                  <span className="inline-block w-2.5 h-2.5 rounded-full border border-white/20" style={{ backgroundColor: c }} />
+                  {l}
+                </span>
+              ))}
+              <span className="flex items-center gap-1 text-[#FFB340] font-medium">
+                <span>★</span> Crown jewel
               </span>
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            {[
-              ['Critical', TOKENS.riskCritical],
-              ['High', TOKENS.riskHigh],
-              ['Medium', TOKENS.riskMedium],
-              ['Low', TOKENS.riskLow],
-            ].map(([l, c]) => (
-              <span key={l} className="flex items-center gap-1">
-                <span className="inline-block w-2.5 h-2.5 rounded-full border-2 bg-white" style={{ borderColor: c }} />
-                {l}
+              <span className="flex items-center gap-1">
+                <span className="inline-block w-3.5 border-t border-dashed border-white/40" /> Misconfig
               </span>
-            ))}
-            <span className="flex items-center gap-1">
-              <span style={{ color: TOKENS.riskCritical }}>★</span> Crown jewel
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="inline-block w-4 border-t border-dashed" style={{ borderColor: TOKENS.nodeStroke }} /> Misconfigured
-            </span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
+      {/* Choke points footer row: glass pills with orange links */}
       {chokes.length > 0 && (
-        <p className="text-sm text-ink-secondary">
-          <span className="text-xs font-medium uppercase tracking-wide mr-2">Choke points</span>
-          {chokes.map((cp, i) => (
-            <React.Fragment key={cp.asset_id}>
-              {i > 0 && <span className="mx-2 text-ink-tertiary">·</span>}
-              <button onClick={() => onSelectAssetId(cp.asset_id)} className="text-accent hover:text-accent-hover hover:underline transition-colors duration-150">
+        <div className="flex flex-wrap items-center gap-2 pt-1 text-sm">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#6F6863] mr-1">
+            Choke points
+          </span>
+          {chokes.map((cp) => (
+            <div
+              key={cp.asset_id}
+              className="glass-pill px-3 py-1.5 rounded-full inline-flex items-center gap-2 text-xs"
+            >
+              <button
+                onClick={() => onSelectAssetId(cp.asset_id)}
+                className="text-[#F26A1B] hover:text-[#FF7A2B] hover:underline font-medium transition-colors"
+              >
                 {cp.name}
               </button>
-              <span className="ml-1 font-mono text-xs text-ink-tertiary">btw {cp.betweenness_centrality.toFixed(2)}</span>
-            </React.Fragment>
+              <span className="font-mono text-[11px] text-[#6F6863]">
+                btw {cp.betweenness_centrality.toFixed(2)}
+              </span>
+            </div>
           ))}
-        </p>
+        </div>
       )}
     </div>
   );
