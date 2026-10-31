@@ -7,11 +7,13 @@ import {
 } from 'framer-motion';
 import {
   Wifi,
-  GitBranch,
-  Layers,
-  BarChart3,
-  ShieldAlert,
-  Zap,
+  Clock,
+  Droplets,
+  Terminal,
+  Scale,
+  ShieldCheck,
+  Check,
+  X,
   LucideIcon,
 } from 'lucide-react';
 
@@ -24,33 +26,33 @@ interface CapabilityItem {
 const CAPABILITIES: CapabilityItem[] = [
   {
     icon: Wifi,
-    title: 'Offline-first architecture',
-    body: 'Runs air-gapped. No cloud dependency, no telemetry home. Your OT topology never leaves your network perimeter.',
+    title: 'Offline-First & Air-Gapped',
+    body: 'Runs 100% offline with zero cloud phone-home. Your OT network topology, SCADA registers, and vulnerability maps never leave your isolated security perimeter.',
   },
   {
-    icon: GitBranch,
-    title: 'Attack path simulation',
-    body: 'Directed-graph engine models every lateral movement route an attacker could chain, weighted by real exploit probabilities from FIRST EPSS.',
+    icon: Clock,
+    title: 'Time-to-Criticality Timeline',
+    body: 'Interactive propagation playback answers "What breaks first?" — tracing lateral traversal from T+0h perimeter ingress down to L1/L0 field controller hijack.',
   },
   {
-    icon: Layers,
-    title: 'Purdue Model mapping',
-    body: 'Assets auto-classified across L0-L4 with cross-level dependency tracking. See exactly where IT/OT boundaries blur.',
+    icon: Droplets,
+    title: 'Physical Impact & Municipal SLAs',
+    body: 'Replaces abstract CVSS with real operational consequence: MLD potable water flow lost, electrical MW tripped, and emergency reserve buffer hours to dry taps.',
   },
   {
-    icon: BarChart3,
-    title: 'Risk-per-hour prioritisation',
-    body: 'Remediation ranked by risk-reduction divided by engineering hours, so finite budgets go where they matter most.',
+    icon: Terminal,
+    title: 'Zero-Downtime Virtual Patching',
+    body: 'Generates drop-in Cisco ACL, FortiOS firewall policies, and Suricata DPI rules blocking unauthorized Modbus function codes without rebooting running PLCs.',
   },
   {
-    icon: ShieldAlert,
-    title: 'MITRE ATT&CK ICS alignment',
-    body: 'Every attack path maps to ATT&CK for ICS tactics and techniques. Speak the same language as your threat intel team.',
+    icon: Scale,
+    title: '42x Adversary Work-Factor Ratio',
+    body: 'Optimises engineering hours to maximize attacker effort. A 14-hour defensive configuration imposes 160+ adversary exploit development hours.',
   },
   {
-    icon: Zap,
-    title: 'Live threat simulation',
-    body: 'Inject anomalies, trigger cascade scenarios, watch risk scores update in real time. Train your SOC without touching production.',
+    icon: ShieldCheck,
+    title: 'Sovereign Regulatory Audit Binder',
+    body: '1-click export maps findings to Indian NCIIPC Critical Information Infrastructure guidelines, CERT-In directions, and IEC 62443-3-3 target security levels.',
   },
 ];
 
@@ -206,6 +208,100 @@ export default function Capabilities() {
               prefersReduced={prefersReduced}
             />
           ))}
+        </div>
+
+        {/* The Vidura Difference: Clean 3-Card Comparison Strip */}
+        <div className="mt-16 sm:mt-20 glass-card p-6 sm:p-8 rounded-3xl border border-white/[0.08] bg-[#120D0B]/80 text-left">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.06]">
+            <div>
+              <div className="text-xs font-mono uppercase tracking-wider text-[#F26A1B] font-semibold">
+                THE VIDURA DIFFERENCE
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">
+                Why operational critical infrastructure requires a different engine.
+              </h3>
+            </div>
+            <span className="text-xs font-mono text-[#6F6863] shrink-0">
+              Zero fluff · Grounded in OT physics
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            {/* Dimension 1: Remediation */}
+            <div className="space-y-3">
+              <div className="text-xs font-semibold text-white/40 uppercase tracking-wider font-mono">
+                01 · REMEDIATION APPROACH
+              </div>
+              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.04] space-y-1.5">
+                <div className="text-xs text-[#6F6863] flex items-center gap-1.5">
+                  <X className="w-3.5 h-3.5 text-[#FF4D4F]" />
+                  <span>Generic OT Scanners</span>
+                </div>
+                <p className="text-xs text-white/50 leading-relaxed">
+                  Advise firmware patching (demanding PLC reboots and plant shutdowns).
+                </p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#F26A1B]/[0.08] border border-[#F26A1B]/30 space-y-1.5 shadow-[0_0_20px_rgba(242,106,27,0.08)]">
+                <div className="text-xs text-[#F26A1B] font-semibold flex items-center gap-1.5 font-mono">
+                  <Check className="w-3.5 h-3.5 text-[#3DDC97]" />
+                  <span>Vidura Virtual Patches</span>
+                </div>
+                <p className="text-xs text-white/90 leading-relaxed">
+                  Generates drop-in Cisco ACL, FortiOS, and Suricata DPI rules with zero plant downtime.
+                </p>
+              </div>
+            </div>
+
+            {/* Dimension 2: Consequence Metric */}
+            <div className="space-y-3">
+              <div className="text-xs font-semibold text-white/40 uppercase tracking-wider font-mono">
+                02 · RISK IMPACT METRIC
+              </div>
+              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.04] space-y-1.5">
+                <div className="text-xs text-[#6F6863] flex items-center gap-1.5">
+                  <X className="w-3.5 h-3.5 text-[#FF4D4F]" />
+                  <span>Generic OT Scanners</span>
+                </div>
+                <p className="text-xs text-white/50 leading-relaxed">
+                  Abstract CVSS 9.8 scores and theoretical commercial dollar loss guesses.
+                </p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#F26A1B]/[0.08] border border-[#F26A1B]/30 space-y-1.5 shadow-[0_0_20px_rgba(242,106,27,0.08)]">
+                <div className="text-xs text-[#F26A1B] font-semibold flex items-center gap-1.5 font-mono">
+                  <Check className="w-3.5 h-3.5 text-[#3DDC97]" />
+                  <span>Vidura Municipal SLAs</span>
+                </div>
+                <p className="text-xs text-white/90 leading-relaxed">
+                  Quantifies physical consequence: 140 MLD potable water lost &amp; 4.2h reserve buffer to dry taps.
+                </p>
+              </div>
+            </div>
+
+            {/* Dimension 3: Sovereign Compliance */}
+            <div className="space-y-3">
+              <div className="text-xs font-semibold text-white/40 uppercase tracking-wider font-mono">
+                03 · STATUTORY COMPLIANCE
+              </div>
+              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.04] space-y-1.5">
+                <div className="text-xs text-[#6F6863] flex items-center gap-1.5">
+                  <X className="w-3.5 h-3.5 text-[#FF4D4F]" />
+                  <span>Generic OT Scanners</span>
+                </div>
+                <p className="text-xs text-white/50 leading-relaxed">
+                  US/EU-centric generic checklists (NIST/CIS) requiring manual spreadsheet mapping.
+                </p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#F26A1B]/[0.08] border border-[#F26A1B]/30 space-y-1.5 shadow-[0_0_20px_rgba(242,106,27,0.08)]">
+                <div className="text-xs text-[#F26A1B] font-semibold flex items-center gap-1.5 font-mono">
+                  <Check className="w-3.5 h-3.5 text-[#3DDC97]" />
+                  <span>Vidura Sovereign Audit Binder</span>
+                </div>
+                <p className="text-xs text-white/90 leading-relaxed">
+                  1-click verified export mapped to Indian NCIIPC CII guidelines, CERT-In, &amp; IEC 62443 SL-3.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

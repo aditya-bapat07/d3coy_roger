@@ -225,16 +225,16 @@ function AttackPathGraphic({ prefersReduced }: { prefersReduced: boolean | null 
 // ── Decorative Graphic 4: Remediation Priorities ───────────────────────────
 function RemediationGraphic({ prefersReduced }: { prefersReduced: boolean | null }) {
   const fixes = [
-    { label: 'Segment SCADA VLAN', impact: '88%', reduction: '+42% safety', color: '#F26A1B' },
-    { label: 'Patch historian CVE-2024-38856', impact: '64%', reduction: '+28% safety', color: '#FF7A2B' },
-    { label: 'Rotate VPN creds', impact: '40%', reduction: '+15% safety', color: '#FFC24B' },
+    { label: 'Segment SCADA VLAN (Cisco/FortiOS)', impact: '88%', reduction: '+42% safety', color: '#F26A1B' },
+    { label: 'Virtual patch historian (Suricata DPI)', impact: '64%', reduction: '+28% safety', color: '#FF7A2B' },
+    { label: 'Rotate VPN creds + FIDO2 MFA', impact: '40%', reduction: '+15% safety', color: '#FFC24B' },
   ];
 
   return (
     <div className="glass-card p-5 rounded-2xl border border-white/[0.08] bg-[#120D0B]/80 max-w-lg w-full">
       <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] text-xs font-mono text-[#A09A96]">
         <span>OPTIMAL FIX SEQUENCE</span>
-        <span className="text-[#3DDC97]">MAX ROI PER HOUR</span>
+        <span className="text-[#3DDC97]">ZERO-DOWNTIME SAFE</span>
       </div>
 
       <div className="mt-4 space-y-3.5">
@@ -263,6 +263,11 @@ function RemediationGraphic({ prefersReduced }: { prefersReduced: boolean | null
           </div>
         ))}
       </div>
+
+      <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-[#A09A96]">
+        <span className="text-[#F26A1B] font-semibold">42x Attacker Work Factor</span>
+        <span className="text-[#3DDC97]">0h Process Outage</span>
+      </div>
     </div>
   );
 }
@@ -277,7 +282,7 @@ const STEPS: StepData[] = [
   {
     number: 2,
     title: 'Score real-world risk',
-    body: 'Each asset gets a composite risk score combining FIRST EPSS exploit probability, CISA KEV status, CVSS base metrics, and Vidura’s own cascade-impact model that weighs how many citizens lose service.',
+    body: 'Each asset gets a composite risk score combining FIRST EPSS exploit probability, CISA KEV status, CVSS base metrics, and Vidura’s physical cascade model calculating MLD water loss & emergency reserve hours.',
     renderGraphic: (prefersReduced) => <RiskMeterGraphic prefersReduced={prefersReduced} />,
   },
   {
@@ -289,7 +294,7 @@ const STEPS: StepData[] = [
   {
     number: 4,
     title: 'Prioritise fixes',
-    body: 'The remediation engine ranks every possible intervention by risk-reduction-per-hour, so your team spends engineering time where it actually moves the needle.',
+    body: 'The remediation engine ranks every intervention by risk reduction per hour and generates zero-downtime compensating controls (Cisco ACL, FortiOS, Suricata DPI) — multiplying attacker work factor 42x without waiting for PLC shutdown windows.',
     renderGraphic: (prefersReduced) => <RemediationGraphic prefersReduced={prefersReduced} />,
   },
 ];

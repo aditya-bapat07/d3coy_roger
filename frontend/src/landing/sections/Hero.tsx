@@ -96,8 +96,14 @@ export default function Hero({ onLaunch, onThreatDemo }: HeroProps) {
           </div>
 
           {/* Micro-line Under Buttons */}
-          <p className="mt-4 text-xs text-[#6F6863] font-mono tracking-tight">
-            Offline-first · CISA KEV · FIRST EPSS · NVD · MITRE ATT&amp;CK ICS
+          <p className="mt-4 text-xs text-[#6F6863] font-mono tracking-tight flex items-center gap-2 flex-wrap">
+            <span>Offline-first</span>
+            <span className="text-white/20">·</span>
+            <span>Zero-Downtime Virtual Patches</span>
+            <span className="text-white/20">·</span>
+            <span>Physical MLD SLAs</span>
+            <span className="text-white/20">·</span>
+            <span>NCIIPC &amp; CERT-In Ready</span>
           </p>
         </div>
 
