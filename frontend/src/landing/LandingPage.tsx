@@ -8,18 +8,21 @@ import Capabilities from './sections/Capabilities';
 import Validation from './sections/Validation';
 import Personas from './sections/Personas';
 import Footer from './sections/Footer';
+import { PersonaType } from '../types/api';
 
 export default function LandingPage({
   onLaunch,
   onLaunchTab,
   onThreatDemo,
+  onLaunchPersona,
 }: {
   onLaunch: () => void;
   onLaunchTab: (tab: 'risk' | 'graph' | 'remediation' | 'how') => void;
   onThreatDemo: () => void;
+  onLaunchPersona?: (persona: PersonaType) => void;
 }) {
   return (
-    <div id="top" className="relative min-h-screen bg-[#0A0706] text-white overflow-x-hidden">
+    <div id="top" className="relative min-h-screen bg-[#0A0706] text-white overflow-x-clip">
       {/* Full-viewport ambient background layer (fixed, z-0, pointer-events: none) */}
       <AmbientBackground />
 
@@ -34,7 +37,7 @@ export default function LandingPage({
         <Views onLaunchTab={onLaunchTab} />
         <Capabilities />
         <Validation />
-        <Personas />
+        <Personas onLaunchPersona={onLaunchPersona} />
         <Footer />
       </div>
     </div>

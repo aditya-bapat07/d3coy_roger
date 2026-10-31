@@ -878,7 +878,10 @@ export function GlassIconReveal({
     const engine = startEngine(wrap, live)
     if (!engine) {
       setFallback(true)
-      return
+      const timer = setTimeout(() => {
+        live.current.onComplete?.()
+      }, 1200)
+      return () => clearTimeout(timer)
     }
     engineRef.current = engine
     return () => {

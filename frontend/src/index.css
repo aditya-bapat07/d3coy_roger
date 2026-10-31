@@ -13,6 +13,28 @@
 :root {
   color-scheme: dark;
 
+  /* shadcn UI variables (harmonized with Cybrix dark palette) */
+  --background: 20 20% 3%;
+  --foreground: 0 0% 100%;
+  --card: 20 25% 6%;
+  --card-foreground: 0 0% 100%;
+  --popover: 20 25% 6%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 23 89% 53%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 20 18% 10%;
+  --secondary-foreground: 24 6% 61%;
+  --muted: 20 18% 10%;
+  --muted-foreground: 24 6% 61%;
+  --accent: 23 89% 53%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 359 100% 65%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 100%;
+  --input: 0 0% 100%;
+  --ring: 23 89% 53%;
+  --radius: 0.75rem;
+
   /* Cybrix Dark Background Surfaces */
   --bg-primary: #0A0706;
   --bg-secondary: #120D0B;
@@ -214,4 +236,13 @@ code, pre, .font-mono {
 .bg-grain {
   background-image: radial-gradient(rgba(242, 106, 27, 0.04) 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+/* Orbital Timeline Custom Utilities */
+.bg-gradient-orbital {
+  background: linear-gradient(to bottom right, #F26A1B, #FF4D4F, #FFC24B);
+}
+
+.shadow-orbital {
+  box-shadow: 0 0 15px rgba(242, 106, 27, 0.25);
 }

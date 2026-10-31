@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Header } from './components/Header';
+import { Header, CityOption } from './components/Header';
 import { RiskTableView } from './components/RiskTableView';
 import { GraphView } from './components/GraphView';
 import { RemediationView } from './components/RemediationView';
@@ -30,21 +30,30 @@ type Tab = 'risk' | 'graph' | 'remediation' | 'how';
 
 interface DashboardProps {
   initialTab?: Tab;
+  initialPersona?: PersonaType;
   onGoHome?: () => void;
 }
 
-export function Dashboard({ initialTab, onGoHome }: DashboardProps) {
+export function Dashboard({ initialTab, initialPersona, onGoHome }: DashboardProps) {
   const queryParams = useMemo(() => new URLSearchParams(window.location.search), []);
   const isDemoMode = queryParams.get('demo') === '1';
+  const initialThreat = queryParams.get('threat') === '1';
 
   const defaultTab =
     initialTab ||
     (queryParams.get('tab') as Tab) ||
     (isDemoMode ? 'graph' : 'risk');
 
+  const defaultPersona =
+    initialPersona ||
+    ((queryParams.get('persona') as PersonaType) &&
+    ['nation_state', 'opportunistic', 'insider'].includes(queryParams.get('persona') as string)
+      ? (queryParams.get('persona') as PersonaType)
+      : 'nation_state');
+
   const [currentTab, setCurrentTab] = useState<Tab>(defaultTab);
-  const [persona, setPersona] = useState<PersonaType>('nation_state');
-  const [threatDropActive, setThreatDropActive] = useState<boolean>(false);
+  const [persona, setPersona] = useState<PersonaType>(defaultPersona);
+  const [threatDropActive, setThreatDropActive] = useState<boolean>(initialThreat);
   const [engineerBudget, setEngineerBudget] = useState<number>(20);
   const [selectedAsset, setSelectedAsset] = useState<AssetRiskResponse | null>(null);
   const [showShortcutLegend, setShowShortcutLegend] = useState<boolean>(isDemoMode);
@@ -59,6 +68,8 @@ export function Dashboard({ initialTab, onGoHome }: DashboardProps) {
   const [metaInfo, setMetaInfo] = useState<MetaResponse | null>(null);
   const [validationReport, setValidationReport] = useState<ValidationResponse | null>(null);
   const [scenarioMeta, setScenarioMeta] = useState<ScenarioMeta | null>(null);
+  const [cities, setCities] = useState<CityOption[]>([]);
+  const [activeCityId, setActiveCityId] = useState<string>('navanagar');
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -171,9 +182,50 @@ export function Dashboard({ initialTab, onGoHome }: DashboardProps) {
     await loadData(false);
   }, [loadData]);
 
+  const handleTabChange = useCallback((tab: Tab) => {
+    setCurrentTab(tab);
+    const q = new URLSearchParams(window.location.search);
+    q.set('tab', tab);
+    window.history.replaceState(null, '', window.location.pathname + '?' + q.toString());
+  }, []);
+
   const handleExportPdf = () => {
-    window.open(`${API_BASE}/report/pdf?persona=${persona}`, '_blank');
+    if (isFallbackMode()) {
+      alert('Executive briefing PDF generation requires a running Vidura backend API (offline static snapshot mode active).');
+      return;
+    }
+    const cleanBase = API_BASE.replace(/\/api\/?$/, '');
+    const pdfUrl = cleanBase
+      ? `${cleanBase}/api/report/pdf?persona=${persona}`
+      : `/api/report/pdf?persona=${persona}`;
+    window.open(pdfUrl, '_blank');
   };
+
+  useEffect(() => {
+    if (isFallbackMode()) return;
+    apiFetchJson<{ active: string; cities: CityOption[] }>('/cities')
+      .then((res) => {
+        if (Array.isArray(res?.cities)) {
+          setCities(res.cities);
+          setActiveCityId(res.active);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleCityChange = useCallback(
+    async (cityId: string) => {
+      setActiveCityId(cityId);
+      setSelectedAsset(null);
+      await apiFetchJson('/city/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ city_id: cityId }),
+      }).catch(() => {});
+      await loadData(false);
+    },
+    [loadData]
+  );
 
   const handleSelectAssetId = (assetId: string) => {
     const match = overview?.assets.find((a) => a.asset_id === assetId);
@@ -220,10 +272,10 @@ export function Dashboard({ initialTab, onGoHome }: DashboardProps) {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
         return;
       }
-      if (e.key === '1') setCurrentTab('risk');
-      else if (e.key === '2') setCurrentTab('graph');
-      else if (e.key === '3') setCurrentTab('remediation');
-      else if (e.key === '4') setCurrentTab('how');
+      if (e.key === '1') handleTabChange('risk');
+      else if (e.key === '2') handleTabChange('graph');
+      else if (e.key === '3') handleTabChange('remediation');
+      else if (e.key === '4') handleTabChange('how');
       else if (e.key === 't' || e.key === 'T') handleToggleThreatDrop();
       else if (e.key === 'd' || e.key === 'D') handleResetSession();
       else if (e.key === 'Escape') setSelectedAsset(null);
@@ -253,7 +305,7 @@ export function Dashboard({ initialTab, onGoHome }: DashboardProps) {
       {/* Top Application Header */}
       <Header
         currentTab={currentTab}
-        onTabChange={setCurrentTab}
+        onTabChange={handleTabChange}
         persona={persona}
         onPersonaChange={setPersona}
         threatDropActive={threatDropActive}
@@ -263,6 +315,9 @@ export function Dashboard({ initialTab, onGoHome }: DashboardProps) {
         loading={loading}
         isDemoMode={isDemoMode}
         onGoHome={onGoHome}
+        cities={cities}
+        activeCityId={activeCityId}
+        onCityChange={handleCityChange}
       />
 
       {/* Main Content Workspace */}
@@ -408,6 +463,12 @@ export default function App() {
     return ['risk', 'graph', 'remediation', 'how'].includes(tabParam) ? tabParam : undefined;
   });
 
+  const [activePersona, setActivePersona] = useState<PersonaType | undefined>(() => {
+    const q = new URLSearchParams(window.location.search);
+    const pParam = q.get('persona') as PersonaType;
+    return ['nation_state', 'opportunistic', 'insider'].includes(pParam) ? pParam : undefined;
+  });
+
   useEffect(() => {
     const handlePopState = () => {
       const q = new URLSearchParams(window.location.search);
@@ -417,20 +478,26 @@ export default function App() {
       if (['risk', 'graph', 'remediation', 'how'].includes(tabParam)) {
         setActiveTab(tabParam);
       }
+      const pParam = q.get('persona') as PersonaType;
+      if (['nation_state', 'opportunistic', 'insider'].includes(pParam)) {
+        setActivePersona(pParam);
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const enterDashboard = (tab?: Tab) => {
+  const enterDashboard = (tab?: Tab, targetPersona?: PersonaType) => {
     if (tab) setActiveTab(tab);
+    if (targetPersona) setActivePersona(targetPersona);
     setShowLanding(false);
 
     const q = new URLSearchParams(window.location.search);
     q.set('app', '1');
     if (tab) q.set('tab', tab);
+    if (targetPersona) q.set('persona', targetPersona);
     const newRelativePathQuery = window.location.pathname + '?' + q.toString();
-    window.history.replaceState(null, '', newRelativePathQuery);
+    window.history.pushState({ app: true, tab, persona: targetPersona }, '', newRelativePathQuery);
   };
 
   const handleGoHome = () => {
@@ -441,7 +508,7 @@ export default function App() {
     q.delete('demo');
     const newQuery = q.toString();
     const newUrl = window.location.pathname + (newQuery ? '?' + newQuery : '');
-    window.history.replaceState(null, '', newUrl);
+    window.history.pushState({ app: false }, '', newUrl);
   };
 
   if (showLanding) {
@@ -451,8 +518,9 @@ export default function App() {
         <LandingPage
           onLaunch={() => enterDashboard()}
           onLaunchTab={(tab) => enterDashboard(tab)}
+          onLaunchPersona={(targetPersona) => enterDashboard(undefined, targetPersona)}
           onThreatDemo={() => {
-            window.location.href = '/?demo=1';
+            window.location.href = '/?demo=1&threat=1';
           }}
         />
 
@@ -528,5 +596,5 @@ export default function App() {
     );
   }
 
-  return <Dashboard initialTab={activeTab} onGoHome={handleGoHome} />;
+  return <Dashboard initialTab={activeTab} initialPersona={activePersona} onGoHome={handleGoHome} />;
 }

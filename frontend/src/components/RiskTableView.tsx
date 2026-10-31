@@ -7,7 +7,7 @@ import {
 } from '../types/api';
 import { getRiskBand, purdueLabel } from '../tokens';
 import { ScenarioMeta, whyFragment } from '../display';
-import { Search } from 'lucide-react';
+import { Search, MapPin } from 'lucide-react';
 
 interface RiskTableViewProps {
   overview: RiskOverviewResponse | null;
@@ -118,16 +118,37 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
 
       {/* Metrics Summary Strip & Filter Input */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <p className="text-sm text-[#A09A96]">
-          <span className="text-white font-semibold">{summary.n}</span> assets scored
-          <span className="mx-2 text-[#6F6863]">·</span>
-          <span className="text-[#FF4D4F] font-semibold">{summary.critical}</span> critical
-          <span className="mx-2 text-[#6F6863]">·</span>
-          <span className="text-[#FF7A2B] font-semibold">{summary.high}</span> high
-          <span className="mx-2 text-[#6F6863]">·</span>
-          median risk:{' '}
-          <span className="font-mono font-bold text-white">{summary.median.toFixed(1)}</span>
-        </p>
+        <div className="flex items-center gap-3 flex-wrap">
+          {overview?.scenario_name && (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-[#F26A1B]/10 border border-[#F26A1B]/30 text-[#F26A1B] shadow-[0_0_12px_rgba(242,106,27,0.15)]">
+              <MapPin className="w-3 h-3 text-[#F26A1B]" />
+              <span className="font-semibold text-white">
+                {overview.scenario_name}
+              </span>
+              {overview.fictional_population > 0 && (
+                <>
+                  <span className="text-white/30">·</span>
+                  <span className="text-[#A09A96]">
+                    {overview.fictional_population >= 1_000_000
+                      ? `${(overview.fictional_population / 1_000_000).toFixed(1)}M citizens`
+                      : `${(overview.fictional_population / 100_000).toFixed(1)}L citizens`}
+                  </span>
+                </>
+              )}
+            </span>
+          )}
+
+          <p className="text-sm text-[#A09A96]">
+            <span className="text-white font-semibold">{summary.n}</span> assets scored
+            <span className="mx-2 text-[#6F6863]">·</span>
+            <span className="text-[#FF4D4F] font-semibold">{summary.critical}</span> critical
+            <span className="mx-2 text-[#6F6863]">·</span>
+            <span className="text-[#FF7A2B] font-semibold">{summary.high}</span> high
+            <span className="mx-2 text-[#6F6863]">·</span>
+            median risk:{' '}
+            <span className="font-mono font-bold text-white">{summary.median.toFixed(1)}</span>
+          </p>
+        </div>
 
         <div className="relative">
           <Search className="w-4 h-4 text-[#6F6863] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -160,7 +181,7 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
                   Zone{sortMark('zone')}
                 </th>
                 <th
-                  className="px-5 py-3 w-28 cursor-pointer select-none hover:text-white transition-colors"
+                  className="px-5 py-3 w-44 cursor-pointer select-none hover:text-white transition-colors"
                   onClick={() => toggleSort('risk')}
                 >
                   Risk{sortMark('risk')}
@@ -186,6 +207,7 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
                 const band = getRiskBand(a.risk_score);
                 const delta = deltaMap.get(a.asset_id);
                 const selected = selectedAssetId === a.asset_id;
+                const isZeroRisk = a.risk_score === 0;
                 return (
                   <tr
                     key={a.asset_id}
@@ -193,6 +215,8 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
                     className={`cursor-pointer transition-all duration-150 ${
                       selected
                         ? 'bg-[#F26A1B]/15 border-l-2 border-l-[#F26A1B] shadow-[inset_0_0_20px_rgba(242,106,27,0.1)]'
+                        : isZeroRisk
+                        ? 'opacity-60 hover:opacity-100 hover:bg-white/[0.03] border-l-2 border-l-transparent'
                         : 'hover:bg-white/[0.03] border-l-2 border-l-transparent'
                     }`}
                   >
@@ -212,16 +236,25 @@ export const RiskTableView: React.FC<RiskTableViewProps> = ({
                     <td className="px-5 py-3 text-xs text-[#A09A96] whitespace-nowrap font-mono">
                       {purdueLabel(a.purdue_level)}
                     </td>
-                    <td className="px-5 py-3 whitespace-nowrap" title={`${band.label} risk`}>
-                      <span className="inline-flex items-center gap-2.5">
+                    <td className="px-5 py-3 whitespace-nowrap" title={`${band.label} risk (${a.risk_score.toFixed(1)}/100)`}>
+                      <div className="flex items-center gap-2.5">
                         <span
-                          className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_8px_currentColor]"
+                          className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_8px_currentColor] shrink-0"
                           style={{ backgroundColor: band.color, color: band.color }}
                         />
-                        <span className="font-mono text-sm font-bold text-white">
+                        <span className="font-mono text-sm font-bold text-white w-9">
                           {a.risk_score.toFixed(1)}
                         </span>
-                      </span>
+                        <div className="hidden sm:block w-16 h-1.5 bg-white/10 rounded-full overflow-hidden shrink-0">
+                          <div
+                            className="h-full rounded-full transition-all duration-300"
+                            style={{
+                              width: `${Math.min(100, Math.max(0, a.risk_score))}%`,
+                              backgroundColor: band.color,
+                            }}
+                          />
+                        </div>
+                      </div>
                     </td>
                     <td className="px-5 py-3 font-mono text-sm text-center">
                       {delta === undefined || Math.abs(delta) < 0.05 ? (

@@ -1,8 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import {
   motion,
-  useScroll,
-  useTransform,
   useReducedMotion,
 } from 'framer-motion';
 
@@ -300,39 +298,52 @@ export default function HowItWorks() {
   const prefersReduced = useReducedMotion();
   const [activeStep, setActiveStep] = useState(0);
 
-  // Parallax scroll progress for the left connector fill
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start center', 'end 80%'],
-  });
-
-  const progressHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-
-  // Track active step based on scroll intersection
+  // Track active step based on scroll reading position
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = Number(entry.target.getAttribute('data-step-index'));
-            if (!isNaN(index)) {
-              setActiveStep(index);
-            }
+    const handleScroll = () => {
+      const vh = window.innerHeight;
+      // Focus reading zone: middle 60% of viewport (from 20% to 80%)
+      const zoneTop = vh * 0.2;
+      const zoneBottom = vh * 0.8;
+
+      let bestIdx = 0;
+      let maxOverlap = -1;
+
+      STEPS.forEach((_, idx) => {
+        const el = document.getElementById(`method-step-${idx}`);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          // Calculate overlap in pixels between this step element and reading zone
+          const overlap = Math.max(0, Math.min(rect.bottom, zoneBottom) - Math.max(rect.top, zoneTop));
+          if (overlap > maxOverlap) {
+            maxOverlap = overlap;
+            bestIdx = idx;
           }
-        });
-      },
-      {
-        rootMargin: '-30% 0px -40% 0px',
-        threshold: 0.2,
+        }
+      });
+
+      // Boundary checks:
+      if (sectionRef.current) {
+        const secRect = sectionRef.current.getBoundingClientRect();
+        // If bottom of method section has entered lower viewport, activate final step
+        if (secRect.bottom <= vh * 0.9) {
+          bestIdx = STEPS.length - 1;
+        } else if (secRect.top > zoneTop) {
+          bestIdx = 0;
+        }
       }
-    );
 
-    STEPS.forEach((_, idx) => {
-      const el = document.getElementById(`method-step-${idx}`);
-      if (el) observer.observe(el);
-    });
+      setActiveStep(bestIdx);
+    };
 
-    return () => observer.disconnect();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
 
   return (
@@ -350,20 +361,25 @@ export default function HowItWorks() {
 
         {/* ── DESKTOP LAYOUT (Sticky Stepper Left, Content Blocks Right) ──────── */}
         <div className="hidden md:flex gap-12 lg:gap-16 items-start relative">
-          {/* Left Column: Sticky Vertical Stepper */}
-          <div className="w-1/3 sticky top-1/2 -translate-y-1/2 self-start py-8">
+          {/* Left Column: Constant Sticky Vertical Stepper */}
+          <div className="w-1/3 sticky top-28 lg:top-32 self-start py-6 z-20">
             <div className="relative pl-2">
-              {/* Vertical connector line track */}
-              <div className="absolute left-[27px] top-5 bottom-5 w-[2px] bg-white/[0.08] -z-0" />
-
-              {/* Progress fill line */}
-              <motion.div
-                className="absolute left-[27px] top-5 w-[2px] bg-[#F26A1B] origin-top -z-0"
-                style={{
-                  height: prefersReduced ? '100%' : progressHeight,
-                  boxShadow: '0 0 10px rgba(242, 106, 27, 0.6)',
-                }}
-              />
+              {/* Vertical connector line track spanning between circle 1 and circle 4 */}
+              <div className="absolute left-[27px] top-5 bottom-5 w-[2px] -z-0">
+                <div className="w-full h-full bg-white/[0.08]" />
+                <motion.div
+                  className="absolute top-0 left-0 w-full bg-[#F26A1B] origin-top rounded-full"
+                  animate={{
+                    height: prefersReduced
+                      ? '100%'
+                      : `${(activeStep / (STEPS.length - 1)) * 100}%`,
+                  }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  style={{
+                    boxShadow: '0 0 12px rgba(242, 106, 27, 0.75)',
+                  }}
+                />
+              </div>
 
               {/* Stepper items */}
               <div className="space-y-12 relative z-10">
@@ -374,19 +390,19 @@ export default function HowItWorks() {
                   return (
                     <div
                       key={step.number}
-                      className="flex items-center gap-4 group cursor-pointer"
+                      className="flex items-center gap-4 group cursor-pointer select-none"
                       onClick={() => {
                         const el = document.getElementById(`method-step-${idx}`);
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        if (el) el.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
                       }}
                     >
                       {/* Circle 40px */}
                       <div
                         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-mono text-sm font-bold transition-all duration-300 ${
                           isActive
-                            ? 'border-2 border-[#F26A1B] bg-[#120D0B] text-white shadow-[0_0_20px_rgba(242,106,27,0.3)] scale-110'
+                            ? 'border-2 border-[#F26A1B] bg-[#120D0B] text-white shadow-[0_0_20px_rgba(242,106,27,0.4)] scale-110'
                             : isPassed
-                            ? 'border-2 border-[#F26A1B]/70 bg-[#120D0B] text-white/90'
+                            ? 'border-2 border-[#F26A1B]/70 bg-[#120D0B] text-white/90 shadow-[0_0_10px_rgba(242,106,27,0.2)]'
                             : 'border-2 border-white/[0.12] bg-[#120D0B] text-[#6F6863]'
                         }`}
                       >
@@ -395,17 +411,25 @@ export default function HowItWorks() {
 
                       {/* Step Title Label */}
                       <div className="flex flex-col">
-                        <span
-                          className={`text-sm font-semibold transition-colors duration-300 ${
-                            isActive
-                              ? 'text-white'
-                              : isPassed
-                              ? 'text-[#A09A96]'
-                              : 'text-[#6F6863]'
-                          }`}
-                        >
-                          {step.title}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`text-sm font-semibold transition-colors duration-300 ${
+                              isActive
+                                ? 'text-white'
+                                : isPassed
+                                ? 'text-[#A09A96]'
+                                : 'text-[#6F6863]'
+                            }`}
+                          >
+                            {step.title}
+                          </span>
+                          {isActive && (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-[#F26A1B]/15 text-[#F26A1B] border border-[#F26A1B]/30 font-semibold shadow-[0_0_8px_rgba(242,106,27,0.2)]">
+                              <span className="w-1 h-1 rounded-full bg-[#F26A1B] animate-pulse" />
+                              Active
+                            </span>
+                          )}
+                        </div>
                         <span className="text-[11px] font-mono text-[#6F6863]">
                           Step 0{step.number}
                         </span>
@@ -417,14 +441,14 @@ export default function HowItWorks() {
             </div>
           </div>
 
-          {/* Right Column: Step Content Blocks (min-h-[60vh] each) */}
+          {/* Right Column: Step Content Blocks (min-h-[80vh] each with proper scroll margin) */}
           <div className="w-2/3 flex flex-col">
             {STEPS.map((step, idx) => (
               <div
                 key={step.number}
                 id={`method-step-${idx}`}
                 data-step-index={idx}
-                className="min-h-[60vh] flex flex-col justify-center py-12"
+                className="min-h-[80vh] flex flex-col justify-center py-16 scroll-mt-28 lg:scroll-mt-32 last:pb-36"
               >
                 <motion.div
                   initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 24 }}

@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import HeroDiagram from '../HeroDiagram';
 
 export interface HeroProps {
@@ -6,9 +8,30 @@ export interface HeroProps {
   onThreatDemo?: () => void;
 }
 
+const METRO_CITIES = [
+  'Navanagar',
+  'Mumbai',
+  'Delhi NCR',
+  'Bengaluru',
+  'Chennai',
+  'Hyderabad',
+  'Ahmedabad',
+  'Kolkata',
+  'Pune',
+];
+
 export default function Hero({ onLaunch, onThreatDemo }: HeroProps) {
+  const [cityIndex, setCityIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCityIndex((prev) => (prev + 1) % METRO_CITIES.length);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section id="hero" className="landing-section scroll-mt-24 min-h-[92vh] pt-28 sm:pt-32 pb-16 flex items-center overflow-hidden">
+    <section id="hero" className="landing-section scroll-mt-24 min-h-[92vh] pt-28 sm:pt-32 pb-16 flex items-center overflow-x-clip">
       <div className="landing-container grid lg:grid-cols-[1.05fr_.95fr] items-center gap-10 lg:gap-12 w-full min-w-0">
         {/* Left Column: Headline and Actions */}
         <div className="flex flex-col items-start text-left w-full min-w-0">
@@ -17,26 +40,35 @@ export default function Hero({ onLaunch, onThreatDemo }: HeroProps) {
             <span>PS 03 · Critical infrastructure cyber-risk</span>
           </div>
 
-          {/* Headline with Gradient Accent */}
+          {/* Headline with Gradient Dynamic Accent */}
           <h1 className="h-display mt-5 text-[clamp(2.4rem,5.6vw,4.4rem)] text-white">
             Know which cyber risk will{' '}
-            <span
-              className="bg-clip-text text-transparent"
-              style={{
-                backgroundImage: 'linear-gradient(90deg, #F26A1B 0%, #FF7A2B 50%, #FFC24B 100%)',
-                WebkitBackgroundClip: 'text',
-              }}
-            >
-              hurt Navanagar
+            <span className="inline-block relative">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={METRO_CITIES[cityIndex]}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -14 }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  className="inline-block bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage: 'linear-gradient(90deg, #F26A1B 0%, #FF7A2B 50%, #FFC24B 100%)',
+                    WebkitBackgroundClip: 'text',
+                  }}
+                >
+                  hurt {METRO_CITIES[cityIndex]}
+                </motion.span>
+              </AnimatePresence>
             </span>{' '}
             first.
           </h1>
 
           {/* Subtitle / Paragraph */}
           <p className="mt-6 text-[#A09A96] max-w-[52ch] text-base sm:text-lg leading-relaxed">
-            Vidura scores every asset in a 5-lakh-person city by how likely it is to be breached and how many people
-            lose service if it is — then tells you which fixes buy the most safety for the engineering hours you
-            actually have.
+            Vidura scores every asset across metropolitan critical infrastructure by how likely it is to be breached
+            and how many citizens lose service if it is — then tells you which fixes buy the most safety for the
+            engineering hours you actually have.
           </p>
 
           {/* Action Buttons Row */}
@@ -70,7 +102,7 @@ export default function Hero({ onLaunch, onThreatDemo }: HeroProps) {
         </div>
 
         {/* Right Column: Interactive Purdue Model Diagram */}
-        <div className="w-full flex justify-center lg:justify-end min-w-0 overflow-hidden">
+        <div className="w-full flex justify-center lg:justify-end min-w-0 overflow-visible">
           <HeroDiagram />
         </div>
       </div>

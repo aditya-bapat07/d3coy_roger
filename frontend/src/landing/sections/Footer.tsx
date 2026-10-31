@@ -38,34 +38,9 @@ export default function Footer() {
           className="w-full h-[1px]"
           style={{
             background:
-              'linear-gradient(90deg, transparent 0%, rgba(242, 106, 27, 0.4) 50%, transparent 100%)',
+              'linear-gradient(90deg, transparent 0%, rgba(242, 106, 27, 0.35) 50%, transparent 100%)',
           }}
         />
-
-        {/* Shield logo mark centered over the line with 3s pulse oscillation */}
-        <div className="absolute left-1/2 -translate-x-1/2 px-3 bg-[#0A0706]">
-          <motion.div
-            animate={
-              prefersReduced
-                ? undefined
-                : {
-                    boxShadow: [
-                      '0 0 0px rgba(242, 106, 27, 0)',
-                      '0 0 20px rgba(242, 106, 27, 0.3)',
-                    ],
-                  }
-            }
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              repeatType: 'reverse',
-              ease: 'easeInOut',
-            }}
-            className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F26A1B]/20 to-[#FF7A2B]/10 border border-[#F26A1B]/30 flex items-center justify-center shrink-0"
-          >
-            <Shield className="w-4 h-4 text-[#F26A1B]" />
-          </motion.div>
-        </div>
       </div>
 
       {/* ── FOOTER CONTENT ────────────────────────────────────────────────── */}
@@ -169,7 +144,7 @@ export default function Footer() {
                 onClick={() => handleScrollToSection('personas')}
                 className={`text-left ${linkClass}`}
               >
-                For whom
+                Threat Personas
               </button>
             </div>
           </div>

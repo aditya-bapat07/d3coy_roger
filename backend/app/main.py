@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 from fastapi import Body, FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from backend.app.schemas import (
     AttackGraphResponse,
@@ -26,6 +27,7 @@ from backend.app.schemas import (
     ValidationResponse,
 )
 from backend.engine.anomaly import get_anomaly, inject_anomaly
+from backend.engine.cities import list_cities, set_active_city
 from backend.engine.attack_graph import AttackGraphEngine
 from backend.engine.choke_point import ChokePointEngine
 from backend.engine.dependency_graph import DependencyGraphEngine
@@ -95,6 +97,7 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -110,9 +113,25 @@ _SESSION_STATE = {
 }
 
 
+@app.get("/health", include_in_schema=False)
 @app.get("/api/health")
 async def health_check():
     return {"status": "ok"}
+
+
+@app.get("/api/cities")
+async def get_cities():
+    return list_cities()
+
+
+@app.post("/api/city/select")
+async def select_city(city_id: str = Body(..., embed=True)):
+    try:
+        result = set_active_city(city_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"Unknown city '{city_id}'")
+    _SESSION_STATE["injected_anomalies"] = {}
+    return result
 
 
 @app.get("/api/assumptions")
@@ -289,6 +308,7 @@ async def reset_session():
     return {"status": "reset", "threat_drop_active": False, "injected_anomalies": {}}
 
 
+@app.get("/report/pdf", include_in_schema=False)
 @app.get("/api/report/pdf")
 async def download_briefing_pdf(
     persona: str = Query("nation_state", enum=["opportunistic", "nation_state", "insider"])
@@ -325,4 +345,11 @@ async def get_validation_report(refresh: bool = Query(False)):
         except Exception:
             pass
     return build_validation_report(save_and_merge=True)
+
+
+# Mount built frontend if available for seamless unified hosting
+FRONTEND_DIST = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
+if FRONTEND_DIST.exists():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="frontend")
+
 

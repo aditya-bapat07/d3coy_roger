@@ -10,4 +10,5 @@ export function GlassRevealViduraDemo() {
   return <ViduraGlassReveal className="h-svh min-h-[420px] w-full" />;
 }
 
-export default GlassReveal21stDemo;
+export default GlassRevealViduraDemo;
+

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileDown, RotateCcw, Shield, ChevronDown, Menu, X } from 'lucide-react';
+import { FileDown, RotateCcw, Shield, ChevronDown, Menu, X, MapPin } from 'lucide-react';
 import { PersonaType } from '../types/api';
 
 type TabKey = 'risk' | 'graph' | 'remediation' | 'how';
@@ -16,6 +16,16 @@ interface HeaderProps {
   loading: boolean;
   isDemoMode?: boolean;
   onGoHome?: () => void;
+  cities?: CityOption[];
+  activeCityId?: string;
+  onCityChange?: (cityId: string) => void;
+}
+
+export interface CityOption {
+  id: string;
+  name: string;
+  state: string;
+  population: number;
 }
 
 const TABS: { key: TabKey; label: string }[] = [
@@ -36,6 +46,9 @@ export const Header: React.FC<HeaderProps> = ({
   onResetSession,
   isDemoMode = false,
   onGoHome,
+  cities = [],
+  activeCityId,
+  onCityChange,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -76,24 +89,11 @@ export const Header: React.FC<HeaderProps> = ({
             >
               Vidura
             </span>
-            {onGoHome && (
-              <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-[#A09A96] group-hover:text-white transition-colors">
-                Home
-              </span>
-            )}
           </div>
         </div>
 
         {/* Center Navigation Tabs (Desktop) */}
         <nav className="hidden lg:flex items-center gap-1.5 p-1 rounded-full bg-white/[0.02] border border-white/[0.04]">
-          {onGoHome && (
-            <button
-              onClick={onGoHome}
-              className="relative px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200 text-[#A09A96] hover:text-white border border-transparent hover:bg-white/[0.04]"
-            >
-              Home
-            </button>
-          )}
           {TABS.map((t) => {
             const active = currentTab === t.key;
             return (
@@ -141,23 +141,43 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
 
+          {/* City selector (top-10 metros base plan) */}
+          {cities.length > 0 && onCityChange && (
+            <div className="relative hidden md:flex items-center">
+              <MapPin className="w-3 h-3 text-[#F26A1B] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <select
+                value={activeCityId}
+                onChange={(e) => onCityChange(e.target.value)}
+                aria-label="Select city"
+                title="Select city scenario"
+                className="appearance-none text-xs text-white bg-[#120D0B]/90 border border-white/10 rounded-full pl-7 pr-7 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#F26A1B] focus:border-[#F26A1B] hover:border-white/20 transition-all cursor-pointer shadow-sm max-w-[155px]"
+              >
+                {cities.map((c) => (
+                  <option key={c.id} value={c.id} className="bg-[#120D0B] text-white">
+                    {c.name} · {(c.population / 1_000_000).toFixed(1)}M
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-[#A09A96] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+          )}
+
           {/* Persona selector as glass dropdown */}
           <div className="relative flex items-center">
-            <label className="flex items-center gap-1.5 text-xs text-[#6F6863]">
-              <span className="hidden xl:inline">Persona</span>
-              <div className="relative">
-                <select
-                  value={persona}
-                  onChange={(e) => onPersonaChange(e.target.value as PersonaType)}
-                  className="appearance-none text-xs text-white bg-[#120D0B]/90 border border-white/10 rounded-full pl-3 pr-7 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#F26A1B] focus:border-[#F26A1B] hover:border-white/20 transition-all cursor-pointer shadow-sm"
-                >
-                  <option value="nation_state" className="bg-[#120D0B] text-white">Nation-state APT</option>
-                  <option value="opportunistic" className="bg-[#120D0B] text-white">Opportunistic</option>
-                  <option value="insider" className="bg-[#120D0B] text-white">Insider</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-[#A09A96] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-            </label>
+            <div className="relative">
+              <select
+                value={persona}
+                onChange={(e) => onPersonaChange(e.target.value as PersonaType)}
+                aria-label="Select adversary persona"
+                title="Select adversary persona"
+                className="appearance-none text-xs text-white bg-[#120D0B]/90 border border-white/10 rounded-full pl-3 pr-7 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#F26A1B] focus:border-[#F26A1B] hover:border-white/20 transition-all cursor-pointer shadow-sm"
+              >
+                <option value="nation_state" className="bg-[#120D0B] text-white">Nation-state APT</option>
+                <option value="opportunistic" className="bg-[#120D0B] text-white">Opportunistic</option>
+                <option value="insider" className="bg-[#120D0B] text-white">Insider</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-[#A09A96] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
           </div>
 
           {/* Export PDF circular glass button */}
@@ -198,17 +218,6 @@ export const Header: React.FC<HeaderProps> = ({
             Navigation
           </div>
           <div className="grid grid-cols-2 gap-2">
-            {onGoHome && (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onGoHome();
-                }}
-                className="px-3 py-2 text-xs font-medium rounded-xl text-left transition-all text-[#A09A96] bg-white/[0.02] border border-white/[0.06] hover:text-white hover:bg-white/[0.05]"
-              >
-                Home
-              </button>
-            )}
             {TABS.map((t) => {
               const active = currentTab === t.key;
               return (

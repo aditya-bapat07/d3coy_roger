@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowUpRight, Menu, X, Shield } from 'lucide-react';
 
 export interface LandingNavProps {
@@ -12,51 +12,63 @@ const NAV_LINKS = [
   { id: 'views', label: 'Views', href: '#views' },
   { id: 'capabilities', label: 'Capabilities', href: '#capabilities' },
   { id: 'validation', label: 'Validation', href: '#validation' },
+  { id: 'personas', label: 'Personas', href: '#personas' },
 ];
+
+const SECTION_IDS = ['problem', 'method', 'views', 'capabilities', 'validation', 'personas'] as const;
 
 export default function LandingNav({ onLaunch }: LandingNavProps) {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<string>('top');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const isManualScrollRef = useRef<boolean>(false);
+  const manualScrollTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Scroll listener (> 20px activates elevated background matching Header.tsx)
+  // Reliable scroll position listener for navbar background elevation and section spy
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+
+      // Do not let scroll listener override active selection during manual smooth-scroll animation
+      if (isManualScrollRef.current) return;
+
       if (window.scrollY < 120) {
         setActiveSection('top');
+        return;
       }
+
+      // If user reaches near the bottom of the page, activate the last section
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 80
+      ) {
+        setActiveSection('personas');
+        return;
+      }
+
+      // Check sections from bottom to top; the first one whose top is at or above the upper viewport threshold is active
+      const navOffset = 220;
+      for (let i = SECTION_IDS.length - 1; i >= 0; i--) {
+        const id = SECTION_IDS[i];
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= navOffset) {
+            setActiveSection(id);
+            return;
+          }
+        }
+      }
+
+      setActiveSection('top');
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // IntersectionObserver for section highlighting
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && window.scrollY >= 120) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      {
-        rootMargin: '-20% 0px -50% 0px',
-        threshold: 0.1,
-      }
-    );
-
-    NAV_LINKS.forEach((link) => {
-      if (link.id !== 'top') {
-        const el = document.getElementById(link.id);
-        if (el) observer.observe(el);
-      }
-    });
-
-    return () => observer.disconnect();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (manualScrollTimerRef.current) clearTimeout(manualScrollTimerRef.current);
+    };
   }, []);
 
   // Close mobile menu on Escape key
@@ -74,12 +86,22 @@ export default function LandingNav({ onLaunch }: LandingNavProps) {
 
   const handleLinkClick = (href: string) => {
     setMobileMenuOpen(false);
+    const targetId = href.replace('#', '');
+
+    // Immediately highlight the selected item in the nav bar
+    setActiveSection(targetId);
+
+    // Lock scroll spy temporarily while smooth scrolling
+    isManualScrollRef.current = true;
+    if (manualScrollTimerRef.current) clearTimeout(manualScrollTimerRef.current);
+    manualScrollTimerRef.current = setTimeout(() => {
+      isManualScrollRef.current = false;
+    }, 1000);
+
     if (href === '#top') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      setActiveSection('top');
       return;
     }
-    const targetId = href.replace('#', '');
     const el = document.getElementById(targetId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });

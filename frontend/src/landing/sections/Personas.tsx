@@ -5,42 +5,70 @@ import {
   useTransform,
   useReducedMotion,
 } from 'framer-motion';
+import { PersonaType } from '../../types/api';
 
-interface PersonaData {
+export interface PersonaData {
+  id: PersonaType;
   number: string;
   role: string;
-  caresAbout: string[];
+  badge: string;
+  badgeColor: string;
+  entryPoints: string;
+  maxHops: string;
+  description: string;
+  traits: string[];
 }
 
 const PERSONAS: PersonaData[] = [
   {
+    id: 'nation_state',
     number: '01',
-    role: 'CISO / Security Head',
-    caresAbout: [
-      'Board-ready risk posture reporting',
-      'Compliance mapping to IEC 62443 and NIST CSF',
-      'Quantified risk reduction from each remediation investment',
-      'Audit trail for every prioritisation decision',
+    role: 'Nation-state APT',
+    badge: 'State-Sponsored APT',
+    badgeColor: '#FF4D4F',
+    entryPoints: 'Internet + Vendor VPN',
+    maxHops: 'Up to 8 hops',
+    description:
+      'Patient, well-resourced state-sponsored actors chaining multi-hop lateral movement through enterprise IT and DMZ into physical OT control layers.',
+    traits: [
+      'Unrestricted lateral chaining across all CVEs and 0-days',
+      'Exploits third-party vendor VPN and dual-homed jump hosts',
+      'Targets safety-instrumented PLCs, water distribution, and RTUs',
+      'Prioritizes catastrophic cascading municipal disruption',
     ],
   },
   {
+    id: 'opportunistic',
     number: '02',
-    role: 'OT / Plant Engineer',
-    caresAbout: [
-      'Which PLCs and HMIs are actually exposed right now',
-      'Remediation steps that don’t require a maintenance window',
-      'Impact simulation before touching production systems',
-      'Plain-language explanations, not security jargon',
+    role: 'Opportunistic Attacker',
+    badge: 'Automated / Ransomware',
+    badgeColor: '#F26A1B',
+    entryPoints: 'Direct Internet Exposure',
+    maxHops: 'Capped at 3 hops',
+    description:
+      'Ransomware gangs and automated botnets scanning for exposed perimeter devices with known weaponized vulnerabilities or factory default passwords.',
+    traits: [
+      'Restricted to CISA KEV entries or high EPSS (≥ 0.1) exploits',
+      'Targets exposed cellular modems, default credentials, and web panels',
+      'Drops attack paths requiring complex manual ICS protocol craft',
+      'Fast-moving perimeter threats exploiting unpatched perimeter assets',
     ],
   },
   {
+    id: 'insider',
     number: '03',
-    role: 'City Administrator / Municipal Commissioner',
-    caresAbout: [
-      'Citizen impact numbers — how many people lose water or power',
-      'Cost-per-risk-point-reduced for budget justification',
-      'Executive dashboard without needing a cybersecurity background',
-      'Compliance status for central government mandates',
+    role: 'Malicious Insider',
+    badge: 'Bypasses Perimeter',
+    badgeColor: '#FFC24B',
+    entryPoints: 'L4 Corporate Workstation',
+    maxHops: 'Up to 6 hops',
+    description:
+      'Disgruntled operators, rogue contractors, or compromised corporate credentials operating directly from inside the organizational perimeter.',
+    traits: [
+      'Completely bypasses perimeter firewalls, NAT, and external defenses',
+      '100% credential validity on internal administrative links',
+      'Moves laterally from enterprise workstations toward SCADA servers',
+      'Simulates privileged credential abuse targeting chemical and pump PLCs',
     ],
   },
 ];
@@ -50,6 +78,7 @@ interface PersonaCardProps {
   index: number;
   scrollYProgress: any;
   prefersReduced: boolean | null;
+  onLaunchPersona?: (persona: PersonaType) => void;
 }
 
 function PersonaCard({
@@ -57,6 +86,7 @@ function PersonaCard({
   index,
   scrollYProgress,
   prefersReduced,
+  onLaunchPersona,
 }: PersonaCardProps) {
   // Parallax depth offset:
   // Card 1 (index 0): moves up slightly faster (scrollProgress * -15px)
@@ -71,7 +101,7 @@ function PersonaCard({
   return (
     <motion.div
       style={{ y: parallaxY }}
-      className="h-full"
+      className="h-full flex"
     >
       <motion.div
         initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 32 }}
@@ -88,9 +118,9 @@ function PersonaCard({
           WebkitBackdropFilter: 'blur(20px)',
           border: '1px solid rgba(255, 255, 255, 0.06)',
           borderRadius: '24px',
-          padding: '36px',
+          padding: '32px',
         }}
-        className="group relative flex flex-col justify-between h-full min-h-[360px] text-left transition-all duration-300 hover:border-[#F26A1B]/20 overflow-hidden"
+        className="group relative flex flex-col justify-between w-full h-full min-h-[460px] text-left transition-all duration-300 hover:border-[#F26A1B]/30 overflow-hidden shadow-lg hover:shadow-[0_0_24px_rgba(242,106,27,0.12)]"
       >
         {/* Subtle grain overlay on hover (30% opacity) */}
         <div className="absolute inset-0 rounded-[24px] bg-grain opacity-0 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none -z-0" />
@@ -103,36 +133,84 @@ function PersonaCard({
           {persona.number}
         </span>
 
-        {/* Card Content */}
-        <div className="relative z-10">
+        {/* Top Badges & Role Information */}
+        <div className="relative z-10 flex flex-col flex-1">
+          {/* Header Badges */}
+          <div className="flex items-center justify-between gap-2 flex-wrap pb-1">
+            <span
+              className="px-2 py-0.5 rounded text-[10px] font-mono uppercase font-semibold border"
+              style={{
+                color: persona.badgeColor,
+                borderColor: `${persona.badgeColor}40`,
+                backgroundColor: `${persona.badgeColor}15`,
+              }}
+            >
+              {persona.badge}
+            </span>
+            <span className="text-[10px] font-mono text-[#A09A96] bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.08]">
+              {persona.maxHops}
+            </span>
+          </div>
+
           {/* Role Title */}
-          <h3 className="pt-4 text-lg font-bold text-white tracking-tight">
+          <h3 className="pt-3 text-xl font-bold text-white tracking-tight">
             {persona.role}
           </h3>
 
-          {/* Cares About Label */}
-          <div className="mt-6 text-xs uppercase tracking-widest text-white/30 font-mono font-medium">
-            Cares about:
+          {/* Entry Point Line */}
+          <div className="mt-1.5 flex items-center gap-1.5 text-xs font-mono text-[#F26A1B]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#F26A1B] shrink-0" />
+            <span className="truncate">Entry: {persona.entryPoints}</span>
+          </div>
+
+          {/* Short Description */}
+          <p className="mt-3 text-xs text-[#A09A96] leading-relaxed">
+            {persona.description}
+          </p>
+
+          {/* Simulation Behavior Section */}
+          <div className="mt-5 text-[11px] uppercase tracking-wider text-white/40 font-mono font-medium">
+            Simulated Attack Profile:
           </div>
 
           {/* Bullet Points */}
-          <ul className="mt-3 space-y-2">
-            {persona.caresAbout.map((point) => (
-              <li key={point} className="flex items-start gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#F26A1B] shrink-0 mt-[11px]" />
-                <span className="text-sm text-white/[0.55] leading-[2]">
-                  {point}
+          <ul className="mt-2.5 space-y-2 flex-1">
+            {persona.traits.map((trait) => (
+              <li key={trait} className="flex items-start gap-2.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#F26A1B] shrink-0 mt-2" />
+                <span className="text-xs text-white/70 leading-relaxed">
+                  {trait}
                 </span>
               </li>
             ))}
           </ul>
         </div>
+
+        {/* Optional Interactive CTA Button */}
+        {onLaunchPersona && (
+          <div className="relative z-10 mt-6 pt-4 border-t border-white/[0.06]">
+            <button
+              type="button"
+              onClick={() => onLaunchPersona(persona.id)}
+              className="w-full py-2.5 px-4 rounded-xl text-xs font-mono font-semibold text-white/80 hover:text-white bg-white/[0.03] hover:bg-[#F26A1B]/15 border border-white/10 hover:border-[#F26A1B]/50 transition-all flex items-center justify-between group/btn shadow-sm"
+            >
+              <span>Simulate this persona</span>
+              <span className="text-[#F26A1B] group-hover/btn:translate-x-1 transition-transform">
+                →
+              </span>
+            </button>
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
 }
 
-export default function Personas() {
+export default function Personas({
+  onLaunchPersona,
+}: {
+  onLaunchPersona?: (persona: PersonaType) => void;
+}) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
 
@@ -148,12 +226,16 @@ export default function Personas() {
         {/* Section Header */}
         <div className="flex flex-col items-center text-center">
           <div className="glass-pill inline-flex items-center gap-2 px-3.5 py-1.5 text-xs text-[#F26A1B] border border-white/[0.08] font-mono tracking-wider uppercase font-semibold">
-            <span>WHO IT’S FOR</span>
+            <span>ADVERSARY MODELING</span>
           </div>
 
           <h2 className="h-display mt-5 text-3xl sm:text-4xl lg:text-5xl text-white max-w-3xl leading-[1.12]">
-            One platform, every stakeholder in the room.
+            Simulate attacks across every adversary archetype.
           </h2>
+
+          <p className="mt-4 text-[#A09A96] text-sm sm:text-base max-w-2xl leading-relaxed">
+            Vidura evaluates risk, likelihood, and lateral reachability against three distinct threat actor profiles, matching real-world adversary capabilities from automated scanners to nation-state APTs.
+          </p>
         </div>
 
         {/* Personas 3-Card Parallax Grid */}
@@ -165,6 +247,7 @@ export default function Personas() {
               index={index}
               scrollYProgress={scrollYProgress}
               prefersReduced={prefersReduced}
+              onLaunchPersona={onLaunchPersona}
             />
           ))}
         </div>
