@@ -1,9 +1,9 @@
-# CASCADE
+# Vidura
 
 **AI-Based Critical Infrastructure Cyber-Risk Prediction & Prioritisation**  
 *Problem Statement 03 — 24-Hour Prototype*
 
-CASCADE is an AI-powered cyber-risk prediction and decision support system designed specifically for critical infrastructure plant security managers. It deterministically models the **Attack Graph** (network reachability, real EPSS exploitability, CISA KEV flags, Purdue zone crossings) and the **Dependency Graph** (physical consequence cascade across water/energy utilities and urban infrastructure based on INL CCE principles).
+Vidura is an AI-powered cyber-risk prediction and decision support system designed specifically for critical infrastructure plant security managers. It deterministically models the **Attack Graph** (network reachability, real EPSS exploitability, CISA KEV flags, Purdue zone crossings) and the **Dependency Graph** (physical consequence cascade across water/energy utilities and urban infrastructure based on INL CCE principles).
 
 ---
 

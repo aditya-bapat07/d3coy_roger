@@ -1,7 +1,7 @@
-# CASCADE Methodology
+# Vidura Methodology
 
 ## Overview
-CASCADE is an AI-powered cyber-risk prediction and prioritisation system for critical infrastructure.
+Vidura is an AI-powered cyber-risk prediction and prioritisation system for critical infrastructure.
 It models critical OT/ICS operational environments alongside IT enterprise networks using Purdue model zone stratification.
 
 ## Methodology Pillars

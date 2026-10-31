@@ -3,6 +3,6 @@ set -e
 
 cd "$(dirname "$0")/frontend"
 
-echo "Starting CASCADE Frontend on http://localhost:5173..."
+echo "Starting Vidura Frontend on http://localhost:5173..."
 npm run dev -- --host
 

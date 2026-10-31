@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
-    title="CASCADE API",
+    title="Vidura API",
     description="AI-Based Critical Infrastructure Cyber-Risk Prediction",
     version="0.1.0",
 )

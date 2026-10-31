@@ -1,5 +1,5 @@
 /**
- * CASCADE Design Tokens
+ * Vidura Design Tokens
  * Control room dark theme & unified 0-100 risk color scale.
  */
 

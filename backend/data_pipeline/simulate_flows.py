@@ -1,5 +1,5 @@
 """
-Flow Simulator for CASCADE.
+Flow Simulator for Vidura.
 Generates 7 days of realistic synthetic network flow records across the Purdue model,
 injects labelled attack scenarios during the last 2 days, and saves flow logs and ground-truth labels.
 """

@@ -90,3 +90,4 @@ def test_bad_practices_count():
     assert "BP-1" in practice_ids
     assert "BP-2" in practice_ids
     assert "BP-3" in practice_ids
+

@@ -1,5 +1,5 @@
 """
-Machine Learning Anomaly Detection Engine for CASCADE.
+Machine Learning Anomaly Detection Engine for Vidura.
 Extracts per-(asset, hour) flow features, trains Isolation Forest on 5-day baseline,
 scores the 2-day evaluation window, evaluates precision/recall/confusion matrix against
 injected attack labels, and provides real-time scoring and live anomaly injection.

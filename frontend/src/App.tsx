@@ -45,7 +45,7 @@ export default function App() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold tracking-wider text-lg text-white">CASCADE</span>
+              <span className="font-bold tracking-wider text-lg text-white">Vidura</span>
               <span className="text-xs px-2 py-0.5 rounded bg-blue-900/50 border border-blue-500/40 text-blue-300 font-mono">
                 v0.1.0-scaffold
               </span>
@@ -187,7 +187,7 @@ export default function App() {
       </main>
 
       <footer className="border-t border-control-border py-3 px-6 text-center text-xs text-control-subtle">
-        CASCADE &bull; Offline-Capable Prototype &bull; PS 03 AI-Based Critical Infrastructure Cyber-Risk Prediction
+        Vidura &bull; Offline-Capable Prototype &bull; PS 03 AI-Based Critical Infrastructure Cyber-Risk Prediction
       </footer>
     </div>
   );

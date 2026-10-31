@@ -21,7 +21,7 @@ CACHE_DIR = DATA_DIR / "cache"
 
 
 def run_full_pipeline(skip_existing: bool = True):
-    logger.info("=== STARTING CASCADE THREAT INTEL PIPELINE ===")
+    logger.info("=== STARTING VIDURA THREAT INTEL PIPELINE ===")
 
     # 1. Fetch CISA KEV
     kev_map_file = CACHE_DIR / "cisa_kev_map.json"
