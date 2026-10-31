@@ -1,0 +1,271 @@
+{
+  "persona": "nation_state",
+  "baseline_aggregate_risk": 8.9,
+  "new_aggregate_risk": 9.1,
+  "delta_aggregate_risk": 0.2,
+  "applied_actions_count": 1,
+  "threat_drop_active": false,
+  "asset_deltas": [
+    {
+      "asset_id": "asset_water_plc_chlorine",
+      "name": "Disinfection Chlorine Dosing Skid PLC",
+      "baseline_risk": 65.9,
+      "new_risk": 66.9,
+      "delta_risk": 1.0,
+      "baseline_level": "high",
+      "new_level": "high"
+    },
+    {
+      "asset_id": "asset_water_dosing_skid",
+      "name": "Chlorine Gas Regulators & Injection Manifold",
+      "baseline_risk": 44.2,
+      "new_risk": 45.2,
+      "delta_risk": 1.0,
+      "baseline_level": "medium",
+      "new_level": "medium"
+    },
+    {
+      "asset_id": "asset_water_scada",
+      "name": "Water Treatment Plant Master SCADA Server",
+      "baseline_risk": 50.8,
+      "new_risk": 51.3,
+      "delta_risk": 0.5,
+      "baseline_level": "high",
+      "new_level": "high"
+    },
+    {
+      "asset_id": "asset_water_hmi",
+      "name": "Water Plant Operator Touchscreen HMI",
+      "baseline_risk": 41.6,
+      "new_risk": 42.1,
+      "delta_risk": 0.5,
+      "baseline_level": "medium",
+      "new_level": "medium"
+    },
+    {
+      "asset_id": "asset_water_plc_pumps",
+      "name": "High-Lift Pumping Station Control PLC",
+      "baseline_risk": 34.3,
+      "new_risk": 34.8,
+      "delta_risk": 0.5,
+      "baseline_level": "medium",
+      "new_level": "medium"
+    },
+    {
+      "asset_id": "asset_water_pumps",
+      "name": "High-Lift Clear Water Centrifugal Pumps",
+      "baseline_risk": 22.1,
+      "new_risk": 22.6,
+      "delta_risk": 0.5,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_pwr_hmi",
+      "name": "Substation Local Operator HMI Panel",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_pwr_rtu",
+      "name": "Substation Main Feeder RTU Controller",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_pwr_scada",
+      "name": "Substation SS-2 Central SCADA Server",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_pwr_ied",
+      "name": "Bay Overcurrent Protection Relay IED",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_pwr_breakers",
+      "name": "33/11 kV Vacuum Circuit Breakers & Busbars",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_water_level_sensors",
+      "name": "Clear Water Reservoir Hydrostatic Level Sensors",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_city_traffic_ctrl",
+      "name": "Central Traffic Corridor Signal Controller",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_hosp_iot_gw",
+      "name": "ICU Medical Device Serial Gateway",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_hosp_bms",
+      "name": "District Hospital Building Management System",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_city_camera_gw",
+      "name": "Municipal Surveillance IoT Video Gateway",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_hosp_gen_ctrl",
+      "name": "Emergency Diesel Generator Controller",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_vendor_vpn",
+      "name": "Third-Party Vendor Remote Access VPN",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_corp_web",
+      "name": "Municipal Citizen Web Portal",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_dmz_historian",
+      "name": "Enterprise Operational Historian Mirror",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_pwr_switch",
+      "name": "Substation Sub-Ring Managed Switch",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_corp_mail",
+      "name": "Corporate Exchange Mail Server",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_corp_ws1",
+      "name": "Corporate IT Operator Workstation",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_corp_ws2",
+      "name": "Plant Security Analyst Workstation",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_dmz_patch",
+      "name": "DMZ Central Patch & Update Server",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_dmz_jump",
+      "name": "Secure Operations Jump Server",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_pwr_eng_ws",
+      "name": "Substation Engineering Workstation",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_corp_dc",
+      "name": "Corporate Active Directory Domain Controller",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    },
+    {
+      "asset_id": "asset_internet",
+      "name": "Public Internet",
+      "baseline_risk": 0.0,
+      "new_risk": 0.0,
+      "delta_risk": 0.0,
+      "baseline_level": "low",
+      "new_level": "low"
+    }
+  ]
+}

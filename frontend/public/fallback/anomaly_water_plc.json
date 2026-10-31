@@ -1,0 +1,62 @@
+{
+  "score": 0.1448,
+  "peak_hour_window": 126,
+  "top_contributing_features": [
+    {
+      "feature": "off_hours_ratio",
+      "value": 1.0,
+      "baseline_mean": 0.38,
+      "z_score": 1.29
+    },
+    {
+      "feature": "connection_count",
+      "value": 24.0,
+      "baseline_mean": 20.06,
+      "z_score": 1.19
+    },
+    {
+      "feature": "bytes_in",
+      "value": 9914.0,
+      "baseline_mean": 8469.12,
+      "z_score": 0.95
+    }
+  ],
+  "example_flows": [
+    {
+      "timestamp": "2026-10-28T06:59:41+00:00",
+      "hour_window": 126,
+      "src": "asset_water_hmi",
+      "dst": "asset_water_plc_chlorine",
+      "port": 502,
+      "protocol": "Modbus-TCP",
+      "bytes": 441,
+      "packets": 4,
+      "duration": 0.067,
+      "hour_of_day": 6
+    },
+    {
+      "timestamp": "2026-10-28T06:59:15+00:00",
+      "hour_window": 126,
+      "src": "asset_water_hmi",
+      "dst": "asset_water_plc_chlorine",
+      "port": 502,
+      "protocol": "Modbus-TCP",
+      "bytes": 283,
+      "packets": 8,
+      "duration": 0.09,
+      "hour_of_day": 6
+    },
+    {
+      "timestamp": "2026-10-28T06:39:48+00:00",
+      "hour_window": 126,
+      "src": "asset_water_hmi",
+      "dst": "asset_water_plc_chlorine",
+      "port": 502,
+      "protocol": "Modbus-TCP",
+      "bytes": 254,
+      "packets": 7,
+      "duration": 0.043,
+      "hour_of_day": 6
+    }
+  ]
+}

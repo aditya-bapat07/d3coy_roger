@@ -1,0 +1,504 @@
+{
+  "nodes": [
+    {
+      "id": "service_feeder_substation_ss2",
+      "label": "Feeder substation SS-2 (33/11 kV)",
+      "site": "Power",
+      "type": "service",
+      "people_served": 120000,
+      "safety_severity": 3,
+      "baseline_outage_hours": 12.0,
+      "backup": "None at the substation"
+    },
+    {
+      "id": "service_residential_power_north",
+      "label": "Residential power, North zone",
+      "site": "Power",
+      "type": "service",
+      "people_served": 120000,
+      "safety_severity": 2,
+      "baseline_outage_hours": 12.0,
+      "backup": "Inverters in some homes (not counted)"
+    },
+    {
+      "id": "service_water_pumping",
+      "label": "Water treatment plant, pumping (27 MLD)",
+      "site": "Water",
+      "type": "service",
+      "people_served": 200000,
+      "safety_severity": 3,
+      "baseline_outage_hours": 24.0,
+      "backup": "Plant DG set runs controls and SCADA only, not the main pumps"
+    },
+    {
+      "id": "service_chlorine_dosing",
+      "label": "Chlorine dosing",
+      "site": "Water",
+      "type": "service",
+      "people_served": 200000,
+      "safety_severity": 4,
+      "baseline_outage_hours": 72.0,
+      "backup": "Online residual-chlorine alarm; manual sampling"
+    },
+    {
+      "id": "service_reservoir_level",
+      "label": "Reservoir level monitoring",
+      "site": "Water",
+      "type": "service",
+      "people_served": 200000,
+      "safety_severity": 2,
+      "baseline_outage_hours": 8.0,
+      "backup": "Manual level readings by plant staff"
+    },
+    {
+      "id": "service_piped_water",
+      "label": "Piped water supply, plant service area",
+      "site": "Water",
+      "type": "service",
+      "people_served": 200000,
+      "safety_severity": 3,
+      "baseline_outage_hours": 24.0,
+      "backup": "Service reservoirs + household overhead tanks and sumps"
+    },
+    {
+      "id": "service_district_hospital",
+      "label": "District hospital (300 beds, 20 ICU)",
+      "site": "Hospital",
+      "type": "service",
+      "people_served": 500000,
+      "safety_severity": 4,
+      "baseline_outage_hours": 12.0,
+      "backup": "Diesel generator 24 h; overhead water tanks 12 h; UPS 30 min on critical loads"
+    },
+    {
+      "id": "service_hospital_bms",
+      "label": "Hospital building management system",
+      "site": "Hospital",
+      "type": "service",
+      "people_served": 300,
+      "safety_severity": 3,
+      "baseline_outage_hours": 8.0,
+      "backup": "Manual override of air-handling units"
+    },
+    {
+      "id": "service_medical_iot",
+      "label": "Medical-device IoT gateway",
+      "site": "Hospital",
+      "type": "service",
+      "people_served": 40,
+      "safety_severity": 3,
+      "baseline_outage_hours": 12.0,
+      "backup": "Bedside device alarms + nurse rounds"
+    },
+    {
+      "id": "service_backup_gen_ctrl",
+      "label": "Backup generator controller",
+      "site": "Hospital",
+      "type": "service",
+      "people_served": 300,
+      "safety_severity": 1,
+      "baseline_outage_hours": 6.0,
+      "backup": "Manual start by on-site electrician, about 30 min"
+    },
+    {
+      "id": "service_traffic_signals",
+      "label": "Traffic signal controller (60 junctions)",
+      "site": "City",
+      "type": "service",
+      "people_served": 150000,
+      "safety_severity": 3,
+      "baseline_outage_hours": 6.0,
+      "backup": "UPS at major junctions about 2 h; traffic police manual control within about 1 h"
+    },
+    {
+      "id": "service_camera_gateway",
+      "label": "IoT camera gateway (city surveillance)",
+      "site": "City",
+      "type": "service",
+      "people_served": 0,
+      "safety_severity": 1,
+      "baseline_outage_hours": 24.0,
+      "backup": "Local recording on cameras, about 72 h"
+    },
+    {
+      "id": "asset_pwr_scada",
+      "label": "Substation SS-2 Central SCADA Server",
+      "site": "power",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_pwr_hmi",
+      "label": "Substation Local Operator HMI Panel",
+      "site": "power",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_pwr_rtu",
+      "label": "Substation Main Feeder RTU Controller",
+      "site": "power",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_pwr_ied",
+      "label": "Bay Overcurrent Protection Relay IED",
+      "site": "power",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_pwr_breakers",
+      "label": "33/11 kV Vacuum Circuit Breakers & Busbars",
+      "site": "power",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_water_scada",
+      "label": "Water Treatment Plant Master SCADA Server",
+      "site": "water",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_water_hmi",
+      "label": "Water Plant Operator Touchscreen HMI",
+      "site": "water",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_water_plc_pumps",
+      "label": "High-Lift Pumping Station Control PLC",
+      "site": "water",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_water_plc_chlorine",
+      "label": "Disinfection Chlorine Dosing Skid PLC",
+      "site": "water",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_water_pumps",
+      "label": "High-Lift Clear Water Centrifugal Pumps",
+      "site": "water",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_water_dosing_skid",
+      "label": "Chlorine Gas Regulators & Injection Manifold",
+      "site": "water",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_water_level_sensors",
+      "label": "Clear Water Reservoir Hydrostatic Level Sensors",
+      "site": "water",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_hosp_bms",
+      "label": "District Hospital Building Management System",
+      "site": "hospital",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_hosp_iot_gw",
+      "label": "ICU Medical Device Serial Gateway",
+      "site": "hospital",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_hosp_gen_ctrl",
+      "label": "Emergency Diesel Generator Controller",
+      "site": "hospital",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_city_traffic_ctrl",
+      "label": "Central Traffic Corridor Signal Controller",
+      "site": "city",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    },
+    {
+      "id": "asset_city_camera_gw",
+      "label": "Municipal Surveillance IoT Video Gateway",
+      "site": "city",
+      "type": "asset",
+      "people_served": 0,
+      "safety_severity": 0,
+      "baseline_outage_hours": 0.0,
+      "backup": ""
+    }
+  ],
+  "edges": [
+    {
+      "id": "dep_edge_0",
+      "source": "asset_pwr_scada",
+      "target": "service_feeder_substation_ss2",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Substation SCADA server supervises and controls feeder substation SS-2."
+    },
+    {
+      "id": "dep_edge_1",
+      "source": "asset_pwr_hmi",
+      "target": "service_feeder_substation_ss2",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Local substation operator HMI commands feeder breaker operations at SS-2."
+    },
+    {
+      "id": "dep_edge_2",
+      "source": "asset_pwr_rtu",
+      "target": "service_feeder_substation_ss2",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Substation RTU directly actuates trip coils on 33/11 kV feeder lines at SS-2."
+    },
+    {
+      "id": "dep_edge_3",
+      "source": "asset_pwr_ied",
+      "target": "service_feeder_substation_ss2",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Protection relay IED triggers mechanical trip breakers at feeder substation SS-2."
+    },
+    {
+      "id": "dep_edge_4",
+      "source": "asset_pwr_breakers",
+      "target": "service_feeder_substation_ss2",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Physical 33/11 kV vacuum circuit breakers interrupt grid current at SS-2."
+    },
+    {
+      "id": "dep_edge_5",
+      "source": "asset_water_scada",
+      "target": "service_water_pumping",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Water treatment master SCADA server supervises plant pumping operations."
+    },
+    {
+      "id": "dep_edge_6",
+      "source": "asset_water_hmi",
+      "target": "service_water_pumping",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Water plant operator HMI controls pump speeds and chemical feed setpoints."
+    },
+    {
+      "id": "dep_edge_7",
+      "source": "asset_water_plc_pumps",
+      "target": "service_water_pumping",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Water pump-control PLC directly operates the high-lift distribution pumps."
+    },
+    {
+      "id": "dep_edge_8",
+      "source": "asset_water_pumps",
+      "target": "service_water_pumping",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "High-lift centrifugal pumps pressurize the 27 MLD water treatment supply."
+    },
+    {
+      "id": "dep_edge_9",
+      "source": "asset_water_plc_chlorine",
+      "target": "service_chlorine_dosing",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Chlorine-dosing PLC regulates disinfectant dosing into the contact tank."
+    },
+    {
+      "id": "dep_edge_10",
+      "source": "asset_water_dosing_skid",
+      "target": "service_chlorine_dosing",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Physical chlorine gas regulators and injection manifold deliver disinfectant."
+    },
+    {
+      "id": "dep_edge_11",
+      "source": "asset_water_level_sensors",
+      "target": "service_reservoir_level",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Reservoir hydrostatic level sensors provide clear-water tank level monitoring."
+    },
+    {
+      "id": "dep_edge_12",
+      "source": "asset_hosp_bms",
+      "target": "service_hospital_bms",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Hospital BMS controller operates theatre and ICU air-handling units."
+    },
+    {
+      "id": "dep_edge_13",
+      "source": "asset_hosp_iot_gw",
+      "target": "service_medical_iot",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Medical-device IoT gateway aggregates central monitoring for 40 ICU/HDU beds."
+    },
+    {
+      "id": "dep_edge_14",
+      "source": "asset_hosp_gen_ctrl",
+      "target": "service_backup_gen_ctrl",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Backup generator controller manages automatic mains-failure transfer (rule 3)."
+    },
+    {
+      "id": "dep_edge_15",
+      "source": "asset_city_traffic_ctrl",
+      "target": "service_traffic_signals",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Central traffic signal controller operates 60 signalised city junctions."
+    },
+    {
+      "id": "dep_edge_16",
+      "source": "asset_city_camera_gw",
+      "target": "service_camera_gateway",
+      "type": "controls",
+      "failure_delay_hours": 0.0,
+      "reason": "Municipal IoT camera gateway aggregates live city surveillance streams."
+    },
+    {
+      "id": "dep_edge_17",
+      "source": "service_feeder_substation_ss2",
+      "target": "service_residential_power_north",
+      "type": "powers",
+      "failure_delay_hours": 0.0,
+      "reason": "Homes lose power when the feeder trips."
+    },
+    {
+      "id": "dep_edge_18",
+      "source": "service_feeder_substation_ss2",
+      "target": "service_water_pumping",
+      "type": "powers",
+      "failure_delay_hours": 0.0,
+      "reason": "Main pumps trip at once; the plant DG set keeps only controls alive."
+    },
+    {
+      "id": "dep_edge_19",
+      "source": "service_feeder_substation_ss2",
+      "target": "service_district_hospital",
+      "type": "powers",
+      "failure_delay_hours": 24.0,
+      "reason": "Diesel generator runtime. Drops to 0 if the generator controller is compromised (rule 3)."
+    },
+    {
+      "id": "dep_edge_20",
+      "source": "service_feeder_substation_ss2",
+      "target": "service_traffic_signals",
+      "type": "powers",
+      "failure_delay_hours": 0.0,
+      "reason": "Most junctions go dark at once; UPS covers only major junctions, so 0 is the network-wide value."
+    },
+    {
+      "id": "dep_edge_21",
+      "source": "service_feeder_substation_ss2",
+      "target": "service_camera_gateway",
+      "type": "powers",
+      "failure_delay_hours": 0.0,
+      "reason": "Gateway goes down at once; cameras keep recording locally."
+    },
+    {
+      "id": "dep_edge_22",
+      "source": "service_water_pumping",
+      "target": "service_piped_water",
+      "type": "supplies_water",
+      "failure_delay_hours": 12.0,
+      "reason": "Service reservoirs plus household storage cover about half a day."
+    },
+    {
+      "id": "dep_edge_23",
+      "source": "service_chlorine_dosing",
+      "target": "service_piped_water",
+      "type": "supplies_water",
+      "failure_delay_hours": 3.0,
+      "reason": "Storage gives no protection here: wrongly dosed water reaches taps through the contact tank and mains in about 3 h, and fills household tanks."
+    },
+    {
+      "id": "dep_edge_24",
+      "source": "service_reservoir_level",
+      "target": "service_water_pumping",
+      "type": "monitors",
+      "failure_delay_hours": 2.0,
+      "reason": "With false readings, pumps run blind; overflow or dry-running damage builds up within about 2 h."
+    },
+    {
+      "id": "dep_edge_25",
+      "source": "service_piped_water",
+      "target": "service_district_hospital",
+      "type": "supplies_water",
+      "failure_delay_hours": 12.0,
+      "reason": "Hospital overhead tanks and sumps cover about 12 h; tankers can be arranged after that."
+    }
+  ]
+}

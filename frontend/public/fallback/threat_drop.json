@@ -1,0 +1,18 @@
+{
+  "cve_id": "CVE-2023-6448",
+  "vendor": "Unitronics",
+  "product": "Vision PLC and HMI",
+  "vulnerability_name": "Unitronics Vision PLC and HMI Insecure Default Password Vulnerability",
+  "cisa_kev": true,
+  "cvss": 9.8,
+  "epss": 0.02089,
+  "technique_name": "Default Credentials",
+  "narrative": "A new CISA KEV advisory has dropped for Unitronics Vision PLCs. Exploitation allows unauthenticated remote adversaries to bypass authorization and overwrite setpoints on pump logic.",
+  "affected_asset_id": "asset_water_plc_chlorine",
+  "affected_asset_name": "Disinfection Chlorine Dosing Skid PLC",
+  "pre_drop_risk": 65.9,
+  "post_drop_risk": 76.9,
+  "delta_risk": 11.0,
+  "date_added": "2023-12-11",
+  "required_action": "Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable."
+}

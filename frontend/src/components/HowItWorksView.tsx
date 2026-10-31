@@ -554,3 +554,4 @@ export const HowItWorksView: React.FC<HowItWorksViewProps> = ({
     </div>
   );
 };
+

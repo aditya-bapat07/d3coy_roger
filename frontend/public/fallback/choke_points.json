@@ -1,0 +1,77 @@
+{
+  "choke_points": [
+    {
+      "asset_id": "asset_water_hmi",
+      "name": "Water Plant Operator Touchscreen HMI",
+      "site": "water",
+      "purdue_level": "L2",
+      "betweenness_centrality": 0.037,
+      "paths_intersected": 4,
+      "recommended_action": "Restrict network rules and close unused ingress ports to Water Plant Operator Touchscreen HMI",
+      "action_type": "segment",
+      "estimated_risk_reduction": 0.2,
+      "cost_engineer_hours": 3.0,
+      "downtime_hours": 0.0
+    },
+    {
+      "asset_id": "asset_water_scada",
+      "name": "Water Treatment Plant Master SCADA Server",
+      "site": "water",
+      "purdue_level": "L3",
+      "betweenness_centrality": 0.0331,
+      "paths_intersected": 3,
+      "recommended_action": "Enforce Hardware MFA and strict IP whitelisting on Water Treatment Plant Master SCADA Server",
+      "action_type": "mfa",
+      "estimated_risk_reduction": 0.35,
+      "cost_engineer_hours": 4.0,
+      "downtime_hours": 0.0
+    },
+    {
+      "asset_id": "asset_pwr_hmi",
+      "name": "Substation Local Operator HMI Panel",
+      "site": "power",
+      "purdue_level": "L2",
+      "betweenness_centrality": 0.0212,
+      "paths_intersected": 1,
+      "recommended_action": "Restrict network rules and close unused ingress ports to Substation Local Operator HMI Panel",
+      "action_type": "segment",
+      "estimated_risk_reduction": 0.2,
+      "cost_engineer_hours": 3.0,
+      "downtime_hours": 0.0
+    },
+    {
+      "asset_id": "asset_pwr_scada",
+      "name": "Substation SS-2 Central SCADA Server",
+      "site": "power",
+      "purdue_level": "L3",
+      "betweenness_centrality": 0.0198,
+      "paths_intersected": 2,
+      "recommended_action": "Restrict network rules and close unused ingress ports to Substation SS-2 Central SCADA Server",
+      "action_type": "segment",
+      "estimated_risk_reduction": 0.2,
+      "cost_engineer_hours": 3.0,
+      "downtime_hours": 0.0
+    },
+    {
+      "asset_id": "asset_pwr_switch",
+      "name": "Substation Sub-Ring Managed Switch",
+      "site": "power",
+      "purdue_level": "L2",
+      "betweenness_centrality": 0.0198,
+      "paths_intersected": 1,
+      "recommended_action": "Deploy immediate vendor security patch for CVE-2021-31886 on Substation Sub-Ring Managed Switch",
+      "action_type": "patch",
+      "estimated_risk_reduction": 0.25,
+      "cost_engineer_hours": 2.0,
+      "downtime_hours": 0.5
+    }
+  ],
+  "min_cut_edges": [
+    {
+      "from_asset": "asset_water_scada",
+      "to_asset": "asset_water_hmi",
+      "protocol": "OPC-UA",
+      "port": "4840"
+    }
+  ]
+}

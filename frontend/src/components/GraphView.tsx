@@ -28,6 +28,7 @@ export const GraphView: React.FC<GraphViewProps> = ({
   attackGraph,
   dependencyGraph,
   chokePoints,
+  loading = false,
   onSelectAssetId,
 }) => {
   const [graphMode, setGraphMode] = useState<'attack' | 'dependency'>('attack');
@@ -360,6 +361,13 @@ export const GraphView: React.FC<GraphViewProps> = ({
       {/* Main Canvas Area */}
       <div className="relative rounded-xl border border-[#23324A] bg-[#0A0E17] h-[580px] overflow-hidden shadow-2xl">
         <div ref={containerRef} className="w-full h-full" />
+
+        {loading && (
+          <div className="absolute inset-0 bg-[#0A0E17]/80 backdrop-blur-sm flex flex-col items-center justify-center z-30">
+            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+            <p className="text-xs font-mono text-slate-300">Rendering Cyber-Physical Graph Topology...</p>
+          </div>
+        )}
 
         {/* Graph Legend Overlay */}
         <div className="absolute top-3 left-3 bg-[#111827]/90 border border-[#23324A] rounded-lg p-2.5 text-[11px] space-y-1.5 backdrop-blur z-10 pointer-events-none">

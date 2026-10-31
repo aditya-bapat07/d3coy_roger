@@ -1,0 +1,2303 @@
+{
+  "scenario_name": "Navanagar",
+  "fictional_population": 500000,
+  "persona": "nation_state",
+  "total_assets": 29,
+  "critical_count": 0,
+  "high_count": 2,
+  "medium_count": 3,
+  "low_count": 24,
+  "average_risk": 8.9,
+  "max_risk": 65.9,
+  "assets": [
+    {
+      "asset_id": "asset_water_plc_chlorine",
+      "name": "Disinfection Chlorine Dosing Skid PLC",
+      "site": "water",
+      "purdue_level": "L1",
+      "vendor": "Schneider Electric",
+      "product": "Modicon M580 / M340",
+      "version": "BMX P34 2020",
+      "cves": [
+        "CVE-2021-22779",
+        "CVE-2015-7937"
+      ],
+      "best_cve": "CVE-2015-7937",
+      "cvss": 10.0,
+      "epss": 0.0735,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 90,
+      "anomaly_score": 0.145,
+      "likelihood_raw": 0.009024,
+      "likelihood_score": 0.6592,
+      "consequence_score": 1.0,
+      "risk_score": 65.9,
+      "risk_level": "high",
+      "services_impacted": [
+        "Chlorine dosing",
+        "Piped water supply, plant service area",
+        "District hospital (300 beds, 20 ICU)"
+      ],
+      "max_people_affected": 500000,
+      "max_safety_severity": 4,
+      "max_outage_hours": 72.0,
+      "path_from_entry": [
+        "asset_vendor_vpn",
+        "asset_water_scada",
+        "asset_water_hmi",
+        "asset_water_plc_chlorine"
+      ],
+      "path_technique_ids": [
+        "T0822",
+        "T0866",
+        "T0843"
+      ],
+      "top_3_paths": [
+        {
+          "path": [
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi",
+            "asset_water_plc_chlorine"
+          ],
+          "probability": 0.009024,
+          "likelihood_score": 0.6592,
+          "technique_ids": [
+            "T0822",
+            "T0866",
+            "T0843"
+          ],
+          "hop_count": 3
+        },
+        {
+          "path": [
+            "asset_internet",
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi",
+            "asset_water_plc_chlorine"
+          ],
+          "probability": 0.008012,
+          "likelihood_score": 0.6506,
+          "technique_ids": [
+            "T0883",
+            "T0822",
+            "T0866",
+            "T0843"
+          ],
+          "hop_count": 4
+        }
+      ],
+      "risk_drop_if_removed": {
+        "factors": [
+          {
+            "factor_id": "internet_exposure",
+            "factor_type": "internet_exposure",
+            "description": "Public internet perimeter exposure",
+            "risk_drop": 65.9,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "rule_asset_vendor_vpn_asset_water_scada",
+            "factor_type": "misconfigured_rule",
+            "description": "Misconfigured firewall rule: Third-Party Vendor Remote Access VPN \u2192 Water Treatment Plant Master SCADA Server",
+            "risk_drop": 65.9,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "consequence_safety_severity",
+            "factor_type": "consequence_component",
+            "description": "Physical safety severity component (Level 4/4)",
+            "risk_drop": 32.9,
+            "risk_without_factor": 33.0
+          },
+          {
+            "factor_id": "consequence_people_affected",
+            "factor_type": "consequence_component",
+            "description": "Population served component (500,000 people)",
+            "risk_drop": 19.8,
+            "risk_without_factor": 46.1
+          },
+          {
+            "factor_id": "anomaly_asset_water_scada",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.82) on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 16.6,
+            "risk_without_factor": 49.3
+          },
+          {
+            "factor_id": "anomaly_asset_water_hmi",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.30) on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 13.9,
+            "risk_without_factor": 52.0
+          },
+          {
+            "factor_id": "consequence_outage_hours",
+            "factor_type": "consequence_component",
+            "description": "Cascading outage duration component (72.0 h)",
+            "risk_drop": 13.2,
+            "risk_without_factor": 52.7
+          },
+          {
+            "factor_id": "anomaly_asset_water_plc_chlorine",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.91) on Disinfection Chlorine Dosing Skid PLC",
+            "risk_drop": 10.8,
+            "risk_without_factor": 55.1
+          },
+          {
+            "factor_id": "cve_CVE-2015-7937",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2015-7937 on Disinfection Chlorine Dosing Skid PLC",
+            "risk_drop": 1.1,
+            "risk_without_factor": 64.8
+          },
+          {
+            "factor_id": "cve_CVE-2023-27997",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 65.9
+          },
+          {
+            "factor_id": "kev_CVE-2023-27997",
+            "factor_type": "kev_status",
+            "description": "CISA KEV mandatory exploitation floor (0.50) for CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 65.9
+          },
+          {
+            "factor_id": "cve_CVE-2021-32944",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2021-32944 on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 0.0,
+            "risk_without_factor": 65.9
+          },
+          {
+            "factor_id": "cve_CVE-2022-3157",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2022-3157 on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 0.0,
+            "risk_without_factor": 65.9
+          },
+          {
+            "factor_id": "cve_CVE-2021-22779",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2021-22779 on Disinfection Chlorine Dosing Skid PLC",
+            "risk_drop": 0.0,
+            "risk_without_factor": 65.9
+          },
+          {
+            "factor_id": "anomaly_asset_vendor_vpn",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.72) on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 65.9
+          }
+        ],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "Medium",
+        "score": 0.7,
+        "reasons": [
+          "Path relies on unsegmented lateral rule assumption (asset_vendor_vpn \u2192 asset_water_scada)"
+        ]
+      },
+      "is_choke_point": false,
+      "criticality_note": "Regulates gas chlorinators and dosage parts-per-million into primary contact basin.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_water_scada",
+      "name": "Water Treatment Plant Master SCADA Server",
+      "site": "water",
+      "purdue_level": "L3",
+      "vendor": "Advantech",
+      "product": "WebAccess/SCADA",
+      "version": "8.4.4",
+      "cves": [
+        "CVE-2021-32944"
+      ],
+      "best_cve": "CVE-2021-32944",
+      "cvss": 7.8,
+      "epss": 0.0267,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": true,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 30,
+      "anomaly_score": 0.88,
+      "likelihood_raw": 0.266117,
+      "likelihood_score": 0.9042,
+      "consequence_score": 0.5617,
+      "risk_score": 50.8,
+      "risk_level": "high",
+      "services_impacted": [
+        "Water treatment plant, pumping (27 MLD)",
+        "Piped water supply, plant service area"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 24.0,
+      "path_from_entry": [
+        "asset_vendor_vpn",
+        "asset_water_scada"
+      ],
+      "path_technique_ids": [
+        "T0822"
+      ],
+      "top_3_paths": [
+        {
+          "path": [
+            "asset_vendor_vpn",
+            "asset_water_scada"
+          ],
+          "probability": 0.266117,
+          "likelihood_score": 0.9042,
+          "technique_ids": [
+            "T0822"
+          ],
+          "hop_count": 1
+        },
+        {
+          "path": [
+            "asset_internet",
+            "asset_vendor_vpn",
+            "asset_water_scada"
+          ],
+          "probability": 0.236259,
+          "likelihood_score": 0.8956,
+          "technique_ids": [
+            "T0883",
+            "T0822"
+          ],
+          "hop_count": 2
+        }
+      ],
+      "risk_drop_if_removed": {
+        "factors": [
+          {
+            "factor_id": "internet_exposure",
+            "factor_type": "internet_exposure",
+            "description": "Public internet perimeter exposure",
+            "risk_drop": 50.8,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "rule_asset_vendor_vpn_asset_water_scada",
+            "factor_type": "misconfigured_rule",
+            "description": "Misconfigured firewall rule: Third-Party Vendor Remote Access VPN \u2192 Water Treatment Plant Master SCADA Server",
+            "risk_drop": 50.8,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "consequence_safety_severity",
+            "factor_type": "consequence_component",
+            "description": "Physical safety severity component (Level 3/4)",
+            "risk_drop": 33.9,
+            "risk_without_factor": 16.9
+          },
+          {
+            "factor_id": "consequence_people_affected",
+            "factor_type": "consequence_component",
+            "description": "Population served component (200,000 people)",
+            "risk_drop": 10.9,
+            "risk_without_factor": 39.9
+          },
+          {
+            "factor_id": "anomaly_asset_water_scada",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.82) on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 9.4,
+            "risk_without_factor": 41.4
+          },
+          {
+            "factor_id": "consequence_outage_hours",
+            "factor_type": "consequence_component",
+            "description": "Cascading outage duration component (24.0 h)",
+            "risk_drop": 6.0,
+            "risk_without_factor": 44.8
+          },
+          {
+            "factor_id": "cve_CVE-2023-27997",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 50.8
+          },
+          {
+            "factor_id": "kev_CVE-2023-27997",
+            "factor_type": "kev_status",
+            "description": "CISA KEV mandatory exploitation floor (0.50) for CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 50.8
+          },
+          {
+            "factor_id": "cve_CVE-2021-32944",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2021-32944 on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 0.0,
+            "risk_without_factor": 50.8
+          },
+          {
+            "factor_id": "anomaly_asset_vendor_vpn",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.72) on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 50.8
+          }
+        ],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "Medium",
+        "score": 0.7,
+        "reasons": [
+          "Path relies on unsegmented lateral rule assumption (asset_vendor_vpn \u2192 asset_water_scada)"
+        ]
+      },
+      "is_choke_point": true,
+      "criticality_note": "Central monitoring for 27 MLD water treatment, filtration, and dosing cycles.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_water_dosing_skid",
+      "name": "Chlorine Gas Regulators & Injection Manifold",
+      "site": "water",
+      "purdue_level": "L0",
+      "vendor": "Generic Industrial",
+      "product": "Vacuum Chlorine Gas Feeder",
+      "version": "V-2000",
+      "cves": [],
+      "best_cve": null,
+      "cvss": null,
+      "epss": 0.0,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 180,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.000451,
+      "likelihood_score": 0.4424,
+      "consequence_score": 1.0,
+      "risk_score": 44.2,
+      "risk_level": "medium",
+      "services_impacted": [
+        "Chlorine dosing",
+        "Piped water supply, plant service area",
+        "District hospital (300 beds, 20 ICU)"
+      ],
+      "max_people_affected": 500000,
+      "max_safety_severity": 4,
+      "max_outage_hours": 72.0,
+      "path_from_entry": [
+        "asset_vendor_vpn",
+        "asset_water_scada",
+        "asset_water_hmi",
+        "asset_water_plc_chlorine",
+        "asset_water_dosing_skid"
+      ],
+      "path_technique_ids": [
+        "T0822",
+        "T0866",
+        "T0843",
+        "T0843"
+      ],
+      "top_3_paths": [
+        {
+          "path": [
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi",
+            "asset_water_plc_chlorine",
+            "asset_water_dosing_skid"
+          ],
+          "probability": 0.000451,
+          "likelihood_score": 0.4424,
+          "technique_ids": [
+            "T0822",
+            "T0866",
+            "T0843",
+            "T0843"
+          ],
+          "hop_count": 4
+        },
+        {
+          "path": [
+            "asset_internet",
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi",
+            "asset_water_plc_chlorine",
+            "asset_water_dosing_skid"
+          ],
+          "probability": 0.000401,
+          "likelihood_score": 0.4338,
+          "technique_ids": [
+            "T0883",
+            "T0822",
+            "T0866",
+            "T0843",
+            "T0843"
+          ],
+          "hop_count": 5
+        }
+      ],
+      "risk_drop_if_removed": {
+        "factors": [
+          {
+            "factor_id": "internet_exposure",
+            "factor_type": "internet_exposure",
+            "description": "Public internet perimeter exposure",
+            "risk_drop": 44.2,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "rule_asset_vendor_vpn_asset_water_scada",
+            "factor_type": "misconfigured_rule",
+            "description": "Misconfigured firewall rule: Third-Party Vendor Remote Access VPN \u2192 Water Treatment Plant Master SCADA Server",
+            "risk_drop": 44.2,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "consequence_safety_severity",
+            "factor_type": "consequence_component",
+            "description": "Physical safety severity component (Level 4/4)",
+            "risk_drop": 22.1,
+            "risk_without_factor": 22.1
+          },
+          {
+            "factor_id": "anomaly_asset_water_scada",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.82) on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 16.6,
+            "risk_without_factor": 27.6
+          },
+          {
+            "factor_id": "anomaly_asset_water_hmi",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.30) on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 13.8,
+            "risk_without_factor": 30.4
+          },
+          {
+            "factor_id": "consequence_people_affected",
+            "factor_type": "consequence_component",
+            "description": "Population served component (500,000 people)",
+            "risk_drop": 13.2,
+            "risk_without_factor": 31.0
+          },
+          {
+            "factor_id": "anomaly_asset_water_plc_chlorine",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.91) on Disinfection Chlorine Dosing Skid PLC",
+            "risk_drop": 10.8,
+            "risk_without_factor": 33.4
+          },
+          {
+            "factor_id": "consequence_outage_hours",
+            "factor_type": "consequence_component",
+            "description": "Cascading outage duration component (72.0 h)",
+            "risk_drop": 8.8,
+            "risk_without_factor": 35.4
+          },
+          {
+            "factor_id": "cve_CVE-2015-7937",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2015-7937 on Disinfection Chlorine Dosing Skid PLC",
+            "risk_drop": 1.1,
+            "risk_without_factor": 43.1
+          },
+          {
+            "factor_id": "cve_CVE-2023-27997",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 44.2
+          },
+          {
+            "factor_id": "kev_CVE-2023-27997",
+            "factor_type": "kev_status",
+            "description": "CISA KEV mandatory exploitation floor (0.50) for CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 44.2
+          },
+          {
+            "factor_id": "cve_CVE-2021-32944",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2021-32944 on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 0.0,
+            "risk_without_factor": 44.2
+          },
+          {
+            "factor_id": "cve_CVE-2022-3157",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2022-3157 on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 0.0,
+            "risk_without_factor": 44.2
+          },
+          {
+            "factor_id": "cve_CVE-2021-22779",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2021-22779 on Disinfection Chlorine Dosing Skid PLC",
+            "risk_drop": 0.0,
+            "risk_without_factor": 44.2
+          },
+          {
+            "factor_id": "anomaly_asset_vendor_vpn",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.72) on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 44.2
+          }
+        ],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "Medium",
+        "score": 0.7,
+        "reasons": [
+          "Product version 'V-2000' for Chlorine Gas Regulators & Injection Manifold was inferred from scenario assumption rather than exact CPE match",
+          "Path relies on unsegmented lateral rule assumption (asset_vendor_vpn \u2192 asset_water_scada)"
+        ]
+      },
+      "is_choke_point": false,
+      "criticality_note": "Gas injection valves controlling toxic disinfectant release into drinking supply.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_water_hmi",
+      "name": "Water Plant Operator Touchscreen HMI",
+      "site": "water",
+      "purdue_level": "L2",
+      "vendor": "Rockwell Automation",
+      "product": "FactoryTalk View SE",
+      "version": "12.0",
+      "cves": [
+        "CVE-2022-3157"
+      ],
+      "best_cve": "CVE-2022-3157",
+      "cvss": 7.5,
+      "epss": 0.0152,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 45,
+      "anomaly_score": 0.626,
+      "likelihood_raw": 0.027644,
+      "likelihood_score": 0.7403,
+      "consequence_score": 0.5617,
+      "risk_score": 41.6,
+      "risk_level": "medium",
+      "services_impacted": [
+        "Water treatment plant, pumping (27 MLD)",
+        "Piped water supply, plant service area"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 24.0,
+      "path_from_entry": [
+        "asset_vendor_vpn",
+        "asset_water_scada",
+        "asset_water_hmi"
+      ],
+      "path_technique_ids": [
+        "T0822",
+        "T0866"
+      ],
+      "top_3_paths": [
+        {
+          "path": [
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi"
+          ],
+          "probability": 0.027644,
+          "likelihood_score": 0.7403,
+          "technique_ids": [
+            "T0822",
+            "T0866"
+          ],
+          "hop_count": 2
+        },
+        {
+          "path": [
+            "asset_internet",
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi"
+          ],
+          "probability": 0.024542,
+          "likelihood_score": 0.7317,
+          "technique_ids": [
+            "T0883",
+            "T0822",
+            "T0866"
+          ],
+          "hop_count": 3
+        }
+      ],
+      "risk_drop_if_removed": {
+        "factors": [
+          {
+            "factor_id": "internet_exposure",
+            "factor_type": "internet_exposure",
+            "description": "Public internet perimeter exposure",
+            "risk_drop": 41.6,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "rule_asset_vendor_vpn_asset_water_scada",
+            "factor_type": "misconfigured_rule",
+            "description": "Misconfigured firewall rule: Third-Party Vendor Remote Access VPN \u2192 Water Treatment Plant Master SCADA Server",
+            "risk_drop": 41.6,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "consequence_safety_severity",
+            "factor_type": "consequence_component",
+            "description": "Physical safety severity component (Level 3/4)",
+            "risk_drop": 27.8,
+            "risk_without_factor": 13.8
+          },
+          {
+            "factor_id": "anomaly_asset_water_scada",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.82) on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 9.4,
+            "risk_without_factor": 32.2
+          },
+          {
+            "factor_id": "consequence_people_affected",
+            "factor_type": "consequence_component",
+            "description": "Population served component (200,000 people)",
+            "risk_drop": 8.9,
+            "risk_without_factor": 32.7
+          },
+          {
+            "factor_id": "anomaly_asset_water_hmi",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.30) on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 7.8,
+            "risk_without_factor": 33.8
+          },
+          {
+            "factor_id": "consequence_outage_hours",
+            "factor_type": "consequence_component",
+            "description": "Cascading outage duration component (24.0 h)",
+            "risk_drop": 5.0,
+            "risk_without_factor": 36.6
+          },
+          {
+            "factor_id": "cve_CVE-2023-27997",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 41.6
+          },
+          {
+            "factor_id": "kev_CVE-2023-27997",
+            "factor_type": "kev_status",
+            "description": "CISA KEV mandatory exploitation floor (0.50) for CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 41.6
+          },
+          {
+            "factor_id": "cve_CVE-2021-32944",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2021-32944 on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 0.0,
+            "risk_without_factor": 41.6
+          },
+          {
+            "factor_id": "cve_CVE-2022-3157",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2022-3157 on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 0.0,
+            "risk_without_factor": 41.6
+          },
+          {
+            "factor_id": "anomaly_asset_vendor_vpn",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.72) on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 41.6
+          }
+        ],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "Medium",
+        "score": 0.7,
+        "reasons": [
+          "Product version '12.0' for Water Plant Operator Touchscreen HMI was inferred from scenario assumption rather than exact CPE match",
+          "Path relies on unsegmented lateral rule assumption (asset_vendor_vpn \u2192 asset_water_scada)"
+        ]
+      },
+      "is_choke_point": true,
+      "criticality_note": "Shift operator station for manual setpoint changes on pump speeds and chemical feed.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_water_plc_pumps",
+      "name": "High-Lift Pumping Station Control PLC",
+      "site": "water",
+      "purdue_level": "L1",
+      "vendor": "Siemens",
+      "product": "SIMATIC S7-1200 / S7-1500",
+      "version": "S7-1516-3 PN/DP",
+      "cves": [
+        "CVE-2020-15782",
+        "CVE-2022-38465"
+      ],
+      "best_cve": "CVE-2020-15782",
+      "cvss": 9.8,
+      "epss": 0.0518,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 90,
+      "anomaly_score": 0.168,
+      "likelihood_raw": 0.004578,
+      "likelihood_score": 0.6101,
+      "consequence_score": 0.5617,
+      "risk_score": 34.3,
+      "risk_level": "medium",
+      "services_impacted": [
+        "Water treatment plant, pumping (27 MLD)",
+        "Piped water supply, plant service area"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 24.0,
+      "path_from_entry": [
+        "asset_vendor_vpn",
+        "asset_water_scada",
+        "asset_water_hmi",
+        "asset_water_plc_pumps"
+      ],
+      "path_technique_ids": [
+        "T0822",
+        "T0866",
+        "T0843"
+      ],
+      "top_3_paths": [
+        {
+          "path": [
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi",
+            "asset_water_plc_pumps"
+          ],
+          "probability": 0.004578,
+          "likelihood_score": 0.6101,
+          "technique_ids": [
+            "T0822",
+            "T0866",
+            "T0843"
+          ],
+          "hop_count": 3
+        },
+        {
+          "path": [
+            "asset_internet",
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi",
+            "asset_water_plc_pumps"
+          ],
+          "probability": 0.004065,
+          "likelihood_score": 0.6015,
+          "technique_ids": [
+            "T0883",
+            "T0822",
+            "T0866",
+            "T0843"
+          ],
+          "hop_count": 4
+        }
+      ],
+      "risk_drop_if_removed": {
+        "factors": [
+          {
+            "factor_id": "internet_exposure",
+            "factor_type": "internet_exposure",
+            "description": "Public internet perimeter exposure",
+            "risk_drop": 34.3,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "rule_asset_vendor_vpn_asset_water_scada",
+            "factor_type": "misconfigured_rule",
+            "description": "Misconfigured firewall rule: Third-Party Vendor Remote Access VPN \u2192 Water Treatment Plant Master SCADA Server",
+            "risk_drop": 34.3,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "consequence_safety_severity",
+            "factor_type": "consequence_component",
+            "description": "Physical safety severity component (Level 3/4)",
+            "risk_drop": 22.9,
+            "risk_without_factor": 11.4
+          },
+          {
+            "factor_id": "anomaly_asset_water_scada",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.82) on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 9.4,
+            "risk_without_factor": 24.9
+          },
+          {
+            "factor_id": "anomaly_asset_water_hmi",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.30) on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 7.8,
+            "risk_without_factor": 26.5
+          },
+          {
+            "factor_id": "consequence_people_affected",
+            "factor_type": "consequence_component",
+            "description": "Population served component (200,000 people)",
+            "risk_drop": 7.4,
+            "risk_without_factor": 26.9
+          },
+          {
+            "factor_id": "anomaly_asset_water_plc_pumps",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.40) on High-Lift Pumping Station Control PLC",
+            "risk_drop": 4.8,
+            "risk_without_factor": 29.5
+          },
+          {
+            "factor_id": "consequence_outage_hours",
+            "factor_type": "consequence_component",
+            "description": "Cascading outage duration component (24.0 h)",
+            "risk_drop": 4.1,
+            "risk_without_factor": 30.2
+          },
+          {
+            "factor_id": "cve_CVE-2020-15782",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2020-15782 on High-Lift Pumping Station Control PLC",
+            "risk_drop": 1.3,
+            "risk_without_factor": 33.0
+          },
+          {
+            "factor_id": "cve_CVE-2023-27997",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 34.3
+          },
+          {
+            "factor_id": "kev_CVE-2023-27997",
+            "factor_type": "kev_status",
+            "description": "CISA KEV mandatory exploitation floor (0.50) for CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 34.3
+          },
+          {
+            "factor_id": "cve_CVE-2021-32944",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2021-32944 on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 0.0,
+            "risk_without_factor": 34.3
+          },
+          {
+            "factor_id": "cve_CVE-2022-3157",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2022-3157 on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 0.0,
+            "risk_without_factor": 34.3
+          },
+          {
+            "factor_id": "cve_CVE-2022-38465",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2022-38465 on High-Lift Pumping Station Control PLC",
+            "risk_drop": 0.0,
+            "risk_without_factor": 34.3
+          },
+          {
+            "factor_id": "anomaly_asset_vendor_vpn",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.72) on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 34.3
+          }
+        ],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "Medium",
+        "score": 0.7,
+        "reasons": [
+          "Path relies on unsegmented lateral rule assumption (asset_vendor_vpn \u2192 asset_water_scada)"
+        ]
+      },
+      "is_choke_point": false,
+      "criticality_note": "Automates variable frequency drives running 4x 150 kW high-lift distribution pumps.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_water_pumps",
+      "name": "High-Lift Clear Water Centrifugal Pumps",
+      "site": "water",
+      "purdue_level": "L0",
+      "vendor": "Generic Industrial",
+      "product": "Centrifugal High Lift Water Pump",
+      "version": "27 MLD Stage",
+      "cves": [],
+      "best_cve": null,
+      "cvss": null,
+      "epss": 0.0,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 180,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.000229,
+      "likelihood_score": 0.3933,
+      "consequence_score": 0.5617,
+      "risk_score": 22.1,
+      "risk_level": "low",
+      "services_impacted": [
+        "Water treatment plant, pumping (27 MLD)",
+        "Piped water supply, plant service area"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 24.0,
+      "path_from_entry": [
+        "asset_vendor_vpn",
+        "asset_water_scada",
+        "asset_water_hmi",
+        "asset_water_plc_pumps",
+        "asset_water_pumps"
+      ],
+      "path_technique_ids": [
+        "T0822",
+        "T0866",
+        "T0843",
+        "T0843"
+      ],
+      "top_3_paths": [
+        {
+          "path": [
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi",
+            "asset_water_plc_pumps",
+            "asset_water_pumps"
+          ],
+          "probability": 0.000229,
+          "likelihood_score": 0.3933,
+          "technique_ids": [
+            "T0822",
+            "T0866",
+            "T0843",
+            "T0843"
+          ],
+          "hop_count": 4
+        },
+        {
+          "path": [
+            "asset_internet",
+            "asset_vendor_vpn",
+            "asset_water_scada",
+            "asset_water_hmi",
+            "asset_water_plc_pumps",
+            "asset_water_pumps"
+          ],
+          "probability": 0.000203,
+          "likelihood_score": 0.3847,
+          "technique_ids": [
+            "T0883",
+            "T0822",
+            "T0866",
+            "T0843",
+            "T0843"
+          ],
+          "hop_count": 5
+        }
+      ],
+      "risk_drop_if_removed": {
+        "factors": [
+          {
+            "factor_id": "internet_exposure",
+            "factor_type": "internet_exposure",
+            "description": "Public internet perimeter exposure",
+            "risk_drop": 22.1,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "rule_asset_vendor_vpn_asset_water_scada",
+            "factor_type": "misconfigured_rule",
+            "description": "Misconfigured firewall rule: Third-Party Vendor Remote Access VPN \u2192 Water Treatment Plant Master SCADA Server",
+            "risk_drop": 22.1,
+            "risk_without_factor": 0.0
+          },
+          {
+            "factor_id": "consequence_safety_severity",
+            "factor_type": "consequence_component",
+            "description": "Physical safety severity component (Level 3/4)",
+            "risk_drop": 14.8,
+            "risk_without_factor": 7.3
+          },
+          {
+            "factor_id": "anomaly_asset_water_scada",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.82) on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 9.4,
+            "risk_without_factor": 12.7
+          },
+          {
+            "factor_id": "anomaly_asset_water_hmi",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.30) on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 7.8,
+            "risk_without_factor": 14.3
+          },
+          {
+            "factor_id": "anomaly_asset_water_plc_pumps",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.40) on High-Lift Pumping Station Control PLC",
+            "risk_drop": 4.7,
+            "risk_without_factor": 17.4
+          },
+          {
+            "factor_id": "consequence_people_affected",
+            "factor_type": "consequence_component",
+            "description": "Population served component (200,000 people)",
+            "risk_drop": 4.7,
+            "risk_without_factor": 17.4
+          },
+          {
+            "factor_id": "consequence_outage_hours",
+            "factor_type": "consequence_component",
+            "description": "Cascading outage duration component (24.0 h)",
+            "risk_drop": 2.6,
+            "risk_without_factor": 19.5
+          },
+          {
+            "factor_id": "cve_CVE-2020-15782",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2020-15782 on High-Lift Pumping Station Control PLC",
+            "risk_drop": 1.2,
+            "risk_without_factor": 20.9
+          },
+          {
+            "factor_id": "cve_CVE-2023-27997",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 22.1
+          },
+          {
+            "factor_id": "kev_CVE-2023-27997",
+            "factor_type": "kev_status",
+            "description": "CISA KEV mandatory exploitation floor (0.50) for CVE-2023-27997 on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 22.1
+          },
+          {
+            "factor_id": "cve_CVE-2021-32944",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2021-32944 on Water Treatment Plant Master SCADA Server",
+            "risk_drop": 0.0,
+            "risk_without_factor": 22.1
+          },
+          {
+            "factor_id": "cve_CVE-2022-3157",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2022-3157 on Water Plant Operator Touchscreen HMI",
+            "risk_drop": 0.0,
+            "risk_without_factor": 22.1
+          },
+          {
+            "factor_id": "cve_CVE-2022-38465",
+            "factor_type": "cve",
+            "description": "Vulnerability CVE-2022-38465 on High-Lift Pumping Station Control PLC",
+            "risk_drop": 0.0,
+            "risk_without_factor": 22.1
+          },
+          {
+            "factor_id": "anomaly_asset_vendor_vpn",
+            "factor_type": "anomaly_score",
+            "description": "ML anomaly boost (0.72) on Third-Party Vendor Remote Access VPN",
+            "risk_drop": 0.0,
+            "risk_without_factor": 22.1
+          }
+        ],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "Medium",
+        "score": 0.7,
+        "reasons": [
+          "Product version '27 MLD Stage' for High-Lift Clear Water Centrifugal Pumps was inferred from scenario assumption rather than exact CPE match",
+          "Path relies on unsegmented lateral rule assumption (asset_vendor_vpn \u2192 asset_water_scada)"
+        ]
+      },
+      "is_choke_point": false,
+      "criticality_note": "Physical motor and impeller assemblies pressurizing city transmission mains.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_pwr_hmi",
+      "name": "Substation Local Operator HMI Panel",
+      "site": "power",
+      "purdue_level": "L2",
+      "vendor": "Siemens",
+      "product": "SIMATIC WinCC",
+      "version": "7.5 SP1",
+      "cves": [
+        "CVE-2020-27664"
+      ],
+      "best_cve": "CVE-2020-27664",
+      "cvss": 9.8,
+      "epss": 0.0229,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 60,
+      "anomaly_score": 0.291,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.5283,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Feeder substation SS-2 (33/11 kV)",
+        "Residential power, North zone",
+        "Water treatment plant, pumping (27 MLD)",
+        "Traffic signal controller (60 junctions)",
+        "IoT camera gateway (city surveillance)"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 12.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": true,
+      "criticality_note": "Control-room switchboard display for feeder breaker open/close operations.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_pwr_rtu",
+      "name": "Substation Main Feeder RTU Controller",
+      "site": "power",
+      "purdue_level": "L1",
+      "vendor": "Rockwell",
+      "product": "1756 ControlLogix",
+      "version": "32.011",
+      "cves": [
+        "CVE-2021-22681",
+        "CVE-2023-3596"
+      ],
+      "best_cve": "CVE-2021-22681",
+      "cvss": 9.8,
+      "epss": 0.6363,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 90,
+      "anomaly_score": 0.634,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.5283,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Feeder substation SS-2 (33/11 kV)",
+        "Residential power, North zone",
+        "Water treatment plant, pumping (27 MLD)",
+        "Traffic signal controller (60 junctions)",
+        "IoT camera gateway (city surveillance)"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 12.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Directly actuates trip coils on 33/11 kV feeder lines supplying North Zone.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_pwr_scada",
+      "name": "Substation SS-2 Central SCADA Server",
+      "site": "power",
+      "purdue_level": "L3",
+      "vendor": "Advantech",
+      "product": "WebAccess/SCADA",
+      "version": "8.4.3",
+      "cves": [
+        "CVE-2020-12034"
+      ],
+      "best_cve": "CVE-2020-12034",
+      "cvss": 8.2,
+      "epss": 0.0126,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 45,
+      "anomaly_score": 0.311,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.5283,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Feeder substation SS-2 (33/11 kV)",
+        "Residential power, North zone",
+        "Water treatment plant, pumping (27 MLD)",
+        "Traffic signal controller (60 junctions)",
+        "IoT camera gateway (city surveillance)"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 12.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": true,
+      "criticality_note": "Supervisory telemetry and control aggregation for 33/11 kV feeder substation.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_pwr_ied",
+      "name": "Bay Overcurrent Protection Relay IED",
+      "site": "power",
+      "purdue_level": "L1",
+      "vendor": "Siemens",
+      "product": "SIMATIC CP",
+      "version": "1543-1 V2.0",
+      "cves": [
+        "CVE-2016-8562"
+      ],
+      "best_cve": "CVE-2016-8562",
+      "cvss": 7.5,
+      "epss": 0.0361,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 120,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.5283,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Feeder substation SS-2 (33/11 kV)",
+        "Residential power, North zone",
+        "Water treatment plant, pumping (27 MLD)",
+        "Traffic signal controller (60 junctions)",
+        "IoT camera gateway (city surveillance)"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 12.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Solid-state protection relay triggering mechanical trip breakers on fault.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_pwr_breakers",
+      "name": "33/11 kV Vacuum Circuit Breakers & Busbars",
+      "site": "power",
+      "purdue_level": "L0",
+      "vendor": "Generic Industrial",
+      "product": "Medium Voltage Vacuum Circuit Breaker",
+      "version": "33kV/1250A",
+      "cves": [],
+      "best_cve": null,
+      "cvss": null,
+      "epss": 0.0,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 180,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.5283,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Feeder substation SS-2 (33/11 kV)",
+        "Residential power, North zone",
+        "Water treatment plant, pumping (27 MLD)",
+        "Traffic signal controller (60 junctions)",
+        "IoT camera gateway (city surveillance)"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 12.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Physical breaker mechanism interrupting grid current to feeder lines.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_water_level_sensors",
+      "name": "Clear Water Reservoir Hydrostatic Level Sensors",
+      "site": "water",
+      "purdue_level": "L0",
+      "vendor": "Generic Industrial",
+      "product": "Submersible Level Transmitter",
+      "version": "4-20mA Hydrostatic",
+      "cves": [],
+      "best_cve": null,
+      "cvss": null,
+      "epss": 0.0,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 180,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.5172,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Water treatment plant, pumping (27 MLD)",
+        "Reservoir level monitoring"
+      ],
+      "max_people_affected": 200000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 8.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "Medium",
+        "score": 0.7,
+        "reasons": [
+          "Product version '4-20mA Hydrostatic' for Clear Water Reservoir Hydrostatic Level Sensors was inferred from scenario assumption rather than exact CPE match"
+        ]
+      },
+      "is_choke_point": false,
+      "criticality_note": "Provides depth readings to prevent pump dry-running cavitation and tank overflow.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_city_traffic_ctrl",
+      "name": "Central Traffic Corridor Signal Controller",
+      "site": "city",
+      "purdue_level": "L1",
+      "vendor": "Moxa",
+      "product": "NPort 5000 Series",
+      "version": "3.1",
+      "cves": [
+        "CVE-2018-10609"
+      ],
+      "best_cve": "CVE-2018-10609",
+      "cvss": 6.1,
+      "epss": 0.023,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": true,
+      "patchable_now": true,
+      "next_maintenance_window_days": 30,
+      "anomaly_score": 0.023,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.4817,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Traffic signal controller (60 junctions)"
+      ],
+      "max_people_affected": 150000,
+      "max_safety_severity": 3,
+      "max_outage_hours": 6.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Coordinates timing plans and green waves across 60 major city intersections.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_hosp_iot_gw",
+      "name": "ICU Medical Device Serial Gateway",
+      "site": "hospital",
+      "purdue_level": "L2",
+      "vendor": "Moxa",
+      "product": "NPort 5110 Serial Device Server",
+      "version": "2.8",
+      "cves": [
+        "CVE-2022-44734"
+      ],
+      "best_cve": "CVE-2022-44734",
+      "cvss": 4.8,
+      "epss": 0.0039,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": true,
+      "patchable_now": true,
+      "next_maintenance_window_days": 14,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.4084,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Medical-device IoT gateway"
+      ],
+      "max_people_affected": 40,
+      "max_safety_severity": 3,
+      "max_outage_hours": 12.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Serial-to-Ethernet bridge consolidating vitals monitoring on 40 ICU/HDU beds.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_hosp_bms",
+      "name": "District Hospital Building Management System",
+      "site": "hospital",
+      "purdue_level": "L2",
+      "vendor": "Schneider Electric",
+      "product": "Modicon Quantum / Premium",
+      "version": "140 NOE 771",
+      "cves": [
+        "CVE-2020-28212"
+      ],
+      "best_cve": "CVE-2020-28212",
+      "cvss": 9.8,
+      "epss": 0.0276,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 30,
+      "anomaly_score": 0.023,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.3974,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Hospital building management system"
+      ],
+      "max_people_affected": 300,
+      "max_safety_severity": 3,
+      "max_outage_hours": 8.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Controls surgical theatre positive pressure, ICU ventilation, and climate.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_city_camera_gw",
+      "name": "Municipal Surveillance IoT Video Gateway",
+      "site": "city",
+      "purdue_level": "L2",
+      "vendor": "Cisco",
+      "product": "IOS XE Web UI",
+      "version": "17.9.2",
+      "cves": [
+        "CVE-2023-20198"
+      ],
+      "best_cve": "CVE-2023-20198",
+      "cvss": 10.0,
+      "epss": 0.9961,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 14,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.1917,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "IoT camera gateway (city surveillance)"
+      ],
+      "max_people_affected": 0,
+      "max_safety_severity": 1,
+      "max_outage_hours": 24.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Aggregates optical streams from CCTV cameras for city traffic and security.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_hosp_gen_ctrl",
+      "name": "Emergency Diesel Generator Controller",
+      "site": "hospital",
+      "purdue_level": "L1",
+      "vendor": "Siemens",
+      "product": "SIMATIC S7-1200 CPU",
+      "version": "1214C DC/DC/DC",
+      "cves": [
+        "CVE-2019-19292"
+      ],
+      "best_cve": "CVE-2019-19292",
+      "cvss": 8.8,
+      "epss": 0.02,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 60,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.1418,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [
+        "Backup generator controller"
+      ],
+      "max_people_affected": 300,
+      "max_safety_severity": 1,
+      "max_outage_hours": 6.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Auto-mains failure (AMF) PLC triggering hospital backup power on grid blackout.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_vendor_vpn",
+      "name": "Third-Party Vendor Remote Access VPN",
+      "site": "vendor",
+      "purdue_level": "L3.5",
+      "vendor": "Fortinet",
+      "product": "FortiOS and FortiProxy SSL-VPN",
+      "version": "7.0.11",
+      "cves": [
+        "CVE-2023-27997"
+      ],
+      "best_cve": "CVE-2023-27997",
+      "cvss": 9.8,
+      "epss": 0.8569,
+      "cisa_kev": true,
+      "internet_exposed": true,
+      "remote_access": true,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 7,
+      "anomaly_score": 1.0,
+      "likelihood_raw": 1.0,
+      "likelihood_score": 1.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [
+        "asset_vendor_vpn"
+      ],
+      "path_technique_ids": [],
+      "top_3_paths": [
+        {
+          "path": [
+            "asset_vendor_vpn"
+          ],
+          "probability": 1.0,
+          "likelihood_score": 1.0,
+          "technique_ids": [],
+          "hop_count": 0
+        }
+      ],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Third-party water contractor maintenance portal; critical ingress entry point.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_corp_web",
+      "name": "Municipal Citizen Web Portal",
+      "site": "corporate",
+      "purdue_level": "L4",
+      "vendor": "Microsoft",
+      "product": "Windows Server IIS",
+      "version": "2019",
+      "cves": [
+        "CVE-2021-34527"
+      ],
+      "best_cve": "CVE-2021-34527",
+      "cvss": 8.8,
+      "epss": 0.9979,
+      "cisa_kev": true,
+      "internet_exposed": true,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 14,
+      "anomaly_score": 0.98,
+      "likelihood_raw": 0.998014,
+      "likelihood_score": 0.9999,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [
+        "asset_internet",
+        "asset_corp_web"
+      ],
+      "path_technique_ids": [
+        "T0883"
+      ],
+      "top_3_paths": [
+        {
+          "path": [
+            "asset_internet",
+            "asset_corp_web"
+          ],
+          "probability": 0.998014,
+          "likelihood_score": 0.9999,
+          "technique_ids": [
+            "T0883"
+          ],
+          "hop_count": 1
+        }
+      ],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Public utility bill payment and grievance portal.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_dmz_historian",
+      "name": "Enterprise Operational Historian Mirror",
+      "site": "corporate",
+      "purdue_level": "L3.5",
+      "vendor": "Schneider Electric",
+      "product": "U.motion Builder",
+      "version": "1.3.4",
+      "cves": [
+        "CVE-2018-7841"
+      ],
+      "best_cve": "CVE-2018-7841",
+      "cvss": 9.8,
+      "epss": 0.7249,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 14,
+      "anomaly_score": 0.916,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "Medium",
+        "score": 0.7,
+        "reasons": [
+          "Product version '1.3.4' for Enterprise Operational Historian Mirror was inferred from scenario assumption rather than exact CPE match"
+        ]
+      },
+      "is_choke_point": false,
+      "criticality_note": "Replicates real-time operational telemetry for business reporting.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_pwr_switch",
+      "name": "Substation Sub-Ring Managed Switch",
+      "site": "power",
+      "purdue_level": "L2",
+      "vendor": "Moxa",
+      "product": "EDS-510E Managed Switch",
+      "version": "5.1",
+      "cves": [
+        "CVE-2021-31886"
+      ],
+      "best_cve": "CVE-2021-31886",
+      "cvss": 9.8,
+      "epss": 0.0307,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": true,
+      "patchable_now": true,
+      "next_maintenance_window_days": 21,
+      "anomaly_score": 0.256,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": true,
+      "criticality_note": "Carries IEC 61850 station bus and GOOSE messaging between bay relays.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_corp_mail",
+      "name": "Corporate Exchange Mail Server",
+      "site": "corporate",
+      "purdue_level": "L4",
+      "vendor": "Microsoft",
+      "product": "Exchange Server",
+      "version": "2019 CU8",
+      "cves": [
+        "CVE-2021-26855"
+      ],
+      "best_cve": "CVE-2021-26855",
+      "cvss": 9.1,
+      "epss": 1.0,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 14,
+      "anomaly_score": 0.602,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Internal employee communications and alerting.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_corp_ws1",
+      "name": "Corporate IT Operator Workstation",
+      "site": "corporate",
+      "purdue_level": "L4",
+      "vendor": "Microsoft",
+      "product": "Windows 10 Workstation",
+      "version": "21H1",
+      "cves": [
+        "CVE-2017-0144"
+      ],
+      "best_cve": "CVE-2017-0144",
+      "cvss": 8.8,
+      "epss": 0.9923,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 7,
+      "anomaly_score": 0.852,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Entry point for insider threat persona; holds domain credentials.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_corp_ws2",
+      "name": "Plant Security Analyst Workstation",
+      "site": "corporate",
+      "purdue_level": "L4",
+      "vendor": "Microsoft",
+      "product": "Windows 10 Workstation",
+      "version": "21H2",
+      "cves": [
+        "CVE-2021-34527"
+      ],
+      "best_cve": "CVE-2021-34527",
+      "cvss": 8.8,
+      "epss": 0.9979,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 7,
+      "anomaly_score": 0.52,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "SOC monitoring workstation with network reach to DMZ services.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_dmz_patch",
+      "name": "DMZ Central Patch & Update Server",
+      "site": "corporate",
+      "purdue_level": "L3.5",
+      "vendor": "Microsoft",
+      "product": "Windows Server WSUS",
+      "version": "2019",
+      "cves": [
+        "CVE-2021-34527"
+      ],
+      "best_cve": "CVE-2021-34527",
+      "cvss": 8.8,
+      "epss": 0.9979,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 14,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Stages software updates for industrial SCADA and engineering nodes.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_dmz_jump",
+      "name": "Secure Operations Jump Server",
+      "site": "corporate",
+      "purdue_level": "L3.5",
+      "vendor": "Citrix",
+      "product": "NetScaler ADC and NetScaler Gateway",
+      "version": "13.1-48.47",
+      "cves": [
+        "CVE-2023-4966"
+      ],
+      "best_cve": "CVE-2023-4966",
+      "cvss": 7.5,
+      "epss": 1.0,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": true,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 7,
+      "anomaly_score": 0.323,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Primary administrative choke-point bridging Corporate IT into L3 Operations.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_pwr_eng_ws",
+      "name": "Substation Engineering Workstation",
+      "site": "power",
+      "purdue_level": "L3",
+      "vendor": "Schneider Electric",
+      "product": "EcoStruxure Control Expert",
+      "version": "14.1",
+      "cves": [
+        "CVE-2021-22800"
+      ],
+      "best_cve": "CVE-2021-22800",
+      "cvss": 7.5,
+      "epss": 0.01,
+      "cisa_kev": false,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 14,
+      "anomaly_score": 0.0,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Configuration terminal for protection relay logic and RTU parameters.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_corp_dc",
+      "name": "Corporate Active Directory Domain Controller",
+      "site": "corporate",
+      "purdue_level": "L4",
+      "vendor": "Microsoft",
+      "product": "Netlogon Active Directory",
+      "version": "2016",
+      "cves": [
+        "CVE-2020-1472"
+      ],
+      "best_cve": "CVE-2020-1472",
+      "cvss": 5.5,
+      "epss": 0.9939,
+      "cisa_kev": true,
+      "internet_exposed": false,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": true,
+      "next_maintenance_window_days": 30,
+      "anomaly_score": 0.553,
+      "likelihood_raw": 0.0,
+      "likelihood_score": 0.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [],
+      "path_technique_ids": [],
+      "top_3_paths": [],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Central identity provider for administrative accounts and workstations.",
+      "scenario_assumption": true
+    },
+    {
+      "asset_id": "asset_internet",
+      "name": "Public Internet",
+      "site": "external",
+      "purdue_level": "INTERNET",
+      "vendor": "Generic",
+      "product": "External Public Network",
+      "version": "IPv4/IPv6",
+      "cves": [],
+      "best_cve": null,
+      "cvss": null,
+      "epss": 0.0,
+      "cisa_kev": false,
+      "internet_exposed": true,
+      "remote_access": false,
+      "default_credentials": false,
+      "patchable_now": false,
+      "next_maintenance_window_days": 0,
+      "anomaly_score": 0.941,
+      "likelihood_raw": 1.0,
+      "likelihood_score": 1.0,
+      "consequence_score": 0.0,
+      "risk_score": 0.0,
+      "risk_level": "low",
+      "services_impacted": [],
+      "max_people_affected": 0,
+      "max_safety_severity": 0,
+      "max_outage_hours": 0.0,
+      "path_from_entry": [
+        "asset_internet"
+      ],
+      "path_technique_ids": [],
+      "top_3_paths": [
+        {
+          "path": [
+            "asset_internet"
+          ],
+          "probability": 1.0,
+          "likelihood_score": 1.0,
+          "technique_ids": [],
+          "hop_count": 0
+        }
+      ],
+      "risk_drop_if_removed": {
+        "factors": [],
+        "note": "Single-factor risk drops isolate each element's contribution and do not sum to total risk due to non-linear and overlapping path dependencies."
+      },
+      "confidence": {
+        "rating": "High",
+        "score": 0.95,
+        "reasons": []
+      },
+      "is_choke_point": false,
+      "criticality_note": "Uncontrolled exterior threat origin for opportunistic and nation-state attacker personas.",
+      "scenario_assumption": true
+    }
+  ]
+}

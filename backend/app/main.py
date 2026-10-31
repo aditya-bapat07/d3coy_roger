@@ -6,6 +6,7 @@ live anomaly injection, threat drops, and executive PDF generation.
 """
 import json
 import logging
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any, Dict, Optional
 from fastapi import Body, FastAPI, HTTPException, Query, Response
@@ -37,11 +38,52 @@ from backend.engine.what_if import WhatIfSimulationEngine
 
 logger = logging.getLogger(__name__)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Precompute and warm up risk models, graph topologies, and validation
+    to ensure sub-50ms endpoint latencies during the demo.
+    """
+    import time
+    logger.info("Initializing Vidura startup precompute...")
+    t0 = time.perf_counter()
+
+    # Warm up scenario and assumptions
+    load_scenario(validate_cves=False)
+    load_assumptions()
+
+    # Pre-calculate baseline risks across all 3 threat personas
+    for persona in ["nation_state", "opportunistic", "insider"]:
+        rc = RiskCalculator()
+        rc.calculate_all(persona=persona)
+
+    # Pre-calculate graph topologies and choke points
+    dep = DependencyGraphEngine()
+    dep.get_graph_data()
+
+    cp = ChokePointEngine()
+    cp.identify_choke_points()
+
+    # Pre-calculate baseline remediation plan
+    planner = RemediationPlanner()
+    planner.build_plan(engineer_hours_budget=20.0, persona="nation_state")
+
+    # Warm up validation cache
+    if not VALIDATION_FILE.exists():
+        build_validation_report(save_and_merge=True)
+
+    t1 = time.perf_counter()
+    logger.info(f"Vidura startup precompute completed in {(t1 - t0)*1000:.1f}ms")
+    yield
+
+
 app = FastAPI(
     title="Vidura API",
     description="AI-Based Critical Infrastructure Cyber-Risk Prediction & Prioritisation",
     version="1.0.0",
+    lifespan=lifespan,
 )
+
 
 origins = [
     "http://localhost:5173",
@@ -239,6 +281,7 @@ async def get_asset_anomaly(asset_id: str):
     return get_anomaly(asset_id)
 
 
+@app.post("/api/reset")
 @app.post("/api/session/reset")
 async def reset_session():
     _SESSION_STATE["threat_drop_active"] = False

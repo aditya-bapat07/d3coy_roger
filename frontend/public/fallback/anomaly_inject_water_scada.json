@@ -1,0 +1,39 @@
+{
+  "asset_id": "asset_water_scada",
+  "score": 1.0,
+  "injected": true,
+  "top_contributing_features": [
+    {
+      "feature": "bytes_in",
+      "value": 12500000.0,
+      "baseline_mean": 0.0,
+      "z_score": 12500000.0
+    },
+    {
+      "feature": "bytes_out",
+      "value": 35000000.0,
+      "baseline_mean": 90205.0,
+      "z_score": 1460.09
+    },
+    {
+      "feature": "connection_count",
+      "value": 85.0,
+      "baseline_mean": 6.0,
+      "z_score": 56.82
+    }
+  ],
+  "example_flows": [
+    {
+      "timestamp": "2026-10-31T12:00:26.889811+00:00",
+      "src": "asset_water_scada",
+      "dst": "asset_external_c2_node",
+      "port": 4444,
+      "protocol": "TCP-RAW",
+      "bytes": 35000000,
+      "packets": 24000,
+      "duration": 45.2,
+      "hour_of_day": 3
+    }
+  ],
+  "timestamp": "2026-10-31T12:00:26.889817+00:00"
+}

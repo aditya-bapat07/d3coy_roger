@@ -417,6 +417,8 @@ export interface LimitationItem {
   description: string;
 }
 
+import { apiFetchJson } from '../apiClient';
+
 export interface MetaResponse {
   formula_summary: FormulaSummary;
   data_sources: DataSourceItem[];
@@ -426,18 +428,10 @@ export interface MetaResponse {
 }
 
 export async function fetchValidationReport(apiBase = '/api'): Promise<ValidationResponse> {
-  const res = await fetch(`${apiBase}/validation`);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch validation report: ${res.status}`);
-  }
-  return res.json();
+  return apiFetchJson<ValidationResponse>(`${apiBase}/validation`);
 }
 
 export async function fetchMetaInfo(apiBase = '/api'): Promise<MetaResponse> {
-  const res = await fetch(`${apiBase}/meta`);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch methodology metadata: ${res.status}`);
-  }
-  return res.json();
+  return apiFetchJson<MetaResponse>(`${apiBase}/meta`);
 }
 

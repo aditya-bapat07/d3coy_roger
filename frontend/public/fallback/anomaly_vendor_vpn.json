@@ -1,0 +1,62 @@
+{
+  "score": 1.0,
+  "peak_hour_window": 123,
+  "top_contributing_features": [
+    {
+      "feature": "bytes_out",
+      "value": 2452924.0,
+      "baseline_mean": 0.0,
+      "z_score": 2452924.0
+    },
+    {
+      "feature": "bytes_in",
+      "value": 570202.0,
+      "baseline_mean": 0.0,
+      "z_score": 570202.0
+    },
+    {
+      "feature": "connection_count",
+      "value": 24.0,
+      "baseline_mean": 0.0,
+      "z_score": 24.0
+    }
+  ],
+  "example_flows": [
+    {
+      "timestamp": "2026-10-28T03:00:34+00:00",
+      "hour_window": 123,
+      "src": "asset_internet",
+      "dst": "asset_vendor_vpn",
+      "port": 443,
+      "protocol": "HTTPS",
+      "bytes": 35429,
+      "packets": 120,
+      "duration": 154.3,
+      "hour_of_day": 3
+    },
+    {
+      "timestamp": "2026-10-28T03:00:36+00:00",
+      "hour_window": 123,
+      "src": "asset_vendor_vpn",
+      "dst": "asset_water_scada",
+      "port": 3389,
+      "protocol": "RDP",
+      "bytes": 311939,
+      "packets": 292,
+      "duration": 257.4,
+      "hour_of_day": 3
+    },
+    {
+      "timestamp": "2026-10-28T03:04:37+00:00",
+      "hour_window": 123,
+      "src": "asset_internet",
+      "dst": "asset_vendor_vpn",
+      "port": 443,
+      "protocol": "HTTPS",
+      "bytes": 49713,
+      "packets": 125,
+      "duration": 82.7,
+      "hour_of_day": 3
+    }
+  ]
+}

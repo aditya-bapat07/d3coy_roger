@@ -1,0 +1,62 @@
+{
+  "score": 0.8797,
+  "peak_hour_window": 123,
+  "top_contributing_features": [
+    {
+      "feature": "bytes_in",
+      "value": 2452924.0,
+      "baseline_mean": 0.0,
+      "z_score": 2452924.0
+    },
+    {
+      "feature": "connection_count",
+      "value": 16.0,
+      "baseline_mean": 6.0,
+      "z_score": 7.19
+    },
+    {
+      "feature": "off_hours_ratio",
+      "value": 1.0,
+      "baseline_mean": 0.38,
+      "z_score": 1.29
+    }
+  ],
+  "example_flows": [
+    {
+      "timestamp": "2026-10-28T03:22:04+00:00",
+      "hour_window": 123,
+      "src": "asset_water_scada",
+      "dst": "asset_dmz_historian",
+      "port": 1433,
+      "protocol": "MSSQL",
+      "bytes": 12550,
+      "packets": 35,
+      "duration": 1.413,
+      "hour_of_day": 3
+    },
+    {
+      "timestamp": "2026-10-28T03:00:30+00:00",
+      "hour_window": 123,
+      "src": "asset_water_scada",
+      "dst": "asset_dmz_historian",
+      "port": 1433,
+      "protocol": "MSSQL",
+      "bytes": 11543,
+      "packets": 31,
+      "duration": 1.709,
+      "hour_of_day": 3
+    },
+    {
+      "timestamp": "2026-10-28T03:26:07+00:00",
+      "hour_window": 123,
+      "src": "asset_water_scada",
+      "dst": "asset_dmz_historian",
+      "port": 1433,
+      "protocol": "MSSQL",
+      "bytes": 23854,
+      "packets": 46,
+      "duration": 1.533,
+      "hour_of_day": 3
+    }
+  ]
+}

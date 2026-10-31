@@ -1,0 +1,101 @@
+{
+  "budget_hours": 20.0,
+  "used_engineer_hours": 18.0,
+  "total_downtime_hours": 1.0,
+  "initial_aggregate_risk": 8.9,
+  "projected_aggregate_risk": 0.0,
+  "risk_reduction_pct": 100.0,
+  "actions": [
+    {
+      "id": "act_mfa_vpn",
+      "asset_id": "asset_vendor_vpn",
+      "asset_name": "Third-Party Vendor Remote Access Gateway",
+      "action_type": "mfa",
+      "description": "Enforce FIDO2 Hardware MFA and geo-fenced IP whitelisting on Vendor VPN Gateway",
+      "engineer_hours": 4.0,
+      "downtime_hours": 0.0,
+      "patchable_now": true,
+      "risk_reduction": 0.35,
+      "selected": true,
+      "priority": 1
+    },
+    {
+      "id": "act_seg_jump",
+      "asset_id": "asset_dmz_jump",
+      "asset_name": "Operations DMZ Jump Host",
+      "action_type": "segment",
+      "description": "Micro-segment DMZ Jump Host: disable RDP clipboard/drive redirection and enforce ephemeral sessions",
+      "engineer_hours": 3.0,
+      "downtime_hours": 0.0,
+      "patchable_now": true,
+      "risk_reduction": 0.28,
+      "selected": true,
+      "priority": 2
+    },
+    {
+      "id": "act_patch_web",
+      "asset_id": "asset_corp_web",
+      "asset_name": "Municipal Citizen Web Portal",
+      "action_type": "patch",
+      "description": "Apply vendor security update for Apache HTTP Server (CVE-2021-41773) on Citizen Portal",
+      "engineer_hours": 2.0,
+      "downtime_hours": 0.5,
+      "patchable_now": true,
+      "risk_reduction": 0.22,
+      "selected": true,
+      "priority": 3
+    },
+    {
+      "id": "act_mon_water_plc",
+      "asset_id": "asset_water_plc_chlorine",
+      "asset_name": "Disinfection Chlorine Dosing Skid PLC",
+      "action_type": "enhanced_monitoring",
+      "description": "Deploy OT IDS sensor to collect Modbus/TCP register & process history logs (DET0776/DET0752 \u2014 detection only, raises confidence, risk reduction = 0)",
+      "engineer_hours": 3.0,
+      "downtime_hours": 0.0,
+      "patchable_now": false,
+      "risk_reduction": 0.0,
+      "selected": true,
+      "priority": 4
+    },
+    {
+      "id": "act_patch_dc",
+      "asset_id": "asset_corp_dc",
+      "asset_name": "Active Directory Domain Controller",
+      "action_type": "patch",
+      "description": "Deploy Active Directory Kerberos security update (CVE-2022-37969) during maintenance window",
+      "engineer_hours": 2.0,
+      "downtime_hours": 0.5,
+      "patchable_now": true,
+      "risk_reduction": 0.2,
+      "selected": true,
+      "priority": 5
+    },
+    {
+      "id": "act_seg_historian",
+      "asset_id": "asset_dmz_historian",
+      "asset_name": "Enterprise OT Process Historian",
+      "action_type": "segment",
+      "description": "Restrict OSIsoft PI Historian port 5450 to unidirectional read-only replica",
+      "engineer_hours": 3.0,
+      "downtime_hours": 0.0,
+      "patchable_now": true,
+      "risk_reduction": 0.15,
+      "selected": true,
+      "priority": 6
+    },
+    {
+      "id": "act_disable_default_creds",
+      "asset_id": "asset_city_traffic_ctrl",
+      "asset_name": "Central Traffic Management Controller",
+      "action_type": "disable_remote_access",
+      "description": "Rotate default credentials and restrict NTCIP controller access to municipal traffic operations fiber VLAN",
+      "engineer_hours": 1.0,
+      "downtime_hours": 0.0,
+      "patchable_now": true,
+      "risk_reduction": 0.14,
+      "selected": true,
+      "priority": 7
+    }
+  ]
+}

@@ -1,0 +1,475 @@
+{
+  "formula_summary": {
+    "risk_formula": "Risk = 100 \u00d7 normalised likelihood \u00d7 consequence",
+    "likelihood_sentence": "Likelihood compounds conditional edge exploit probabilities (from CISA KEV, FIRST EPSS, credential exposure, and ML anomaly boost) along the highest-probability path found by Yen's top-k search, mapped onto a fixed log scale L_n = (log10(max(L, 10\u207b\u2076)) + 6) \u00f7 6 so multi-hop differences remain visible without cross-asset distortion.",
+    "consequence_sentence": "Consequence propagates outages across the physical service dependency DAG (applying edge failure delays once and taking max population served among lost services to prevent double-counting), combining safety severity (50%), population affected (30%), and outage duration (20%).",
+    "attack_graph_role": "Attack Graph = How they get in (IT \u2192 DMZ \u2192 OT L3\u2013L0 reachability, CVEs, credentials, and ATT&CK techniques).",
+    "dependency_graph_role": "Dependency Graph = What breaks (OT controllers \u2192 substations, water pumping, chlorine dosing, hospital, and traffic cascades)."
+  },
+  "data_sources": [
+    {
+      "key": "cisa_kev_map.json",
+      "file": "cisa_kev_map.json",
+      "description": "CISA Known Exploited Vulnerabilities Catalog (Indexed)",
+      "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+      "record_count": 1766,
+      "fetched_at": "2026-10-30T17:37:21.710572+00:00",
+      "file_size_bytes": 1565485
+    },
+    {
+      "key": "attack_ics_techniques.json",
+      "file": "attack_ics_techniques.json",
+      "description": "MITRE ATT&CK for ICS Techniques STIX Extract",
+      "source": "https://raw.githubusercontent.com/mitre/cti/master/ics-attack/ics-attack.json",
+      "record_count": 118,
+      "fetched_at": "2026-10-30T17:37:43.035844+00:00",
+      "file_size_bytes": 92992
+    },
+    {
+      "key": "selected_cves.json",
+      "file": "selected_cves.json",
+      "description": "Targeted ICS and edge remote-access candidate CVEs",
+      "source": "Derived from CISA KEV and NVD ICS equipment selections",
+      "record_count": 39,
+      "fetched_at": "2026-10-30T17:40:12.867050+00:00",
+      "file_size_bytes": 12029
+    },
+    {
+      "key": "nvd_cve_details.json",
+      "file": "nvd_cve_details.json",
+      "description": "NVD CVSS v3.x, Attack Vector, and CPE descriptions",
+      "source": "https://services.nvd.nist.gov/rest/json/cves/2.0",
+      "record_count": 38,
+      "fetched_at": "2026-10-30T17:45:08.760523+00:00",
+      "file_size_bytes": 48593
+    },
+    {
+      "key": "epss_current.json",
+      "file": "epss_current.json",
+      "description": "FIRST Exploit Prediction Scoring System (Current Batch)",
+      "source": "https://api.first.org/data/v1/epss",
+      "record_count": 38,
+      "fetched_at": "2026-10-30T17:46:08.251268+00:00",
+      "file_size_bytes": 7587
+    },
+    {
+      "key": "epss_history.json",
+      "file": "epss_history.json",
+      "description": "FIRST EPSS 30-day historical time-series per CVE",
+      "source": "https://api.first.org/data/v1/epss?scope=time-series",
+      "record_count": 38,
+      "fetched_at": "2026-10-30T17:46:08.251268+00:00",
+      "file_size_bytes": 117140
+    },
+    {
+      "key": "threat_drop.json",
+      "file": "threat_drop.json",
+      "description": "Reserved real KEV-listed ICS CVE for live demo threat drop",
+      "source": "CISA KEV / NVD reserved ICS vulnerability",
+      "record_count": 1,
+      "fetched_at": "2026-10-30T17:46:57.007624+00:00",
+      "file_size_bytes": 1129
+    },
+    {
+      "key": "attack_ics_assets.json",
+      "file": "data/research/attack_ics_assets.json",
+      "description": "MITRE ATT&CK for ICS targeted asset types per technique",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), ics-attack/ics-attack.json. \u00a9 The MITRE Corporation; reproduced under the ATT&CK licence (see licenses/MITRE_ATTACK_LICENSE.txt).",
+      "record_count": 18,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 26928
+    },
+    {
+      "key": "attack_ics_campaigns.json",
+      "file": "data/research/attack_ics_campaigns.json",
+      "description": "MITRE ATT&CK for ICS historical campaigns and targeted assets",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+      "record_count": 10,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 8994
+    },
+    {
+      "key": "attack_ics_detection.json",
+      "file": "data/research/attack_ics_detection.json",
+      "description": "MITRE ATT&CK for ICS detection strategies and data sources",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), ics-attack/ics-attack.json. \u00a9 The MITRE Corporation; reproduced under the ATT&CK licence (see licenses/MITRE_ATTACK_LICENSE.txt).",
+      "record_count": 3,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 52936
+    },
+    {
+      "key": "attack_ics_hop_mapping.json",
+      "file": "data/research/attack_ics_hop_mapping.json",
+      "description": "Hop-type to MITRE ATT&CK for ICS technique mapping",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+      "record_count": 18,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 14901
+    },
+    {
+      "key": "attack_ics_mitigations.json",
+      "file": "data/research/attack_ics_mitigations.json",
+      "description": "MITRE ATT&CK for ICS mitigation techniques",
+      "source": "MITRE ATT&CK for ICS, mitre/cti commit 50be388 (2026-10-13), file ics-attack/ics-attack.json, license: see mitre/cti LICENSE.txt",
+      "record_count": 104,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 46271
+    },
+    {
+      "key": "bad_practices.json",
+      "file": "data/research/bad_practices.json",
+      "description": "CISA Bad Practices catalog for critical infrastructure",
+      "source": "CISA Bad Practices catalog, github.com/cisagov/bad-practices README, commit fd26f25 (2026-08-05)",
+      "record_count": 3,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 1893
+    },
+    {
+      "key": "csaf_ot_cve_index.json",
+      "file": "data/research/csaf_ot_cve_index.json",
+      "description": "CISA CSAF machine-readable security advisories index for OT/ICS",
+      "source": "CISA CSAF repository (github.com/cisagov/CSAF), OT advisories, commit 3c2594d (2026-10-29). TLP:WHITE, 'Disclosure is not limited'.",
+      "record_count": 5,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 13436667
+    },
+    {
+      "key": "csaf_ot_cve_index.json.gz",
+      "file": "data/research/csaf_ot_cve_index.json.gz",
+      "description": "Compressed CISA CSAF machine-readable security advisories index for OT/ICS",
+      "source": "CISA CSAF repository (github.com/cisagov/CSAF), OT advisories, commit 3c2594d (2026-10-29). TLP:WHITE, 'Disclosure is not limited'.",
+      "record_count": 5,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 972786
+    },
+    {
+      "key": "csaf_sector_vendors_2021plus.csv",
+      "file": "data/research/csaf_sector_vendors_2021plus.csv",
+      "description": "CSAF OT sector vendors and products published 2021+",
+      "source": "CISA CSAF advisories, github.com/cisagov/CSAF (commit 3c2594d, 2026-10-29), TLP:WHITE",
+      "record_count": 105,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 3899
+    },
+    {
+      "key": "hai_p3_isolation_forest_baseline.json",
+      "file": "data/research/hai_p3_isolation_forest_baseline.json",
+      "description": "HAI testbed process anomaly baseline using Isolation Forest",
+      "source": "HAI dataset, github.com/icsdataset/hai (HAI 21.03)",
+      "record_count": 7,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 2541
+    },
+    {
+      "key": "kev_epss_ics_evidence.json",
+      "file": "data/research/kev_epss_ics_evidence.json",
+      "description": "Cross-analysis evidence of CISA KEV catalog against EPSS distributions",
+      "source": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29); EPSS for KEV, github.com/jgamblin/KEV_EPSS (commit bef6f7c, 2026-10-30), Apache-2.0; EPSS by FIRST",
+      "record_count": 6,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 2476
+    },
+    {
+      "key": "kev_ics_shortlist.csv",
+      "file": "data/research/kev_ics_shortlist.csv",
+      "description": "CISA KEV shortlist for industrial control systems (ICS)",
+      "source": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29)",
+      "record_count": 122,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 21396
+    },
+    {
+      "key": "kev_vpn_gateway_shortlist.csv",
+      "file": "data/research/kev_vpn_gateway_shortlist.csv",
+      "description": "CISA KEV shortlist for VPN and remote-access gateways",
+      "source": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29)",
+      "record_count": 98,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 15422
+    },
+    {
+      "key": "response_templates.json",
+      "file": "data/research/response_templates.json",
+      "description": "Incident response plan templates for ICS critical infrastructure",
+      "source": "CERT-In Directions of 28 April 2022 under Section 70B of the IT Act (summary: Internet Society, internetsociety.org/wp-content/uploads/2022/06/IIB-India-CERT-In-Directions-2022.pdf)",
+      "record_count": 6,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 3873
+    },
+    {
+      "key": "wntr_pump_outage_net3.json",
+      "file": "data/research/wntr_pump_outage_net3.json",
+      "description": "EPA WNTR hydraulic simulation of Net3 water network pump outage",
+      "source": "WNTR, github.com/USEPA/WNTR (v1.5.0), Revised BSD",
+      "record_count": 2,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 3859
+    },
+    {
+      "key": "SSVC_MAPPING.md",
+      "file": "data/ssvc/SSVC_MAPPING.md",
+      "description": "Stakeholder-Specific Vulnerability Categorization (SSVC) mapping methodology",
+      "source": "CERT/CC SSVC, github.com/CERTCC/SSVC (commit bf3213b, 2026-10-22), data under MIT (SEI)-style licence",
+      "record_count": 35,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 4095
+    },
+    {
+      "key": "deployer_patch_application_priority_1_0_0.csv",
+      "file": "data/ssvc/deployer_patch_application_priority_1_0_0.csv",
+      "description": "SSVC deployer patch application priority decision table",
+      "source": "CERT/CC SSVC, github.com/CERTCC/SSVC (commit bf3213b, 2026-10-22), data under MIT (SEI)-style licence",
+      "record_count": 72,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 2895
+    },
+    {
+      "key": "human_impact_1_0_0.csv",
+      "file": "data/ssvc/human_impact_1_0_0.csv",
+      "description": "SSVC human impact evaluation matrix",
+      "source": "CERT/CC SSVC, github.com/CERTCC/SSVC (commit bf3213b, 2026-10-22), data under MIT (SEI)-style licence",
+      "record_count": 16,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 622
+    },
+    {
+      "key": "certin_mapping.json",
+      "file": "data/certin_mapping.json",
+      "description": "CERT-In Cyber Security Guidelines for Smart City Infrastructure mapping",
+      "source": "CERT-In, Cyber Security Guidelines for Smart City Infrastructure, table of contents",
+      "record_count": 5,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 1108
+    },
+    {
+      "key": "consequence_numbers.md",
+      "file": "docs/inputs/consequence_numbers.md",
+      "description": "Consequence metrics, population served, safety severity, and failure delay hours",
+      "source": "S Mohan and GR Abhijith, 'Intermittent water supply interventions for India's cities', The Source (IWA), February 2021, thesourcemagazine.org; CPHEEO manual",
+      "record_count": 45,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 8328
+    },
+    {
+      "key": "assumptions_justifications.md",
+      "file": "docs/inputs/assumptions_justifications.md",
+      "description": "Scenario parameter assumptions and justifications",
+      "source": "CISA KEV catalog, github.com/cisagov/kev-data (catalog version 2026.10.29); EPSS by FIRST; INL Consequence-driven Cyber-informed Engineering (CCE)",
+      "record_count": 24,
+      "fetched_at": "2026-10-31T08:29:43.039619+00:00",
+      "file_size_bytes": 6174
+    }
+  ],
+  "assumptions_table": [
+    {
+      "parameter": "KEV_FLOOR",
+      "value": "0.5",
+      "justification": "KEV listing means exploitation has been confirmed in the wild, so a reachable KEV CVE should never rank as unlikely because of a low EPSS. This matters most for water: of the KEV-listed CVEs that also have a CISA ICS advisory in the water sector, half have EPSS below 0.1 (median 0.09, 16 CVEs, a small sample). Across all ICS KEV entries EPSS is not lower than KEV overall (median 0.67 vs 0.57), so the floor is a water-sector correction, not a general ICS one. 0.5 treats a reachable KEV CVE as at least a coin flip.",
+      "source": "CISA KEV catalog (BOD 22-01): a CVE is only added with evidence of active exploitation. EPSS figures: CISA KEV v2026.10.29 joined with the jgamblin/KEV_EPSS mirror (30 Oct 2026). The 0.5 value itself is a design choice.",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "P(success) vs default credentials",
+      "value": "0.9",
+      "justification": "Default passwords are public and tried automatically by scanners and botnets; failure mostly comes from the device being changed or unreachable, not from difficulty.",
+      "source": "Joint advisory AA23-335A (Dec 2023): IRGC-affiliated actors compromised internet-exposed Unitronics PLCs, including at US water facilities, likely by exploiting poor password security such as default passwords. Supports \"this happens in practice\", not the 0.9 number.",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "P(success) vs exposed remote access without MFA (RDP/VPN)",
+      "value": "0.3",
+      "justification": "Needs a working credential (guessing, stuffing or a leaked password), so harder than defaults but realistic over time for an internet-facing service.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Likelihood scale for the 0\u2013100 score",
+      "value": "Fixed log scale: L_n = (log10(max(L, 10\u207b\u2076)) + 6) \u00f7 6",
+      "justification": "EPSS values differ by orders of magnitude, so a log scale keeps differences visible. The bounds are fixed, not taken from the current assets, so changing one asset never moves another asset's score.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Anomaly boost ALPHA",
+      "value": "0.3",
+      "justification": "An anomaly is a signal, not proof of compromise. A score of 1.0 closes 30% of the remaining gap to certainty (p' = p + (1 - p) \u00d7 0.3 \u00d7 score), so the ML raises priority without overriding the vulnerability evidence.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Persona: opportunistic",
+      "value": "Entry: Internet only. Max 3 hops. Only uses edges whose best CVE is KEV-listed or has EPSS \u2265 0.1, or that are a default-credential weakness",
+      "justification": "Mass-scanning attackers go for exposed, known-exploited weaknesses and default passwords, and do not chain long paths into OT.",
+      "source": "Design choice, consistent with MITRE ATT&CK for ICS campaigns C0031 (Unitronics, 2023) and C0066 (U.S. water utilities, 2026), both listing T0883 Internet Accessible Device and T1694.001 Default Credentials",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Persona: nation-state",
+      "value": "Entry: Internet + vendor VPN. Max 8 hops. All edges",
+      "justification": "Patient, well-resourced actors chain through IT and DMZ into control layers and use third-party access.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Persona: insider",
+      "value": "Entry: one corporate workstation. Holds valid domain credentials (credential edges inside IT = 1.0). Max 6 hops",
+      "justification": "Models an employee or a stolen employee account: no need to break in, only to move laterally.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Consequence weights",
+      "value": "Safety severity 0.5, people affected 0.3, outage hours 0.2 (sum = 1)",
+      "justification": "Physical safety dominates in critical infrastructure; people affected comes next; duration matters but is partly captured by the other two.",
+      "source": "Consequence-first framing follows INL's Consequence-driven Cyber-informed Engineering (CCE). The weights themselves are a design choice.",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Consequence normalisation",
+      "value": "Severity \u00f7 4; people affected \u00f7 500,000 (city population); outage hours \u00f7 72 (longest outage in the scenario); each capped at 1",
+      "justification": "Puts each component on 0\u20131 before weighting. People affected is the largest people_served among services lost, not the sum (see consequence_numbers.md, rule 4), so overlapping populations are not double-counted.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Fix: patch (IT asset)",
+      "value": "2 engineer-hours, 0.5 h downtime",
+      "justification": "Standard OS/app patch plus a reboot, usually possible within the month.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Fix: patch (PLC/RTU)",
+      "value": "8 engineer-hours, 4 h downtime; only in a maintenance window",
+      "justification": "Firmware updates on controllers need vendor validation, testing and a process shutdown, so they are deferred (patchable_now = false).",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Fix: segment a firewall rule",
+      "value": "3 engineer-hours, 0 h downtime",
+      "justification": "Rule change plus testing that operations traffic still flows; no process stop needed.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Fix: disable remote access",
+      "value": "1 engineer-hour, 0 h downtime",
+      "justification": "Quick to switch off; the cost is operational (vendor support must be re-arranged), noted in the UI rather than counted as downtime.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Fix: add MFA",
+      "value": "4 engineer-hours, 0 h downtime",
+      "justification": "Enrolment and testing for the remote-access gateway users.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "Fix: enhanced monitoring",
+      "value": "3 engineer-hours, 0 h downtime; risk reduction = 0",
+      "justification": "Detection, not prevention: raises confidence, does not lower likelihood.",
+      "source": "Design choice",
+      "scenario_assumption": true
+    },
+    {
+      "parameter": "MFA reduction factor",
+      "value": "\u00d7 0.1 on credential-attack probability",
+      "justification": "Deliberately more conservative than vendor headline figures, because targeted attackers bypass MFA (push fatigue, session/token theft).",
+      "source": "Microsoft Security blog (Aug 2019) reported that accounts using MFA are over 99.9% less likely to be compromised; we use 90% to allow for targeted bypass. The 0.1 value is a design choice.",
+      "scenario_assumption": true
+    }
+  ],
+  "limitations": [
+    {
+      "title": "EPSS Meaning vs Breach Probability",
+      "description": "EPSS is the probability that a CVE sees exploitation activity somewhere in the wild over the next 30 days \u2014 it is NOT the probability that our specific asset is breached. Vidura uses EPSS and CISA KEV as relative weights gated by network reachability and persona constraints."
+    },
+    {
+      "title": "Simulated Municipal Topology (Navanagar)",
+      "description": "The 29-asset IT/DMZ/OT topology, firewall rules, and 500,000-resident service capacities represent a realistic but fictional Indian smart city (Navanagar). All scenario parameters are explicitly tagged 'Scenario assumption'."
+    },
+    {
+      "title": "No Ground Truth for Cyber-Physical Risk Scores",
+      "description": "There is no empirical ground-truth dataset of city-wide cyber-physical breach frequencies. Accordingly, Vidura never claims an 'accuracy percentage' for risk scores; instead, we verify mathematical invariants, parameter sensitivity (Kendall's \u03c4), CVSS divergence reasons, and held-out anomaly detection precision/recall."
+    }
+  ],
+  "kev_floor_evidence": {
+    "sources": {
+      "kev": "CISA KEV catalog v2026.10.29 (github.com/cisagov/kev-data, 1764 entries)",
+      "epss": "jgamblin/KEV_EPSS epss_kev_nvd.csv, commit bef6f7c (2026-10-30), Apache-2.0; EPSS from FIRST",
+      "csaf": "CISA CSAF OT index in this pack"
+    },
+    "definition": "ICS KEV = KEV CVE that also appears in a CISA ICS (CSAF OT) advisory.",
+    "small_sample_note": "Note: The water-sector KEV sample is small (17 KEV CVEs, 16 with EPSS scores; median EPSS = 0.0936, 50% below 0.10). Present this as an empirical indication motivating the water-sector KEV_FLOOR = 0.50 correction rather than a universal statistical law.",
+    "rows": [
+      {
+        "group": "All KEV",
+        "kev_cves": 1764,
+        "with_epss": 1571,
+        "median_epss": 0.5669,
+        "p25_epss": 0.1109,
+        "p75_epss": 0.9347,
+        "share_below_0_1": 0.23,
+        "share_below_0_5": 0.469,
+        "ransomware_known": 361
+      },
+      {
+        "group": "ICS KEV (all sectors)",
+        "kev_cves": 122,
+        "with_epss": 114,
+        "median_epss": 0.6707,
+        "p25_epss": 0.0897,
+        "p75_epss": 0.9892,
+        "share_below_0_1": 0.272,
+        "share_below_0_5": 0.43,
+        "ransomware_known": 25
+      },
+      {
+        "group": "ICS KEV \u2014 Water and Wastewater Systems",
+        "kev_cves": 17,
+        "with_epss": 16,
+        "median_epss": 0.0936,
+        "p25_epss": 0.0719,
+        "p75_epss": 0.8322,
+        "share_below_0_1": 0.5,
+        "share_below_0_5": 0.625,
+        "ransomware_known": 0
+      },
+      {
+        "group": "ICS KEV \u2014 Energy",
+        "kev_cves": 55,
+        "with_epss": 50,
+        "median_epss": 0.4901,
+        "p25_epss": 0.0719,
+        "p75_epss": 0.9713,
+        "share_below_0_1": 0.36,
+        "share_below_0_5": 0.5,
+        "ransomware_known": 9
+      },
+      {
+        "group": "ICS KEV \u2014 Healthcare and Public Health",
+        "kev_cves": 24,
+        "with_epss": 22,
+        "median_epss": 0.7984,
+        "p25_epss": 0.0412,
+        "p75_epss": 0.9713,
+        "share_below_0_1": 0.273,
+        "share_below_0_5": 0.364,
+        "ransomware_known": 9
+      },
+      {
+        "group": "KEV \u2014 VPN / Remote-Access Gateways",
+        "kev_cves": 98,
+        "with_epss": 80,
+        "median_epss": 0.6982,
+        "p25_epss": 0.2256,
+        "p75_epss": 0.9834,
+        "share_below_0_1": 0.125,
+        "share_below_0_5": 0.475,
+        "ransomware_known": 45
+      }
+    ]
+  }
+}

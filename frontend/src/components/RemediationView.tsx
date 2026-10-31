@@ -46,8 +46,21 @@ export const RemediationView: React.FC<RemediationViewProps> = ({
   onToggleAction,
   onToggleThreatDrop,
   onExportPdf,
+  loading = false,
 }) => {
   const [zeroDowntimeOnly, setZeroDowntimeOnly] = useState(false);
+
+  if (loading && !plan) {
+    return (
+      <div className="space-y-6 animate-pulse">
+        <div className="h-28 bg-[#162032] rounded-xl border border-[#23324A]"></div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 h-96 bg-[#162032] rounded-xl border border-[#23324A]"></div>
+          <div className="h-96 bg-[#162032] rounded-xl border border-[#23324A]"></div>
+        </div>
+      </div>
+    );
+  }
 
   const actions = plan?.actions || [];
   const initialRisk = plan?.initial_aggregate_risk ?? 8.9;
