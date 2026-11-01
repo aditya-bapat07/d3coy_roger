@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowUpRight, Menu, X, Shield } from 'lucide-react';
+import { ArrowRight, Menu, X, Shield } from 'lucide-react';
 
 export interface LandingNavProps {
   onLaunch?: () => void;
@@ -163,10 +163,20 @@ export default function LandingNav({ onLaunch }: LandingNavProps) {
           <button
             type="button"
             onClick={onLaunch}
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#F26A1B] px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-white shadow-md shadow-[#F26A1B]/20 transition hover:bg-[#FF7A2B] focus:outline-none focus-visible:ring-2 ring-[#F26A1B]/60 shrink-0"
+            className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#F26A1B] hover:bg-white text-white hover:text-[#120D0B] px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold shadow-md shadow-[#F26A1B]/25 hover:shadow-[0_0_22px_rgba(255,255,255,0.4)] transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 ring-white/60 shrink-0 cursor-pointer"
           >
-            <span>Open Dashboard</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
+            {/* Incoming left arrow on hover */}
+            <span className="inline-flex items-center justify-center -translate-x-3 opacity-0 w-0 group-hover:w-3.5 group-hover:mr-1.5 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+            </span>
+
+            {/* Label */}
+            <span className="select-none tracking-tight">Open Dashboard</span>
+
+            {/* Outgoing right arrow on hover */}
+            <span className="inline-flex items-center justify-center ml-1.5 translate-x-0 opacity-100 w-3.5 group-hover:translate-x-3 group-hover:opacity-0 group-hover:w-0 group-hover:ml-0 transition-all duration-300 ease-out">
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+            </span>
           </button>
 
           {/* Mobile Hamburger Toggle */}
@@ -215,10 +225,15 @@ export default function LandingNav({ onLaunch }: LandingNavProps) {
                 setMobileMenuOpen(false);
                 onLaunch?.();
               }}
-              className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#F26A1B] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#FF7A2B] focus:outline-none focus-visible:ring-2 ring-[#F26A1B]/60"
+              className="group w-full inline-flex items-center justify-center overflow-hidden rounded-xl bg-[#F26A1B] hover:bg-white px-4 py-2.5 text-xs font-semibold text-white hover:text-[#120D0B] transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 ring-white/60 cursor-pointer"
             >
+              <span className="inline-flex items-center justify-center -translate-x-3 opacity-0 w-0 group-hover:w-3.5 group-hover:mr-1.5 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+              </span>
               <span>Open Dashboard</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <span className="inline-flex items-center justify-center ml-1.5 translate-x-0 opacity-100 w-3.5 group-hover:translate-x-3 group-hover:opacity-0 group-hover:w-0 group-hover:ml-0 transition-all duration-300 ease-out">
+                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+              </span>
             </button>
           </div>
         </div>
