@@ -4,19 +4,7 @@
 
 An AI-powered cyber-physical risk prediction, prioritisation, and sovereign remediation platform for critical information infrastructure — built for **Problem Statement 03: Consequence-Driven Cyber-Physical Risk Decision Support for Critical Infrastructure**.
 
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![NetworkX](https://img.shields.io/badge/NetworkX-3.4-blue)](https://networkx.org/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.6-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Cytoscape](https://img.shields.io/badge/Cytoscape.js-3.30-EA580C)](https://js.cytoscape.org/)
-[![Pydantic](https://img.shields.io/badge/Pydantic-v2.10-E92063?logo=pydantic&logoColor=white)](https://docs.pydantic.dev/)
-[![tests](https://img.shields.io/badge/tests-58_passing-brightgreen)](backend/tests/)
-[![air-gapped](https://img.shields.io/badge/air--gapped-100%25_offline-red)](backend/engine/offline_guard.py)
-[![compliance](https://img.shields.io/badge/compliance-NCIIPC_CII_%7C_CERT--In_70B-orange)](#sovereign-compliance--regulatory-audit-binder)
+[![FastAPI 0.115](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/) [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/) [![React 18](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/) [![TypeScript 5](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite 6](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/) [![Tailwind CSS 3](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/) [![NetworkX 3](https://img.shields.io/badge/NetworkX-3-blue)](https://networkx.org/) [![Scikit-Learn 1.6](https://img.shields.io/badge/Scikit--Learn-1.6-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/) [![Cytoscape 3.30](https://img.shields.io/badge/Cytoscape-3.30-EA580C)](https://js.cytoscape.org/) [![Pydantic v2](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)](https://docs.pydantic.dev/) [![tests 58 passing](https://img.shields.io/badge/tests-58_passing-brightgreen)](backend/tests/) [![air-gapped 100%](https://img.shields.io/badge/air--gapped-100%25_offline-red)](backend/engine/offline_guard.py) [![compliance NCIIPC | CERT-In](https://img.shields.io/badge/compliance-NCIIPC_CII_%7C_CERT--In_70B-orange)](#sovereign-compliance--regulatory-audit-binder)
 
 ---
 
