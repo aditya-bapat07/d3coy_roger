@@ -1,0 +1,370 @@
+{
+  "package_id": "NCIIPC-AUDIT-OFFLINE-DEMO",
+  "generated_at": "2026-11-01T00:25:40.241331+00:00",
+  "city": "Navanagar",
+  "sovereign_framework": "Indian NCIIPC Critical Information Infrastructure Protection Guidelines & Section 70B CERT-In Mandate",
+  "iec_security_level_target": "SL-3 (Systematic defense against sophisticated threat actors with IACS-specific skills)",
+  "summary": {
+    "critical_assets_evaluated": 29,
+    "total_mld_water_at_risk": 290.0,
+    "critical_reserve_buffer_hours": 4.2,
+    "nciipc_choke_points_identified": 2,
+    "unmitigated_critical_assets": []
+  },
+  "cert_in_mandatory_disclosures": {
+    "jurisdiction": "Republic of India",
+    "cyber_incident_reporting_window_hours": 6,
+    "log_retention_mandate_days": 180,
+    "cryptographic_integrity_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "authorized_auditor": "National Critical Information Infrastructure Protection Centre (Empanelled Lead Assessor)"
+  },
+  "zero_downtime_compensating_controls_enforced": [
+    "Cisco ASA/FTD Hardware ACL Rules with Micro-Segmentation",
+    "FortiOS Virtual Patching & Policy-Based OT Decoupling",
+    "Linux iptables Kernel-Level Strict Drop Policies for Modbus TCP Port 502",
+    "Suricata Deep Packet Inspection Signatures for ICS/SCADA Protocol Anomalies"
+  ],
+  "assets_audit_manifest": [
+    {
+      "id": "asset_water_plc_chlorine",
+      "name": "Disinfection Chlorine Dosing Skid PLC",
+      "purdue_level": "L1",
+      "risk_score": 65.9,
+      "mld_consequence": 290.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 3.4,
+      "cves": [
+        "CVE-2021-22779",
+        "CVE-2015-7937"
+      ]
+    },
+    {
+      "id": "asset_water_scada",
+      "name": "Water Treatment Plant Master SCADA Server",
+      "purdue_level": "L3",
+      "risk_score": 50.8,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 1.2,
+      "cves": [
+        "CVE-2021-32944"
+      ]
+    },
+    {
+      "id": "asset_water_dosing_skid",
+      "name": "Chlorine Gas Regulators & Injection Manifold",
+      "purdue_level": "L0",
+      "risk_score": 44.2,
+      "mld_consequence": 290.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 4.2,
+      "cves": []
+    },
+    {
+      "id": "asset_water_hmi",
+      "name": "Water Plant Operator Touchscreen HMI",
+      "purdue_level": "L2",
+      "risk_score": 41.6,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 2.1,
+      "cves": [
+        "CVE-2022-3157"
+      ]
+    },
+    {
+      "id": "asset_water_plc_pumps",
+      "name": "High-Lift Pumping Station Control PLC",
+      "purdue_level": "L1",
+      "risk_score": 34.3,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 3.4,
+      "cves": [
+        "CVE-2020-15782",
+        "CVE-2022-38465"
+      ]
+    },
+    {
+      "id": "asset_water_pumps",
+      "name": "High-Lift Clear Water Centrifugal Pumps",
+      "purdue_level": "L0",
+      "risk_score": 22.1,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 4.2,
+      "cves": []
+    },
+    {
+      "id": "asset_pwr_hmi",
+      "name": "Substation Local Operator HMI Panel",
+      "purdue_level": "L2",
+      "risk_score": 0.0,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 170.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2020-27664"
+      ]
+    },
+    {
+      "id": "asset_pwr_rtu",
+      "name": "Substation Main Feeder RTU Controller",
+      "purdue_level": "L1",
+      "risk_score": 0.0,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 170.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2021-22681",
+        "CVE-2023-3596"
+      ]
+    },
+    {
+      "id": "asset_pwr_scada",
+      "name": "Substation SS-2 Central SCADA Server",
+      "purdue_level": "L3",
+      "risk_score": 0.0,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 170.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2020-12034"
+      ]
+    },
+    {
+      "id": "asset_pwr_ied",
+      "name": "Bay Overcurrent Protection Relay IED",
+      "purdue_level": "L1",
+      "risk_score": 0.0,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 170.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2016-8562"
+      ]
+    },
+    {
+      "id": "asset_pwr_breakers",
+      "name": "33/11 kV Vacuum Circuit Breakers & Busbars",
+      "purdue_level": "L0",
+      "risk_score": 0.0,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 170.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": []
+    },
+    {
+      "id": "asset_water_level_sensors",
+      "name": "Clear Water Reservoir Hydrostatic Level Sensors",
+      "purdue_level": "L0",
+      "risk_score": 0.0,
+      "mld_consequence": 116.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": []
+    },
+    {
+      "id": "asset_city_traffic_ctrl",
+      "name": "Central Traffic Corridor Signal Controller",
+      "purdue_level": "L1",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2018-10609"
+      ]
+    },
+    {
+      "id": "asset_hosp_iot_gw",
+      "name": "ICU Medical Device Serial Gateway",
+      "purdue_level": "L2",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2022-44734"
+      ]
+    },
+    {
+      "id": "asset_hosp_bms",
+      "name": "District Hospital Building Management System",
+      "purdue_level": "L2",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2020-28212"
+      ]
+    },
+    {
+      "id": "asset_city_camera_gw",
+      "name": "Municipal Surveillance IoT Video Gateway",
+      "purdue_level": "L2",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2023-20198"
+      ]
+    },
+    {
+      "id": "asset_hosp_gen_ctrl",
+      "name": "Emergency Diesel Generator Controller",
+      "purdue_level": "L1",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2019-19292"
+      ]
+    },
+    {
+      "id": "asset_vendor_vpn",
+      "name": "Third-Party Vendor Remote Access VPN",
+      "purdue_level": "L3.5",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2023-27997"
+      ]
+    },
+    {
+      "id": "asset_corp_web",
+      "name": "Municipal Citizen Web Portal",
+      "purdue_level": "L4",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 1.2,
+      "cves": [
+        "CVE-2021-34527"
+      ]
+    },
+    {
+      "id": "asset_dmz_historian",
+      "name": "Enterprise Operational Historian Mirror",
+      "purdue_level": "L3.5",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2018-7841"
+      ]
+    },
+    {
+      "id": "asset_pwr_switch",
+      "name": "Substation Sub-Ring Managed Switch",
+      "purdue_level": "L2",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2021-31886"
+      ]
+    },
+    {
+      "id": "asset_corp_mail",
+      "name": "Corporate Exchange Mail Server",
+      "purdue_level": "L4",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2021-26855"
+      ]
+    },
+    {
+      "id": "asset_corp_ws1",
+      "name": "Corporate IT Operator Workstation",
+      "purdue_level": "L4",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2017-0144"
+      ]
+    },
+    {
+      "id": "asset_corp_ws2",
+      "name": "Plant Security Analyst Workstation",
+      "purdue_level": "L4",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2021-34527"
+      ]
+    },
+    {
+      "id": "asset_dmz_patch",
+      "name": "DMZ Central Patch & Update Server",
+      "purdue_level": "L3.5",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2021-34527"
+      ]
+    },
+    {
+      "id": "asset_dmz_jump",
+      "name": "Secure Operations Jump Server",
+      "purdue_level": "L3.5",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2023-4966"
+      ]
+    },
+    {
+      "id": "asset_pwr_eng_ws",
+      "name": "Substation Engineering Workstation",
+      "purdue_level": "L3",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2021-22800"
+      ]
+    },
+    {
+      "id": "asset_corp_dc",
+      "name": "Corporate Active Directory Domain Controller",
+      "purdue_level": "L4",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": [
+        "CVE-2020-1472"
+      ]
+    },
+    {
+      "id": "asset_internet",
+      "name": "Public Internet",
+      "purdue_level": "INTERNET",
+      "risk_score": 0.0,
+      "mld_consequence": 0.0,
+      "power_mw_consequence": 0.0,
+      "time_to_criticality_hours": 0.0,
+      "cves": []
+    }
+  ]
+}

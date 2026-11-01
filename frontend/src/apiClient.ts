@@ -27,12 +27,14 @@ function resolveFallbackPath(path: string, options?: RequestInit): string {
 
   const method = (options?.method || 'GET').toUpperCase();
 
-  // 1. Health, Meta, Scenario, Assumptions, Validation
+  // 1. Health, Meta, Scenario, Assumptions, Validation, Cities, Compliance
   if (cleanPath.startsWith('/health')) return '/fallback/health.json';
   if (cleanPath.startsWith('/meta')) return '/fallback/meta.json';
   if (cleanPath.startsWith('/assumptions')) return '/fallback/assumptions.json';
   if (cleanPath.startsWith('/scenario')) return '/fallback/scenario.json';
   if (cleanPath.startsWith('/validation')) return '/fallback/validation.json';
+  if (cleanPath.startsWith('/cities')) return '/fallback/cities.json';
+  if (cleanPath.startsWith('/compliance/audit-package')) return '/fallback/compliance_audit_package.json';
   if (cleanPath.startsWith('/choke-points')) return '/fallback/choke_points.json';
   if (cleanPath.startsWith('/graph/dependency')) return '/fallback/graph_dependency.json';
   if (cleanPath.startsWith('/threat-drop') && method === 'GET') return '/fallback/threat_drop.json';

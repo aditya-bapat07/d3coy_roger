@@ -360,7 +360,6 @@ export function Dashboard({ initialTab, initialPersona, onGoHome }: DashboardPro
             overview={overview}
             loading={loading}
             onSelectAsset={setSelectedAsset}
-            onInjectAnomaly={handleInjectAnomaly}
             selectedAssetId={selectedAsset?.asset_id ?? null}
             simulation={simulation}
             scenarioMeta={scenarioMeta}

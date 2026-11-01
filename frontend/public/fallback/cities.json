@@ -1,0 +1,93 @@
+{
+  "active": "navanagar",
+  "cities": [
+    {
+      "id": "navanagar",
+      "name": "Navanagar (reference)",
+      "state": "Fictional",
+      "population": 500000,
+      "power_utility": "Reference grid",
+      "water_utility": "Reference water works"
+    },
+    {
+      "id": "delhi",
+      "name": "Delhi NCR",
+      "state": "Delhi",
+      "population": 33000000,
+      "power_utility": "Delhi DISCOMs",
+      "water_utility": "Delhi Jal Board"
+    },
+    {
+      "id": "mumbai",
+      "name": "Mumbai",
+      "state": "Maharashtra",
+      "population": 21700000,
+      "power_utility": "BEST / Tata Power",
+      "water_utility": "BMC Hydraulic Dept."
+    },
+    {
+      "id": "kolkata",
+      "name": "Kolkata",
+      "state": "West Bengal",
+      "population": 15600000,
+      "power_utility": "CESC",
+      "water_utility": "Kolkata Municipal Corporation"
+    },
+    {
+      "id": "bengaluru",
+      "name": "Bengaluru",
+      "state": "Karnataka",
+      "population": 14000000,
+      "power_utility": "BESCOM",
+      "water_utility": "BWSSB"
+    },
+    {
+      "id": "chennai",
+      "name": "Chennai",
+      "state": "Tamil Nadu",
+      "population": 11500000,
+      "power_utility": "TANGEDCO",
+      "water_utility": "CMWSSB"
+    },
+    {
+      "id": "hyderabad",
+      "name": "Hyderabad",
+      "state": "Telangana",
+      "population": 11000000,
+      "power_utility": "TSSPDCL",
+      "water_utility": "HMWSSB"
+    },
+    {
+      "id": "ahmedabad",
+      "name": "Ahmedabad",
+      "state": "Gujarat",
+      "population": 8900000,
+      "power_utility": "Torrent Power",
+      "water_utility": "AMC Water Supply"
+    },
+    {
+      "id": "surat",
+      "name": "Surat",
+      "state": "Gujarat",
+      "population": 8000000,
+      "power_utility": "DGVCL",
+      "water_utility": "SMC Water Works"
+    },
+    {
+      "id": "pune",
+      "name": "Pune",
+      "state": "Maharashtra",
+      "population": 7400000,
+      "power_utility": "MSEDCL",
+      "water_utility": "PMC Water Supply"
+    },
+    {
+      "id": "lucknow",
+      "name": "Lucknow",
+      "state": "Uttar Pradesh",
+      "population": 4000000,
+      "power_utility": "LESA / UPPCL",
+      "water_utility": "Lucknow Jal Sansthan"
+    }
+  ]
+}

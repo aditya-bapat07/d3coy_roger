@@ -1165,13 +1165,33 @@ export default GlassReveal21st
 /* ------------------------------------------------------------------ *
  * ViduraGlassReveal
  * ------------------------------------------------------------------ */
-export const MARK_VIDURA = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M50 4 C68 11 86 14 86 14 C86 54 70 80 50 96 C30 80 14 54 14 14 C14 14 32 11 50 4 Z M50 18 C38 23 26 25 26 25 C26 55 38 74 50 84 C62 74 74 55 74 25 C74 25 62 23 50 18 Z M50 28 L66 60 H55 L50 48 L45 60 H34 L50 28 Z"/></svg>`
+export const MARK_VIDURA = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M 50 6.5 C 62 12 76 17 81 19.5 C 83.5 21.5 85 23.5 85 26.5 L 85 57 C 85 68.5 73.5 81 50 93.5 C 26.5 81 15 68.5 15 57 L 15 26.5 C 15 23.5 16.5 21.5 19 19.5 C 24 17 38 12 50 6.5 Z M 50 14.5 C 59 19 70 23 74.5 25 C 76.5 26.5 77.5 27.5 77.5 29.5 L 77.5 55.5 C 77.5 64.5 67.5 75.5 50 85 C 32.5 75.5 22.5 64.5 22.5 55.5 L 22.5 29.5 C 22.5 27.5 23.5 26.5 25.5 25 C 30 23 41 19 50 14.5 Z"/></svg>`
+
+export function ViduraShieldIcon({ className = "w-4 h-4 text-[#F26A1B]" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      fill="currentColor"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M 50 6.5 C 62 12 76 17 81 19.5 C 83.5 21.5 85 23.5 85 26.5 L 85 57 C 85 68.5 73.5 81 50 93.5 C 26.5 81 15 68.5 15 57 L 15 26.5 C 15 23.5 16.5 21.5 19 19.5 C 24 17 38 12 50 6.5 Z M 50 14.5 C 59 19 70 23 74.5 25 C 76.5 26.5 77.5 27.5 77.5 29.5 L 77.5 55.5 C 77.5 64.5 67.5 75.5 50 85 C 32.5 75.5 22.5 64.5 22.5 55.5 L 22.5 29.5 C 22.5 27.5 23.5 26.5 25.5 25 C 30 23 41 19 50 14.5 Z"
+      />
+    </svg>
+  )
+}
 
 export interface ViduraGlassRevealProps extends Omit<GlassIconRevealProps, "logo"> {
+  logo?: string
   transparent?: boolean
 }
 
 export function ViduraGlassReveal({
+  logo = MARK_VIDURA,
   tuning,
   look = "dark",
   background = "#0A0706",
@@ -1185,7 +1205,7 @@ export function ViduraGlassReveal({
 }: ViduraGlassRevealProps) {
   return (
     <GlassIconReveal
-      logo={MARK_VIDURA}
+      logo={logo}
       label={label}
       look={look}
       background={background}

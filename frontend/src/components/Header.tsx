@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FileDown, RotateCcw, Shield, ChevronDown, Menu, X, MapPin, ShieldCheck } from 'lucide-react';
+import { FileDown, RotateCcw, ChevronDown, Menu, X, MapPin, ShieldCheck } from 'lucide-react';
+import { ViduraShieldIcon } from './ui/liquid-glass-logo-reveal';
 import { PersonaType } from '../types/api';
 
 type TabKey = 'risk' | 'graph' | 'remediation' | 'how';
@@ -82,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({
           title={onGoHome ? 'Return to Home' : undefined}
         >
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F26A1B]/20 to-[#FF7A2B]/10 border border-[#F26A1B]/30 flex items-center justify-center shadow-[0_0_15px_rgba(242,106,27,0.25)] group-hover:border-[#F26A1B]/60 transition-colors">
-            <Shield className="w-4 h-4 text-[#F26A1B]" />
+            <ViduraShieldIcon className="w-4 h-4 text-[#F26A1B]" />
           </div>
           <div className="flex items-center gap-2">
             <span

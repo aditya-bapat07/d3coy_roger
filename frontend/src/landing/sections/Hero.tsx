@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import HeroDiagram from '../HeroDiagram';
 
@@ -76,10 +76,20 @@ export default function Hero({ onLaunch, onThreatDemo }: HeroProps) {
             <button
               type="button"
               onClick={onLaunch}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#F26A1B] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#F26A1B]/25 transition hover:bg-[#FF7A2B] focus:outline-none focus-visible:ring-2 ring-[#F26A1B]/60"
+              className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#F26A1B] hover:bg-white text-white hover:text-[#120D0B] px-6 py-3.5 text-sm font-semibold shadow-lg shadow-[#F26A1B]/25 hover:shadow-[0_0_30px_rgba(255,255,255,0.45)] transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 ring-white/60 cursor-pointer"
             >
-              <span>Open the dashboard</span>
-              <ArrowUpRight className="w-4 h-4" />
+              {/* Incoming left arrow on hover */}
+              <span className="inline-flex items-center justify-center -translate-x-3 opacity-0 w-0 group-hover:w-4 group-hover:mr-2 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+                <ArrowRight className="w-4 h-4 shrink-0" />
+              </span>
+
+              {/* Label */}
+              <span className="select-none tracking-tight">Open the dashboard</span>
+
+              {/* Outgoing right arrow on hover */}
+              <span className="inline-flex items-center justify-center ml-2 translate-x-0 opacity-100 w-4 group-hover:translate-x-3 group-hover:opacity-0 group-hover:w-0 group-hover:ml-0 transition-all duration-300 ease-out">
+                <ArrowRight className="w-4 h-4 shrink-0" />
+              </span>
             </button>
 
             <button

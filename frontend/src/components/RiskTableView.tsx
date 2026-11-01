@@ -13,7 +13,6 @@ interface RiskTableViewProps {
   overview: RiskOverviewResponse | null;
   loading: boolean;
   onSelectAsset: (asset: AssetRiskResponse) => void;
-  onInjectAnomaly?: (assetId: string) => Promise<void>;
   selectedAssetId?: string | null;
   simulation?: SimulationResponse | null;
   scenarioMeta?: ScenarioMeta | null;

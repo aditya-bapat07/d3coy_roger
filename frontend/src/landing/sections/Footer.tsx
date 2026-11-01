@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronUp, Shield } from 'lucide-react';
+import { ChevronUp } from 'lucide-react';
+import { ViduraShieldIcon } from '../../components/ui/liquid-glass-logo-reveal';
 
 export interface FooterProps {
   onLaunchTab?: (tab: 'risk' | 'graph' | 'remediation' | 'how') => void;
@@ -54,7 +55,7 @@ export default function Footer({ onLaunchTab }: FooterProps) {
           <div className="md:col-span-5 flex flex-col items-start text-left">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F26A1B]/20 to-[#FF7A2B]/10 border border-[#F26A1B]/30 flex items-center justify-center shadow-[0_0_15px_rgba(242,106,27,0.25)]">
-                <Shield className="w-4 h-4 text-[#F26A1B]" />
+                <ViduraShieldIcon className="w-4 h-4 text-[#F26A1B]" />
               </div>
               <span
                 className="font-semibold text-lg tracking-tight text-white"
