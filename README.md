@@ -1,60 +1,45 @@
-# Vidura (विदुरु) — Critical Infrastructure Cyber-Risk Platform
+# Vidura
 
-<div align="center">
+**See the physical consequence before the breach occurs.**
 
-<img src="frontend/public/vidura-shield.svg" alt="Vidura Shield Logo" width="110" height="110" />
+An AI-powered cyber-physical risk prediction, prioritisation, and sovereign remediation platform for critical information infrastructure — built for **Problem Statement 03: Consequence-Driven Cyber-Physical Risk Decision Support for Critical Infrastructure**.
 
-### **Consequence-Driven Cyber-Physical Risk Prediction, Prioritisation & Sovereign Defense**
-*Problem Statement 03 — Consequence-Driven Cyber-Physical Risk Decision Support for Critical Information Infrastructure (CII)*
-
-[![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![NetworkX](https://img.shields.io/badge/NetworkX-Graph%20Theory-blue?style=for-the-badge)](https://networkx.org/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Isolation%20Forest-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Tests](https://img.shields.io/badge/Tests-58%20Passed-brightgreen?style=for-the-badge)](backend/tests/)
-[![Offline First](https://img.shields.io/badge/Offline-100%25%20Air--Gapped-red?style=for-the-badge)](backend/engine/offline_guard.py)
-[![Compliance](https://img.shields.io/badge/Compliance-NCIIPC%20CII%20%7C%20CERT--In%2070B%20%7C%20IEC%2062443-orange?style=for-the-badge)](#sovereign-compliance--regulatory-audit-binder)
-
-[**Live Demo Walkthrough**](#live-demo--quick-walkthrough) • [**System Architecture**](#system-architecture--the-dual-graph-model) • [**Key Innovations & USPs**](#five-landmark-usps--why-vidura-wins) • [**Mathematical Rigor**](#mathematical-formulation) • [**Quickstart (3 Mins)**](#quickstart--run-in-3-minutes) • [**API Reference**](#api-specification) • [**Mathematical Invariants**](#mathematical-invariants--credibility-verification)
-
-</div>
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![NetworkX](https://img.shields.io/badge/NetworkX-3.4-blue)](https://networkx.org/)
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.6-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![Cytoscape](https://img.shields.io/badge/Cytoscape.js-3.30-EA580C)](https://js.cytoscape.org/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-v2.10-E92063?logo=pydantic&logoColor=white)](https://docs.pydantic.dev/)
+[![tests](https://img.shields.io/badge/tests-58_passing-brightgreen)](backend/tests/)
+[![air-gapped](https://img.shields.io/badge/air--gapped-100%25_offline-red)](backend/engine/offline_guard.py)
+[![compliance](https://img.shields.io/badge/compliance-NCIIPC_CII_%7C_CERT--In_70B-orange)](#sovereign-compliance--regulatory-audit-binder)
 
 ---
 
-## Executive Summary
+## The problem
 
-Critical Information Infrastructure (CII) — municipal water treatment works, electrical power grids, district trauma hospitals, and metro rail networks — cannot be secured using standard enterprise IT vulnerability scanners. Traditional tools sort vulnerabilities by static **CVSS base scores**. This produces dangerous blind spots:
-1. An unpatched **CVSS 9.8** SQL injection on an air-gapped municipal billing server is assigned urgent priority, while a **CVSS 6.8** unauthenticated Modbus TCP command injection on a chlorine dosing PLC is ignored.
-2. In reality, the SQL injection causes zero physical downtime, while the chlorine PLC vulnerability can **poison the potable water reservoir of 500,000 citizens in under 4 hours**.
-3. Plant engineers cannot patch live operational PLCs/RTUs without taking entire utility plants offline, triggering blackouts or contaminated water supplies.
+PS03 observes that existing vulnerability management tools *"rely on static CVSS base-score sorting that completely ignores industrial control topology, physical consequence propagation, and operational downtime constraints."* They overwhelm plant engineers with thousands of generic IT CVEs while missing the critical, multi-hop kill chains that take down physical urban services.
 
-**Vidura** solves this fundamental crisis. Built on Idaho National Laboratory's **Consequence-driven Cyber-informed Engineering (CCE)** methodology, Vidura couples:
-* A multi-hop, probabilistic **Attack Graph** ("*How an adversary gets in*"), with
-* A cascading physical **Municipal Dependency Graph** ("*What breaks in the real world*").
-
-Vidura quantifies true cyber-physical risk, attributes exact risk drivers (`risk_drop_if_removed`), identifies non-obvious topological choke points, generates **zero-downtime compensating control CLI snippets** (Cisco, FortiOS, iptables, Suricata), and formulates an optimal budget-constrained remediation roadmap that respects real-world OT maintenance windows.
+Vidura answers the questions a critical infrastructure CISO and plant operations manager actually have:
+* *Which controller breach poisons our water supply or blacks out the trauma hospital first?*
+* *How long does our city have before taps run dry once telemetry drops ($T+0\text{h} \to T+6\text{h}$)?*
+* *How can we neutralize 78% of the risk today when we cannot take live PLCs offline to patch firmware?*
+* *Which defensive moves buy the highest safety return for the scarce 20 engineering hours we actually have?*
 
 ---
 
-## Five Landmark USPs — Why Vidura Wins
+## The core idea: two graphs, not one
 
-| # | High-Impact Capability | Legacy Scanners (Tenable, Qualys, Nessus) | Generic Graph Tools (BloodHound) | **Vidura Risk Engine** |
-| :---: | :--- | :--- | :--- | :--- |
-| **1** | **Zero-Downtime Compensating Controls** | Tells you to "patch firmware" (requires 8h plant shutdown). | None. | **Provides instant, copy-pasteable firewall micro-segmentation & virtual patch CLI commands** (Cisco ASA/FTD, FortiOS, Linux iptables, Suricata Modbus DPI) that drop risk by up to 78% with zero operational interruption. |
-| **2** | **Physical Consequence Telemetry** | Abstract 1–10 scores. Zero physical ground truth. | Active Directory permissions only. | **Grounds every risk score in municipal physical impact**: Million Litres per Day (MLD) water curtailment, Megawatts (MW) grid curtailment, and municipal reserve buffer hours to dry taps. |
-| **3** | **Asymmetric Attacker Work Factor Ratio** | Assumes all attackers are identical. | Unweighted hop counts. | **Quantifies adversary economics**: Measures the ratio between attacker exploitation cost and defender mitigation cost (e.g. **42× attacker multiplier** for a 14h engineering sprint). |
-| **4** | **"What Breaks First?" Cascade Scrub Bar** | Static PDF snapshot. | Static topology layout. | **Interactive timeline playback ($T+0.0\text{h} \to T+6.0\text{h}$)**: Visualizes the chronological wave of compromise and cascading municipal failure with millisecond Cytoscape graph animation. |
-| **5** | **1-Click Sovereign Regulatory Audit Package** | Generic CSV exports. | Raw JSON dumps. | **Instant export of an official audit package** conforming to Indian **NCIIPC Critical Information Infrastructure** guidelines, **CERT-In 6-Hour Section 70B** directions, and **IEC 62443-3-3** Security Levels. |
+Most vulnerability platforms look only at isolated software flaws. Vidura couples **two directed graphs**:
 
----
+1. **The Attack Graph ("How they get in")**: Models the digital ingress and multi-hop network propagation through the standard ISA-95 / Purdue Model hierarchy ($L_4 \to L_{3.5} \to L_3 \to L_2 \to L_1 \to L_0$). Edge weights combine **CISA KEV** exploit intelligence, **FIRST EPSS v3** exploitation probabilities, credential exposures, and **Isolation Forest ML** flow anomaly detection.
+2. **The Physical Dependency Graph ("What breaks in the city")**: A directed acyclic graph (DAG) tracing how digital controller failure propagates into municipal utility collapse — treating water treatment pumping, chlorine chemical dosing, district power substations, hospital trauma centers, and traffic grids as interdependent physical flows.
 
-## System Architecture — The Dual-Graph Model
-
-Vidura models operational technology using two coupled, directed mathematical graphs:
+$$\text{Unified Risk}(a) = 100 \times \underbrace{L_n(a)}_{\text{Multi-Hop Likelihood (0–1)}} \times \underbrace{C(a)}_{\text{Physical Consequence (0–1)}}$$
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -63,7 +48,7 @@ Vidura models operational technology using two coupled, directed mathematical gr
 │ 1. ATTACK GRAPH ("How They Get In")           │ 2. DEPENDENCY GRAPH ("What Breaks In The City")  │
 │ • Purdue Model Hierarchy (Internet → L4 → L0) │ • OT Controllers → Physical Municipal Services   │
 │ • CISA KEV + FIRST EPSS v3 + NVD CVEs         │ • Water Pumping, Chlorine Dosing, Power Grid,    │
-│ • Unauthenticated Remote Access & Credentials │   District Trauma Hospital, Traffic Signalling   │
+│ • Credential & Remote Access Exposures        │   District Trauma Hospital, Traffic Signalling   │
 │ • Scikit-Learn Isolation Forest ML Anomaly    │ • Physical failure delays & backup power rules   │
 │ • Yen's Top-k Shortest Simple Paths Search    │ • Non-double-counted population bounding         │
 └───────────────────────┬───────────────────────┴────────────────────────┬─────────────────────────┘
@@ -87,18 +72,30 @@ for individual exposures             blocking max attack paths           under e
 
 ---
 
-## Mathematical Formulation
+## The 5 landmark USPs
+
+| # | Capability | Legacy Vulnerability Scanners (Tenable, Qualys) | Generic Graph Tools (BloodHound) | **Vidura Risk Engine** |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | **Zero-Downtime Compensating Controls** | Demands "patch firmware immediately" (requires 8h plant shutdown). | None. | **Auto-generates virtual patch CLI snippets** (Cisco ASA/FTD, FortiOS, Linux iptables, Suricata Modbus DPI) that drop risk by up to 78% with zero operational interruption. |
+| **2** | **Physical Consequence Telemetry** | Abstract 1–10 scores. Zero physical grounding. | Active Directory permissions only. | **Grounds every score in municipal utility impact**: Million Litres per Day (MLD) water volume lost, Megawatts (MW) grid curtailment, and municipal reserve buffer hours to dry taps. |
+| **3** | **Asymmetric Attacker Work Factor Ratio** | Assumes all attackers are identical. | Unweighted hop counts. | **Quantifies adversary economics**: Measures the ratio between attacker exploitation cost and defender mitigation cost (e.g. **42× attacker multiplier** for a 14h engineer sprint). |
+| **4** | **"What Breaks First?" Cascade Scrub Bar** | Static PDF report. | Static graph visualization. | **Interactive timeline playback ($T+0.0\text{h} \to T+6.0\text{h}$)**: Visualizes the chronological wave of compromise and cascading municipal failure with millisecond Cytoscape graph animation. |
+| **5** | **1-Click Sovereign Regulatory Audit Package** | Generic CSV exports. | Raw JSON dumps. | **Instant export of an official audit package** conforming to Indian **NCIIPC Critical Information Infrastructure** guidelines, **CERT-In 6-Hour Section 70B** directions, and **IEC 62443-3-3** Security Levels. |
+
+---
+
+## Detailed mathematical formulation
 
 ### 1. Unified Risk Formula
-The risk score for any asset $a$ is bounded strictly within $[0, 100]$:
+The risk score for any asset $a$ is strictly bounded in $[0, 100]$:
 $$\text{Risk}(a) = 100 \times L_n(a) \times C(a)$$
 
 ### 2. Multi-Hop Attack Likelihood ($L_n$)
 Each directed network transition $(u \to v)$ carries a conditional exploitation probability:
 $$p(u, v) = \max\!\left(\text{EPSS}(v), \text{KEV\_FLOOR}\right) \times \text{CredFactor}(v)$$
-Where:
-* $\text{KEV\_FLOOR} = 0.50$ if any vulnerability on $v$ is present in the **CISA Known Exploited Vulnerabilities (KEV)** catalog.
-* $\text{CredFactor}(v) = 0.90$ for default/hardcoded credentials, $0.30$ for exposed remote access without MFA, and $0.10$ otherwise.
+
+* $\text{KEV\_FLOOR} = 0.50$ if any vulnerability on $v$ is cataloged in the **CISA Known Exploited Vulnerabilities (KEV)** database.
+* $\text{CredFactor}(v) = 0.90$ for default or hardcoded credentials, $0.30$ for exposed remote management without MFA, and $0.10$ otherwise.
 * **Isolation Forest Anomaly Telemetry Boost**: Live network flow anomalies dynamically escalate edge transition probability:
   $$p'(u, v) = p(u, v) + \big(1 - p(u, v)\big) \times \alpha \times \text{anomaly\_score}(v), \quad \alpha = 0.30$$
 
@@ -124,9 +121,37 @@ Evaluated independently for: Internet exposure, firewall pinholes, CISA KEV stat
 
 ---
 
-## Indian Metros Scalability
+## Zero-downtime compensating controls (CLI terminal)
 
-Vidura includes out-of-the-box topological and consequence parameter profiles for **10 major Indian metropolitan areas**, scaling population consequence, municipal utilities, and water/power distribution baselines:
+When plant operators cannot take a live PLC offline to patch firmware, Vidura provides instant, copy-pasteable configuration snippets across 4 enterprise networking layers:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ Cisco ASA / FTD Hardware ACL                                                           │
+│ access-list OT_INSPECTION extended deny tcp any host 192.168.10.45 eq 502             │
+│ access-list OT_INSPECTION extended permit tcp 10.0.1.0 255.255.255.0 host 192.168.10.45│
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ FortiOS Virtual Patching & Decoupling                                                  │
+│ config firewall policy                                                                 │
+│   edit 101                                                                             │
+│     set srcintf "dmz" set dstintf "ot_cell" set action accept                          │
+│     set ips-sensor "Modbus_Strict_Enforce" set ssl-ssh-profile "deep-inspection"       │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ Linux iptables Kernel Rule                                                             │
+│ iptables -I FORWARD 1 -p tcp --dport 502 -m string --hex-string "|00 00 00 00 00 06|"  │
+│   --algo bm -j DROP                                                                    │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ Suricata Deep Packet Inspection (DPI) Rule                                             │
+│ drop modbus any any -> $PLC_SUBNET 502 (msg:"VIDURA-01: Unauthorized Modbus Write";   │
+│   modbus.function:5; sid:9001001; rev:1;)                                              │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 10 Indian metropolitan scaling matrix
+
+Vidura includes built-in consequence scaling profiles for **10 major Indian metropolitan areas**, adjusting population consequence, municipal utilities, and water/power distribution baselines:
 
 ```
 ┌─────────────┬─────────────────┬──────────────┬────────────────────────┬──────────────────────────┐
@@ -148,102 +173,52 @@ Vidura includes out-of-the-box topological and consequence parameter profiles fo
 
 ---
 
-## Repository Structure
+## System architecture & data flow
 
 ```
-d3coy/
-├── backend/
-│   ├── app/
-│   │   ├── main.py                    # FastAPI REST application & OpenAPI router
-│   │   ├── schemas.py                 # Pydantic v2 data models & validation schemas
-│   │   └── auth.py                    # Role-based JWT authentication & access control
-│   ├── engine/
-│   │   ├── risk_calculator.py         # Dual-Graph unified risk scoring engine
-│   │   ├── attack_graph.py            # Yen's Top-k shortest simple paths & MITRE ICS mapper
-│   │   ├── dependency_graph.py        # Physical service cascade DAG & consequence propagation
-│   │   ├── choke_point.py             # Betweenness centrality & topological cut-set analysis
-│   │   ├── remediation.py             # Budget-constrained greedy knapsack planner & CLI snippets
-│   │   ├── what_if.py                 # Counterfactual simulation engine
-│   │   ├── scenario.py                # Pydantic scenario loader & cross-graph integrity checks
-│   │   ├── cities.py                  # 10 Indian metropolitan consequence scaling registry
-│   │   ├── report_generator.py        # Executive PDF briefing generator (ReportLab)
-│   │   ├── intel.py                   # CISA KEV, FIRST EPSS & NVD offline cache manager
-│   │   ├── validation.py              # Mathematical invariant verification suite
-│   │   └── offline_guard.py           # Socket-level air-gap enforcement hook
-│   ├── tests/
-│   │   ├── test_api.py                # 58 comprehensive automated tests
-│   │   └── conftest.py                # Pytest fixtures & mock sessions
-│   └── requirements.txt               # Pinned Python dependencies
-│
-├── frontend/
-│   ├── public/
-│   │   ├── fallback/                  # 30 baked static JSON fixtures for 100% offline demo
-│   │   │   ├── cities.json
-│   │   │   ├── compliance_audit_package.json
-│   │   │   └── ...
-│   │   ├── vidura-shield.svg          # Official brand vector logo
-│   │   ├── vidura-shield-smooth.svg   # Browser tab favicon
-│   │   └── vidura-app-icon.png        # 818x818 high-resolution app tile
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Header.tsx             # Floating frosted navbar with city switcher & PDF export
-│   │   │   ├── RiskTableView.tsx      # Ranked asset inventory with physical impact chips
-│   │   │   ├── GraphView.tsx          # Cytoscape Purdue entity graph & Cascade Timeline scrubber
-│   │   │   ├── RemediationView.tsx    # Knapsack planner, CLI snippets & Asymmetric Work Factor
-│   │   │   ├── HowItWorksView.tsx     # Interactive mathematical walkthrough & formulas
-│   │   │   ├── AssetDetailModal.tsx   # Deep-dive drawer with counterfactual "Why" factor drops
-│   │   │   └── ui/
-│   │   │       └── liquid-glass-logo-reveal.tsx  # WebGL liquid-glass startup shader
-│   │   ├── landing/                   # High-converting landing page with flow buttons
-│   │   ├── types/api.ts               # TypeScript interfaces matching backend Pydantic models
-│   │   ├── apiClient.ts               # Resilient fetch client with transparent fallback routing
-│   │   ├── App.tsx                    # Top-level state orchestration & keyboard navigation
-│   │   └── main.tsx                   # React root entry point
-│   ├── package.json                   # Pinned npm dependencies
-│   ├── tsconfig.json                  # Strict TypeScript configuration
-│   └── vite.config.ts                 # Vite bundler configuration
-│
-├── data/
-│   ├── scenario.json                  # Ground-truth Navanagar cyber-physical reference topology
-│   ├── assumptions.json               # Physical constants, safety thresholds, and cost weights
-│   ├── certin_mapping.json            # CERT-In compliance directive cross-walk
-│   ├── cache/                         # Local pre-cached CISA KEV, EPSS, NVD & anomaly baselines
-│   └── research/                      # Academic papers, EPA WNTR hydraulic traces & HAI datasets
-│
-├── run_backend.sh                     # One-click POSIX backend runner
-├── run_frontend.sh                    # One-click POSIX frontend runner
-├── run_backend.bat                    # One-click Windows backend runner
-├── run_frontend.bat                   # One-click Windows frontend runner
-└── README.md                          # Comprehensive documentation
+  ┌─────────────────────────┐      ┌─────────────────────────┐      ┌─────────────────────────┐
+  │   Live Ingestion Feed   │      │ Offline Intelligence    │      │ Municipal SCADA System  │
+  │  Modbus TCP Telemetry   │      │ CISA KEV + FIRST EPSS   │      │ Level 0/1/2/3/4 Purdue  │
+  └────────────┬────────────┘      └────────────┬────────────┘      └────────────┬────────────┘
+               │                                │                                │
+               ▼                                ▼                                ▼
+  ┌───────────────────────────────────────────────────────────────────────────────────────────┐
+  │                           VIDURA INGESTION & VALIDATION ENGINE                            │
+  │            • Pydantic v2 Schema Validation • Air-Gap Socket Guard (OFFLINE=1)             │
+  └─────────────────────────────────────────────┬─────────────────────────────────────────────┘
+                                                │
+                                                ▼
+  ┌───────────────────────────────────────────────────────────────────────────────────────────┐
+  │                            ANOMALY DETECTION & GRAPH SEARCH                               │
+  │ • Scikit-Learn Isolation Forest Telemetry Scorer (alpha = 0.30)                           │
+  │ • Yen's Top-k Shortest Simple Paths Search via NetworkX (-log10 transition weights)       │
+  │ • Betweenness Centrality Choke-Point Identification                                       │
+  │ • Cascading Physical Outage Propagation across Service DAG                                │
+  └─────────────────────────────────────────────┬─────────────────────────────────────────────┘
+                                                │
+                                                ▼
+  ┌───────────────────────────────────────────────────────────────────────────────────────────┐
+  │                            DECISION SUPPORT & REMEDIATION                                 │
+  │ • Dynamic Knapsack Planner: Maximize Risk Reduction within Engineer-Hour Budget           │
+  │ • Zero-Downtime Virtual Patching: Cisco ACL, FortiOS, iptables, Suricata DPI              │
+  │ • Asymmetric Attacker Work Factor Multiplier (e.g. 42x cost ratio)                        │
+  │ • Sovereign Compliance Binder: NCIIPC Mandatory Disclosures & CERT-In Section 70B         │
+  └─────────────────────────────────────────────┬─────────────────────────────────────────────┘
+                                                │
+                                                ▼
+  ┌───────────────────────────────────────────────────────────────────────────────────────────┐
+  │                                ANALYST PRESENTATION LAYER                                 │
+  │ • React 18 + TypeScript + Vite + Tailwind CSS Dark UI                                     │
+  │ • Cytoscape.js Hierarchical Purdue Graph Layout                                           │
+  │ • "What Breaks First?" Cascade Scrub Bar (T+0.0h to T+6.0h animated slider)               │
+  │ • WebGL Liquid-Glass Startup Shader & Micro-Interactions                                  │
+  │ • 1-Click Executive PDF Briefing Generator (ReportLab)                                    │
+  └───────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Live Demo & Quick Walkthrough
-
-### 1. One-Click Demo Mode (`?demo=1`)
-Opening `http://127.0.0.1:5173/?demo=1` initializes a flawless judge presentation:
-* **Session Reset**: Resets dirty state (`POST /api/reset`).
-* **Persona Selection**: Activates the **Nation-State APT** threat profile.
-* **Crown-Jewel Focus**: Directly navigates to the **Graph View**, centering on the **Disinfection Chlorine Dosing Skid PLC** (`asset_water_plc_chlorine`).
-* **Path Highlighting**: Automatically animates the 3-hop traversal path (`Vendor VPN → Water SCADA → Water HMI → Chlorine PLC`).
-* **Analyst Drawer**: Pops open the right-side inspection drawer revealing the exact physical consequence (380 MLD potable water lost, 4h buffer to dry taps, 42,000 citizens affected).
-
-### 2. Interactive Keyboard Hotkeys
-| Key | Action | Description |
-| :---: | :--- | :--- |
-| `1` | **Dashboard View** | Shows the ranked asset risk table, physical loss chips, and trend indicators. |
-| `2` | **Graph View** | Hierarchical Cytoscape Purdue model (Internet down to L0 field instruments). |
-| `3` | **Remediation View** | Greedy knapsack roadmap, zero-downtime CLI snippets, and work factor ROI. |
-| `4` | **How It Works** | Step-by-step mathematical proof, sensitivity curves, and formula derivations. |
-| `T` | **Toggle Threat Drop** | Simulates a live CISA KEV zero-day exploit drop on Siemens S7 PLCs. |
-| `D` | **Reset Session** | Cleans all simulated anomalies and restores baseline operational state. |
-| `Esc` | **Close Drawer** | Dismisses any open asset detail or modal dialog. |
-| `?` | **Shortcut Cheat Sheet** | Displays the instant on-screen keyboard shortcut guide. |
-
----
-
-## Quickstart — Run in 3 Minutes
+## Quickstart — run in 3 minutes
 
 ### Prerequisites
 * **Python**: `3.11` or `3.12`
@@ -255,17 +230,17 @@ Opening `http://127.0.0.1:5173/?demo=1` initializes a flawless judge presentatio
 git clone https://github.com/adityabapat/decoy.git
 cd decoy
 
-# Create and activate Python virtual environment
+# Create and activate virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Install backend dependencies
+# Install dependencies
 pip install -r backend/requirements.txt
 ```
 
 ### 2. Frontend Setup
 ```bash
-# Navigate to frontend directory
+# Install frontend dependencies and build bundle
 cd frontend
 npm install
 npm run build
@@ -296,15 +271,13 @@ run_frontend.bat
 
 ---
 
-## 100% Air-Gapped & Offline Reliability Guarantee
+## 100% air-gapped & offline demo guarantee
 
-Critical infrastructure security software must operate inside completely isolated, air-gapped security operations centers (SOCs) without external internet access:
+1. **Socket-Level Air-Gap Guard (`OFFLINE=1`)**:
+   [`backend/engine/offline_guard.py`](file:///Users/adityabapat/Desktop/decoy/backend/engine/offline_guard.py) hooks low-level OS calls (`socket.connect`, `socket.connect_ex`, `socket.getaddrinfo`). Any outbound attempt outside loopback (`127.0.0.1`) raises an immediate, fatal `RuntimeError`, guaranteeing zero telemetry leaks.
 
-1. **Socket-Level Air-Gap Enforcement (`OFFLINE=1`)**:
-   [`backend/engine/offline_guard.py`](file:///Users/adityabapat/Desktop/decoy/backend/engine/offline_guard.py) intercepts low-level OS calls (`socket.connect`, `socket.connect_ex`, `socket.getaddrinfo`). Any outbound call outside loopback (`127.0.0.1`) raises an immediate, fatal `RuntimeError`, guaranteeing that no telemetry leaks and no external API requests are made.
-
-2. **Zero-Dependency Static Fallback (`VITE_FALLBACK=1`)**:
-   All 30 REST endpoints are pre-baked as deterministic static JSON snapshots inside [`frontend/public/fallback/`](file:///Users/adityabapat/Desktop/decoy/frontend/public/fallback/). If python is unavailable, run:
+2. **Static JSON Fallback Snapshot (`VITE_FALLBACK=1`)**:
+   All 30 REST endpoints are pre-baked as deterministic static JSON snapshots in [`frontend/public/fallback/`](file:///Users/adityabapat/Desktop/decoy/frontend/public/fallback/). If python is unavailable, run:
    ```bash
    cd frontend && VITE_FALLBACK=1 npm run dev
    ```
@@ -312,14 +285,33 @@ Critical infrastructure security software must operate inside completely isolate
 
 ---
 
-## API Specification
+## Demo mode & analyst shortcuts
 
-Vidura provides a clean, well-documented OpenAPI REST API compliant with RFC specifications:
+* **One-Click Demo Mode (`?demo=1`)**: Opening `http://127.0.0.1:5173/?demo=1` automatically:
+  * Resets session state (`POST /api/reset`).
+  * Activates the **Nation-State APT** persona.
+  * Directs focus to the **Graph View**, centering on the **Disinfection Chlorine Dosing Skid PLC** (`asset_water_plc_chlorine`).
+  * Highlights the 3-hop attack path (`Vendor VPN → Water SCADA → Water HMI → Chlorine PLC`).
+  * Opens the right-side analyst drawer showing physical consequences (380 MLD potable water lost, 4h buffer to dry taps, 42,000 citizens affected).
+
+* **Keyboard Hotkeys**:
+  * `1`: **Dashboard View** (Ranked asset table & physical loss chips)
+  * `2`: **Graph View** (Hierarchical Cytoscape Purdue model)
+  * `3`: **Remediation View** (Knapsack planner, CLI snippets, work factor ROI)
+  * `4`: **How It Works** (Mathematical proofs, formulas, sensitivity curves)
+  * `T`: **Toggle Threat Drop** (Live CISA KEV exploit drop simulation)
+  * `D`: **Reset Session** (Cleans simulated anomalies and restores baseline)
+  * `Esc`: **Close Drawer** (Dismisses open modal or analyst inspector)
+  * `?`: **Shortcut Cheat Sheet** (Displays on-screen hotkey guide)
+
+---
+
+## API reference
 
 | Method | Endpoint | Query / Body Params | Description |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/health` | None | Returns backend engine health status. |
-| `GET` | `/api/cities` | None | Lists all 10 supported Indian metropolitan areas with populations & utilities. |
+| `GET` | `/api/health` | None | Engine health check. |
+| `GET` | `/api/cities` | None | Lists 10 Indian metropolitan areas with populations and utilities. |
 | `POST` | `/api/city/select` | `{"city_id": "mumbai"}` | Rescales consequence inputs to selected metropolitan population. |
 | `GET` | `/api/risk/assets` | `persona`: `nation_state` \| `opportunistic` \| `insider` | Returns assets ranked by unified risk score, MLD loss, and why factor drops. |
 | `GET` | `/api/graph/attack` | `persona`: (enum) | Generates multi-hop attack graph, primary paths, and top-3 Yen trajectories. |
@@ -335,7 +327,7 @@ Vidura provides a clean, well-documented OpenAPI REST API compliant with RFC spe
 
 ---
 
-## Sovereign Compliance & Regulatory Audit Binder
+## Sovereign compliance & regulatory audit binder
 
 Vidura natively aligns with statutory Indian cybersecurity regulations:
 
@@ -351,9 +343,9 @@ Clicking **"Compliance"** in the top navigation immediately downloads a cryptogr
 
 ---
 
-## Mathematical Invariants & Credibility Verification
+## Mathematical invariants & credibility verification
 
-To prove mathematical soundess, Vidura includes a continuous invariant verification engine ([`backend/engine/validation.py`](file:///Users/adityabapat/Desktop/decoy/backend/engine/validation.py)):
+Vidura includes a continuous invariant verification engine ([`backend/engine/validation.py`](file:///Users/adityabapat/Desktop/decoy/backend/engine/validation.py)):
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -381,7 +373,7 @@ OFFLINE=1 .venv/bin/python -m backend.scripts.run_validation
 
 ---
 
-## Data Intelligence Provenance
+## Data intelligence provenance
 
 All intelligence feeds are curated from authoritative international and Indian national bodies:
 
@@ -395,7 +387,7 @@ All intelligence feeds are curated from authoritative international and Indian n
 
 ---
 
-## Team & Acknowledgements
+## Team & citations
 
 Developed for **Problem Statement 03 — AI-Based Critical Infrastructure Cyber-Risk Prediction & Prioritisation**:
 
